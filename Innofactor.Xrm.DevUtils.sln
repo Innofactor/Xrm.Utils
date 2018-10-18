@@ -7,14 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csp
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common.Source", "Common.Source\Common.Source.shproj", "{6B4F59AE-7903-47B0-B888-B7B2EAD40B2C}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Plugin.Source", "Plugin.Source\Plugin.Source.shproj", "{6C534C92-E758-4EDE-91AB-54AC28A54D37}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin", "Plugin\Plugin.csproj", "{FF23D380-948E-4BE6-B9D2-17C89D3E0959}"
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common.Source\Common.Source.projitems*{6b4f59ae-7903-47b0-b888-b7b2ead40b2c}*SharedItemsImports = 13
-		Plugin.Source\Plugin.Source.projitems*{6c534c92-e758-4ede-91ab-54ac28a54d37}*SharedItemsImports = 13
 		Common.Source\Common.Source.projitems*{fdbf5769-343e-433c-956f-12f7bc87a9d1}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,10 +21,6 @@ Global
 		{FDBF5769-343E-433C-956F-12F7BC87A9D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDBF5769-343E-433C-956F-12F7BC87A9D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDBF5769-343E-433C-956F-12F7BC87A9D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF23D380-948E-4BE6-B9D2-17C89D3E0959}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF23D380-948E-4BE6-B9D2-17C89D3E0959}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF23D380-948E-4BE6-B9D2-17C89D3E0959}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF23D380-948E-4BE6-B9D2-17C89D3E0959}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

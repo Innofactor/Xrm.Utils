@@ -14,5 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LoggerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IContainable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PluginBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PluginContainer.cs" />
   </ItemGroup>
 </Project>
