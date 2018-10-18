@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Common", "Common\Common.shproj", "{6B4F59AE-7903-47B0-B888-B7B2EAD40B2C}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Innofactor.Xrm.Utils.Common", "Common\Innofactor.Xrm.Utils.Common.shproj", "{6B4F59AE-7903-47B0-B888-B7B2EAD40B2C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{A076C2AE-F84C-449A-94E5-86E850170AF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Module", "modules\Common.Module\Common.Module.csproj", "{DD7194A9-1074-425B-BE3F-86999DBE6336}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "modules\Common.Module\Common.csproj", "{DD7194A9-1074-425B-BE3F-86999DBE6336}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
