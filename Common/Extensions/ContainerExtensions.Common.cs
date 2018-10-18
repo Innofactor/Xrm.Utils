@@ -210,7 +210,7 @@
         /// <param name="attributes"></param>
         /// <returns></returns>
         public static bool IsChangedAnyOf(this IPluginContainer container, params string[] attributes) =>
-            CintEntity.EntityChangedAny(container.Context, attributes);
+            container.Context.IsChangedAnyOf(attributes);
 
         /// <summary>
         ///

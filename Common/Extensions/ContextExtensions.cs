@@ -1,6 +1,7 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
     using System;
+    using System.Linq;
     using Innofactor.Xrm.Utils.Common.Constants;
     using Microsoft.Xrm.Sdk;
 
@@ -80,6 +81,26 @@
             }
 
             return Guid.Empty;
+        }
+
+        /// <summary>
+        /// Returnerar true om något attribut i listan återfinns i Target i Context.
+        /// Om det är ett Create-message så returneras alltid true
+        /// Om Target saknas så returneras alltid true
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
+        public static bool IsChangedAnyOf(this IPluginExecutionContext context, params string[] attributes)
+        {
+            if (context.InputParameters.Contains(ParameterName.Target) && context.InputParameters[ParameterName.Target] is Entity)
+            {
+                return ((Entity)context.InputParameters[ParameterName.Target]).Attributes.Keys.Intersect(attributes).Any();
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
