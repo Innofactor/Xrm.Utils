@@ -1,4 +1,4 @@
-﻿namespace Innofactor.Xrm.DevUtils.Common.Constants
+﻿namespace Innofactor.Xrm.Utils.Common.Constants
 {
     /// <summary>Message names for plugin steps</summary>
     public static class MessageName

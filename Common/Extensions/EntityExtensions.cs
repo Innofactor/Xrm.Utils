@@ -1,4 +1,4 @@
-﻿namespace Innofactor.Xrm.DevUtils.Common.Extensions
+﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
     using System;
     using System.Linq;

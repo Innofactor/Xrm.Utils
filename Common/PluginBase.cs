@@ -1,4 +1,4 @@
-﻿namespace Innofactor.Xrm.DevUtils.Common
+﻿namespace Innofactor.Xrm.Utils.Common
 {
     using System;
     using System.Diagnostics;

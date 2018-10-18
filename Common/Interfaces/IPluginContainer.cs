@@ -1,4 +1,4 @@
-﻿namespace Innofactor.Xrm.DevUtils.Common.Interfaces
+﻿namespace Innofactor.Xrm.Utils.Common.Interfaces
 {
     using Microsoft.Xrm.Sdk;
 

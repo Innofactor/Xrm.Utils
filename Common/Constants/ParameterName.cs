@@ -1,4 +1,4 @@
-﻿namespace Innofactor.Xrm.DevUtils.Common.Constants
+﻿namespace Innofactor.Xrm.Utils.Common.Constants
 {
     /// <summary>
     /// Common parameter names for InputParameters and OutputParameters in plugin steps

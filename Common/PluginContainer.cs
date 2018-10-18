@@ -1,10 +1,10 @@
-﻿namespace Innofactor.Xrm.DevUtils.Common
+﻿namespace Innofactor.Xrm.Utils.Common
 {
     using System;
     using System.Linq;
-    using Innofactor.Xrm.DevUtils.Common.Constants;
-    using Innofactor.Xrm.DevUtils.Common.Extensions;
-    using Innofactor.Xrm.DevUtils.Common.Interfaces;
+    using Innofactor.Xrm.Utils.Common.Constants;
+    using Innofactor.Xrm.Utils.Common.Extensions;
+    using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
 
     /// <summary>
