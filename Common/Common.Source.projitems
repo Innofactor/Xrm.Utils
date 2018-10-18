@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageProcessingMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageProcessingStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Constants\ParameterName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContextExtensions.cs" />
