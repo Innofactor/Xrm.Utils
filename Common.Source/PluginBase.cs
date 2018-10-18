@@ -9,13 +9,7 @@
     /// </summary>
     public abstract class PluginBase : IPlugin
     {
-        #region Private Fields
-
         private readonly string name;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginBase"/> class. Will use refrected name of the calling plugin.
@@ -26,15 +20,11 @@
             name = (new StackTrace()).GetFrame(1).GetMethod().ReflectedType.Name;
         }
 
-        #endregion Public Constructors
-
-        #region Public Methods
-
         /// <summary>
         /// Default entry point for CRM plugin
         /// </summary>
         /// <param name="serviceProvider"></param>
-        public void Execute(IServiceProvider serviceProvider) => 
+        public void Execute(IServiceProvider serviceProvider) =>
             new PluginContainer(serviceProvider)
             {
                 Validator = new Predicate<IPluginExecutionContext>(Validate),
@@ -54,7 +44,5 @@
         /// <param name="context"></param>
         /// <returns></returns>
         public abstract bool Validate(IPluginExecutionContext context);
-
-        #endregion Public Methods
     }
 }

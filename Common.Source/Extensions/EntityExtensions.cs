@@ -9,8 +9,6 @@
     /// </summary>
     public static class EntityExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// Clones entity instance to a new C# instance
         /// </summary>
@@ -88,19 +86,14 @@
         public static bool IsActive(this Entity entity)
         {
             var result = false;
-            if (Const.StatecodelessEntities.Contains(entity.LogicalName))
-            {
-                // State finns ej - alltid aktiva
-                result = true;
-            }
-            else if (!entity.Attributes.Contains("statecode"))
+
+            if (!entity.Attributes.Contains("statecode"))
             {
                 throw new InvalidPluginExecutionException($"Querying statecode which is not currently available for {entity.LogicalName}");
             }
             else
             {
-                var state = ((OptionSetValue)entity.Attributes["statecode"]).Value;
-                if (CintEntity.GetActiveStates(entity.LogicalName).Contains(state))
+                if (((OptionSetValue)entity.Attributes["statecode"]).Value == 0)
                 {
                     result = true;
                 }
@@ -185,7 +178,5 @@
         /// <param name="user"></param>
         public static void SetOwner(this Entity entity, Guid user) =>
             entity.SetAttribute("ownerid", new EntityReference("systemuser", user));
-
-        #endregion Public Methods
     }
 }

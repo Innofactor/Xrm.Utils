@@ -13,8 +13,6 @@
     /// </summary>
     public class PluginContainer : IPluginContainer, IDisposable
     {
-        #region Private Fields
-
         private Lazy<Entity> completeEntity;
         private Lazy<IPluginExecutionContext> context;
         private Lazy<ITracingService> logger;
@@ -22,10 +20,6 @@
         private Lazy<Entity> preEntity;
         private Lazy<IOrganizationService> service;
         private Lazy<Entity> targetEntity;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginContainer"/> class.
@@ -45,10 +39,6 @@
             context = new Lazy<IPluginExecutionContext>(() => GetExecutionContext(provider));
             logger = new Lazy<ITracingService>(() => GetTracingService(provider));
         }
-
-        #endregion Public Constructors
-
-        #region Public Properties
 
         /// <summary>
         /// Gets or sets link to method that should execute main logic of the plugin. This method
@@ -120,10 +110,6 @@
             get;
             set;
         }
-        
-        #endregion Public Properties
-
-        #region Public Methods
 
         /// <summary>
         ///
@@ -162,10 +148,6 @@
             }
         }
 
-        #endregion Public Methods
-
-        #region Protected Methods
-
         /// <summary>
         ///
         /// </summary>
@@ -191,7 +173,7 @@
                 }
                 else
                 {
-                    result = this.Merge(result, postImage);
+                    result = result.Merge(postImage);
                 }
             }
 
@@ -205,13 +187,13 @@
                 }
                 else
                 {
-                    result = this.Merge(result, preImage);
+                    result = result.Merge(preImage);
                 }
             }
 
             if (result == null || result.Id.Equals(Guid.Empty))
             {
-                var id = PluginHelper.GetEntityId(Context, false);
+                var id = context.GetEntityId();
                 if (!id.Equals(Guid.Empty))
                 {
                     if (result == null)
@@ -227,10 +209,6 @@
 
             return result;
         }
-
-        #endregion Protected Methods
-
-        #region Private Methods
 
         private static IPluginExecutionContext GetExecutionContext(IServiceProvider provider) =>
             (IPluginExecutionContext)provider.GetService(typeof(IPluginExecutionContext));
@@ -288,7 +266,5 @@
                 return null;
             }
         }
-
-        #endregion Private Methods
     }
 }

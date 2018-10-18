@@ -5,8 +5,6 @@
     /// </summary>
     public static class ParameterName
     {
-        #region Public Fields
-
         public const string Assignee = "Assignee";
         public const string AsyncOperationId = "AsyncOperationId";
         public const string BusinessEntity = "BusinessEntity";
@@ -50,7 +48,5 @@
         public const string UpdateContent = "UpdateContent";
         public const string ValidationResult = "ValidationResult";
         public const string WorkflowId = "WorkflowId";
-
-        #endregion Public Fields
     }
 }

@@ -7,8 +7,6 @@
     /// </summary>
     public interface IPluginContainer : IContainable
     {
-        #region Public Properties
-
         /// <summary>
         /// Gets instance of the <see cref="IPluginExecutionContext"/> assosiated with current container
         /// </summary>
@@ -16,7 +14,5 @@
         {
             get;
         }
-
-        #endregion Public Properties
     }
 }
