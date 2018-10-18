@@ -58,13 +58,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Constants\ParameterName.cs" />
+    <Compile Include="Extensions\EntityExtensions.cs" />
+    <Compile Include="Extensions\LoggerExtensions.cs" />
     <Compile Include="Interfaces\IContainable.cs" />
     <Compile Include="Interfaces\IPluginContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PluginBase.cs" />
+    <Compile Include="PluginContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
