@@ -143,7 +143,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Trace(ex);
+                Logger.Log(ex);
 
                 throw;
             }
