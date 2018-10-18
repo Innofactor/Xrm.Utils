@@ -1,11 +1,11 @@
 ﻿namespace Innofactor.Xrm.DevUtils.Common
 {
     using System;
+    using System.Linq;
     using Innofactor.Xrm.DevUtils.Common.Constants;
     using Innofactor.Xrm.DevUtils.Common.Extensions;
     using Innofactor.Xrm.DevUtils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
-    using Microsoft.Xrm.Sdk.Query;
 
     /// <summary>
     /// Container object that helps to keep all objects and methods needed for CRM development in
@@ -31,13 +31,14 @@
         {
             // Reset values of entities, if they was already used —
             // this move will set fresh values for cached loggers and services
-            completeEntity = new Lazy<Entity>(() => GetCompleteEntity(provider));
-            postEntity = new Lazy<Entity>(() => GetPostEntity(provider));
-            preEntity = new Lazy<Entity>(() => GetPreEntity(provider));
-            targetEntity = new Lazy<Entity>(() => GetTargetEntity(provider));
-            service = new Lazy<IOrganizationService>(() => GetOrganizationService(provider));
-            context = new Lazy<IPluginExecutionContext>(() => GetExecutionContext(provider));
-            logger = new Lazy<ITracingService>(() => GetTracingService(provider));
+            context = new Lazy<IPluginExecutionContext>(() => provider.Get<IPluginExecutionContext>());
+            logger = new Lazy<ITracingService>(() => provider.Get<ITracingService>());
+            service = new Lazy<IOrganizationService>(() => provider.Get<IOrganizationService>());
+
+            completeEntity = new Lazy<Entity>(() => GetCompleteEntity(context));
+            postEntity = new Lazy<Entity>(() => GetPostEntity(context));
+            preEntity = new Lazy<Entity>(() => GetPreEntity(context));
+            targetEntity = new Lazy<Entity>(() => GetTargetEntity(context));
         }
 
         /// <summary>
@@ -152,20 +153,18 @@
         ///
         /// </summary>
         /// <returns></returns>
-        protected static Entity GetCompleteEntity(IServiceProvider provider)
+        protected static Entity GetCompleteEntity(Lazy<IPluginExecutionContext> context)
         {
             var result = default(Entity);
 
-            var context = (IPluginExecutionContext)provider.GetService(typeof(IPluginExecutionContext));
-
-            if (context.InputParameters.Contains(ParameterName.Target) && context.InputParameters[ParameterName.Target] is Entity)
+            if (context.Value.InputParameters.Contains(ParameterName.Target) && context.Value.InputParameters[ParameterName.Target] is Entity)
             {
-                result = (Entity)context.InputParameters[ParameterName.Target];
+                result = (Entity)context.Value.InputParameters[ParameterName.Target];
             }
 
-            if (context.PostEntityImages.Contains(ParameterName.PostImage))
+            if (context.Value.PostEntityImages.Keys.Count > 0)
             {
-                var postImage = context.PostEntityImages[ParameterName.PostImage];
+                var postImage = context.Value.PostEntityImages[context.Value.PostEntityImages.Keys.First()];
 
                 if (result == null)
                 {
@@ -177,9 +176,9 @@
                 }
             }
 
-            if (context.PreEntityImages.Contains(ParameterName.PreImage))
+            if (context.Value.PreEntityImages.Keys.Count > 0)
             {
-                var preImage = context.PreEntityImages[ParameterName.PreImage];
+                var preImage = context.Value.PreEntityImages[context.Value.PreEntityImages.Keys.First()];
 
                 if (result == null)
                 {
@@ -193,12 +192,12 @@
 
             if (result == null || result.Id.Equals(Guid.Empty))
             {
-                var id = context.GetEntityId();
+                var id = context.Value.GetEntityId();
                 if (!id.Equals(Guid.Empty))
                 {
                     if (result == null)
                     {
-                        result = new Entity(context.PrimaryEntityName, id);
+                        result = new Entity(context.Value.PrimaryEntityName, id);
                     }
                     else
                     {
@@ -210,52 +209,38 @@
             return result;
         }
 
-        private static IPluginExecutionContext GetExecutionContext(IServiceProvider provider) =>
-            (IPluginExecutionContext)provider.GetService(typeof(IPluginExecutionContext));
-
-        private static IOrganizationService GetOrganizationService(IServiceProvider provider) =>
-            (IOrganizationService)provider.GetService(typeof(IOrganizationService));
-
-        private static ITracingService GetTracingService(IServiceProvider provider) =>
-            (ITracingService)provider.GetService(typeof(ITracingService));
-
-        private static Entity GetPostEntity(IServiceProvider provider)
+        private static Entity GetPostEntity(Lazy<IPluginExecutionContext> context)
         {
-            var context = (IPluginExecutionContext)provider.GetService(typeof(IPluginExecutionContext));
-
-            if (context.PostEntityImages.Contains(ParameterName.PostImage) && context.PostEntityImages[ParameterName.PostImage] != null)
+            if (context.Value.PostEntityImages.Keys.Count > 0 && context.Value.PostEntityImages[context.Value.PostEntityImages.Keys.First()] != null)
             {
-                return context.PostEntityImages[ParameterName.PostImage];
+                return context.Value.PostEntityImages[context.Value.PostEntityImages.Keys.First()];
             }
             return null;
         }
 
-        private static Entity GetPreEntity(IServiceProvider provider)
+        private static Entity GetPreEntity(Lazy<IPluginExecutionContext> context)
         {
-            var context = (IPluginExecutionContext)provider.GetService(typeof(IPluginExecutionContext));
-
-            if (context.PreEntityImages.Contains(ParameterName.PreImage) && context.PreEntityImages[ParameterName.PreImage] != null)
+            if (context.Value.PreEntityImages.Keys.Count > 0 && context.Value.PreEntityImages[context.Value.PostEntityImages.Keys.First()] != null)
             {
-                return context.PreEntityImages[ParameterName.PreImage];
+                return context.Value.PreEntityImages[context.Value.PostEntityImages.Keys.First()];
             }
             return null;
         }
 
-        private Entity GetTargetEntity(IServiceProvider provider)
+        private static Entity GetTargetEntity(Lazy<IPluginExecutionContext> context)
         {
-            var context = (IPluginExecutionContext)provider.GetService(typeof(IPluginExecutionContext));
-
             try
             {
-                if (context.InputParameters.Contains(ParameterName.Target) && context.InputParameters[ParameterName.Target] is Entity)
+                if (context.Value.InputParameters.Contains(ParameterName.Target) && context.Value.InputParameters[ParameterName.Target] is Entity)
                 {
-                    return (Entity)context.InputParameters[ParameterName.Target];
+                    return (Entity)context.Value.InputParameters[ParameterName.Target];
                 }
-                else if (context.InputParameters.Contains(ParameterName.Target) && context.InputParameters[ParameterName.Target] is EntityReference)
+                else if (context.Value.InputParameters.Contains(ParameterName.Target) && context.Value.InputParameters[ParameterName.Target] is EntityReference)
                 {
-                    // In case of reference supplied — return entity will all attributes
-                    var reference = (EntityReference)context.InputParameters[ParameterName.Target];
-                    return Service.Retrieve(reference.LogicalName, reference.Id, new ColumnSet(true));
+                    // In case of reference supplied — return entity no attributes
+                    var reference = (EntityReference)context.Value.InputParameters[ParameterName.Target];
+
+                    return new Entity(reference.LogicalName, reference.Id);
                 }
 
                 return null;

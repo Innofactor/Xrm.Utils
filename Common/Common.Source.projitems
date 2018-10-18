@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\LoggerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ProviderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IContainable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PluginBase.cs" />

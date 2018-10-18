@@ -26,10 +26,8 @@
         public const string ListId = "ListId";
         public const string OptionalParameters = "OptionalParameters";
         public const string PostBusinessEntity = "PostBusinessEntity";
-        public const string PostImage = "postimage";
         public const string PostMasterBusinessEntity = "PostMasterBusinessEntity";
         public const string PreBusinessEntity = "PreBusinessEntity";
-        public const string PreImage = "preimage";
         public const string PreMasterBusinessEntity = "PreMasterBusinessEntity";
         public const string PreSubordinateBusinessEntity = "PreSubordinateBusinessEntity";
         public const string Query = "Query";
