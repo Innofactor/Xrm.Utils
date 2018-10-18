@@ -3,11 +3,13 @@
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <HasSharedItems>true</HasSharedItems>
-    <SharedGUID>e7ed4398-39d1-4485-80f7-f40ccadcb63a</SharedGUID>
+    <SharedGUID>6c534c92-e758-4ede-91ab-54ac28a54d37</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Core</Import_RootNamespace>
+    <Import_RootNamespace>Plugin.Source</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)PluginBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PluginContainer.cs" />
   </ItemGroup>
 </Project>
