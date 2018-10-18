@@ -14,12 +14,12 @@
     public class PluginContainer : IPluginContainer, IDisposable
     {
         private Lazy<Entity> completeEntity;
-        private Lazy<IPluginExecutionContext> context;
-        private Lazy<ITracingService> logger;
         private Lazy<Entity> postEntity;
         private Lazy<Entity> preEntity;
-        private Lazy<IOrganizationService> service;
         private Lazy<Entity> targetEntity;
+        private Lazy<IOrganizationService> service;
+        private Lazy<IPluginExecutionContext> context;
+        private Lazy<ITracingService> logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginContainer"/> class.
