@@ -3,7 +3,8 @@
     using System;
     using System.Collections.Concurrent;
     using System.ServiceModel;
-    using Cinteros.Crm.Utils.Common.Interfaces;
+    using Innofactor.Xrm.Utils.Common.Extensions;
+    using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Metadata;

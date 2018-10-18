@@ -1,7 +1,7 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Fluent.Attribute
 {
-    using Cinteros.Crm.Utils.Common.Interfaces;
-    using Cinteros.Crm.Utils.Common.Slim;
+    using Innofactor.Xrm.Utils.Common.Extensions;
+    using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Metadata;

@@ -3,8 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Cinteros.Crm.Utils.Common.Interfaces;
-    using Cinteros.Crm.Utils.Common.Slim;
+    using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
 
     public class OperationsSet1 : InformationBase

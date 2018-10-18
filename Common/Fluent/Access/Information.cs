@@ -1,6 +1,6 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Fluent.Access
 {
-    using Cinteros.Crm.Utils.Common.Interfaces;
+    using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
 
     public class Information : InformationBase

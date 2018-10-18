@@ -20,8 +20,7 @@
             var clone = CloneId(entity);
 
             // Preparing all attributes except the one in which entity id is stored
-            var attributes = entity.Attributes
-                .Where(x => x.Key.ToLowerInvariant() != $"{clone.LogicalName}id".ToLowerInvariant() || (Guid)x.Value != clone.Id);
+            var attributes = entity.Attributes.Where(x => x.Key.ToLowerInvariant() != $"{clone.LogicalName}id".ToLowerInvariant() || (Guid)x.Value != clone.Id);
 
             foreach (var attribute in attributes)
             {
