@@ -7,8 +7,8 @@
     <ProjectGuid>{DD7194A9-1074-425B-BE3F-86999DBE6336}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.Module</RootNamespace>
-    <AssemblyName>Common.Module</AssemblyName>
+    <RootNamespace>Innofactor.Xrm.Utils.Common</RootNamespace>
+    <AssemblyName>Innofactor.Xrm.Utils.Common</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

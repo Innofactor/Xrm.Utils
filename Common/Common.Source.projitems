@@ -6,7 +6,7 @@
     <SharedGUID>6b4f59ae-7903-47b0-b888-b7b2ead40b2c</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>Innofactor.Xrm.DevUtils.Common</Import_RootNamespace>
+    <Import_RootNamespace>Innofactor.Xrm.Utils.Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageName.cs" />
