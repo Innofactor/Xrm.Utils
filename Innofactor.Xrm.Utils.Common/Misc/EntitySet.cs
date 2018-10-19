@@ -6,14 +6,14 @@
     using Innofactor.Xrm.Utils.Common.Extensions;
     using Microsoft.Xrm.Sdk;
 
-    public class EntityComplect
+    public class EntitySet
     {
         private readonly Lazy<Entity> target;
         private readonly Lazy<Entity> pre;
         private readonly Lazy<Entity> post;
         private readonly Lazy<Entity> complete;
 
-        public EntityComplect(Lazy<IPluginExecutionContext> context)
+        public EntitySet(Lazy<IPluginExecutionContext> context)
         {
             complete = new Lazy<Entity>(() => GetCompleteEntity(context));
             post = new Lazy<Entity>(() => GetPostEntity(context));

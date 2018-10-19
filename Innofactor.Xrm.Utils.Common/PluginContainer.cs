@@ -30,7 +30,7 @@
             logger = new Lazy<ITracingService>(() => provider.Get<ITracingService>());
             service = new Lazy<IOrganizationService>(() => provider.Get<IOrganizationService>());
 
-            Entities = new EntityComplect(context);
+            Entities = new EntitySet(context);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
             set;
         }
 
-        public EntityComplect Entities
+        public EntitySet Entities
         {
             get;
         }
