@@ -36,6 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\InformationBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IContainable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginExecutionContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Misc\EntityComplect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\EntityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\SortAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PluginBase.cs" />
