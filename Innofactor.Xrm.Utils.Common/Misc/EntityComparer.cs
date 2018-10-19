@@ -8,24 +8,23 @@
     /// <summary>A class used to compare cintdynentity instances</summary>
     public sealed class EntityComparer : IComparer<Entity>
     {
-        private readonly List<SortAttribute> sortAttributes;
 
         /// <summary>Constructor of CintDynEntity class. Takes a list of attribute names as an argument.</summary>
         /// <param name="attributes">The attributes to sort the comparison by......</param>
         public EntityComparer(params string[] attributes)
         {
-            sortAttributes = new List<SortAttribute>();
+            SortAttributes = new List<SortAttribute>();
             foreach (var attribute in attributes)
             {
                 if (!string.IsNullOrEmpty(attribute))
                 {
                     if (attribute[0] == '!')
                     {
-                        sortAttributes.Add(new SortAttribute(attribute.Substring(1), OrderType.Descending));
+                        SortAttributes.Add(new SortAttribute(attribute.Substring(1), OrderType.Descending));
                     }
                     else
                     {
-                        sortAttributes.Add(new SortAttribute(attribute, OrderType.Ascending));
+                        SortAttributes.Add(new SortAttribute(attribute, OrderType.Ascending));
                     }
                 }
             }
@@ -35,10 +34,7 @@
         /// <returns>The list of sort attributes</returns>
         public List<SortAttribute> SortAttributes
         {
-            get
-            {
-                return sortAttributes;
-            }
+            get;
         }
 
         /// <summary>The method that performs the actual comparison in the CintDynEntityComparer class.</summary>
@@ -48,7 +44,7 @@
         public int Compare(Entity x, Entity y)
         {
             var result = 0;
-            foreach (var sortAttribute in sortAttributes)
+            foreach (var sortAttribute in SortAttributes)
             {
                 var xAttrValue = x.Contains(sortAttribute.Attribute) ? x.Attributes[sortAttribute.Attribute] : null;
                 var yAttrValue = y.Contains(sortAttribute.Attribute) ? y.Attributes[sortAttribute.Attribute] : null;

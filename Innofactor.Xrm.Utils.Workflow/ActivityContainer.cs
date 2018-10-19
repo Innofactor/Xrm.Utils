@@ -10,27 +10,30 @@
 
     public class ActivityContainer : IActivityContainer
     {
-        public ActivityContainer(CodeActivityContext codeActivityContext)
+        public ActivityContainer(CodeActivityContext context)
         {
-            ActivityContext = codeActivityContext;
-            WorkflowContext = codeActivityContext.GetExtension<IWorkflowContext>();
+            ActivityContext = context;
+            workflowContext = new Lazy<IWorkflowContext>(() => context.GetExtension<IWorkflowContext>());
+
+            // Reset values of entities, if they was already used —
+            // this move will set fresh values for cached loggers and services
+            logger = new Lazy<ITracingService>(() => provider.Get<ITracingService>());
+            service = new Lazy<IOrganizationService>(() => provider.Get<IOrganizationService>());
         }
 
         public new Action<ActivityContainer> Action { get; set; }
 
         public CodeActivityContext ActivityContext { get; }
 
-        public EntityReference TargetReference
-        {
-            get
-            {
-                return new EntityReference(WorkflowContext.PrimaryEntityName, WorkflowContext.PrimaryEntityId);
-            }
-        }
+        private Lazy<IWorkflowContext> workflowContext;
 
-        public IWorkflowContext WorkflowContext { get; }
+        public EntityReference TargetReference => 
+            new EntityReference(WorkflowContext.PrimaryEntityName, WorkflowContext.PrimaryEntityId);
 
-        public override void Execute()
+        public IWorkflowContext WorkflowContext =>
+            workflowContext.Value;
+
+        public void Execute()
         {
             try
             {
@@ -79,8 +82,6 @@
         }
 
         public void SetCodeActivityParameter<T>(OutArgument<T> parameter, T value) => parameter.Set(ActivityContext, value);
-
-        protected override CintDynEntity GetCompleteEntity() => CintDynEntity.Retrieve(this, TargetReference, new ColumnSet(true));
 
         protected override ILoggable GetContextLogger()
         {
