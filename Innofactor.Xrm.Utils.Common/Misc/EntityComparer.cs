@@ -8,13 +8,7 @@
     /// <summary>A class used to compare cintdynentity instances</summary>
     public sealed class EntityComparer : IComparer<Entity>
     {
-        #region Private Fields
-
         private readonly List<SortAttribute> sortAttributes;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         /// <summary>Constructor of CintDynEntity class. Takes a list of attribute names as an argument.</summary>
         /// <param name="attributes">The attributes to sort the comparison by......</param>
@@ -37,10 +31,6 @@
             }
         }
 
-        #endregion Public Constructors
-
-        #region Public Properties
-
         /// <summary>Property returning the configured sort attributes.</summary>
         /// <returns>The list of sort attributes</returns>
         public List<SortAttribute> SortAttributes
@@ -50,10 +40,6 @@
                 return sortAttributes;
             }
         }
-
-        #endregion Public Properties
-
-        #region Public Methods
 
         /// <summary>The method that performs the actual comparison in the CintDynEntityComparer class.</summary>
         /// <param name="x">The Entity to compare.</param>
@@ -95,10 +81,6 @@
             }
             return result;
         }
-
-        #endregion Public Methods
-
-        #region Private Methods
 
         private static int CompareDateTimes(object xAttrValue, object yAttrValue)
         {
@@ -153,7 +135,5 @@
             }
             return result;
         }
-
-        #endregion Private Methods
     }
 }

@@ -4,7 +4,6 @@
     using System.Linq;
     using System.Reflection;
     using System.ServiceModel;
-    using System.Xml;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Crm.Sdk.Messages;
     using Microsoft.Xrm.Sdk;
@@ -16,8 +15,6 @@
     /// </summary>
     public static partial class ContainerExtensions
     {
-        #region Public Methods
-
         /// <summary>Associates current record with relatedentity, using specified intersect relationship</summary>
         /// <param name="container"></param>
         /// <param name="entity">Current entity</param>
@@ -255,7 +252,5 @@
 
             return response;
         }
-
-        #endregion Public Methods
     }
 }

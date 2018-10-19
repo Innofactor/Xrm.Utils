@@ -10,8 +10,6 @@
     /// </summary>
     public static partial class ContainerExtensions
     {
-        #region Public Methods
-
         /// <summary>
         ///
         /// </summary>
@@ -145,7 +143,5 @@
             container.Service.Update(entity);
             container.Logger.Log($"Updated {entity.LogicalName} {entity.Id} with {entity.Attributes.Count} attributes");
         }
-
-        #endregion Public Methods
     }
 }

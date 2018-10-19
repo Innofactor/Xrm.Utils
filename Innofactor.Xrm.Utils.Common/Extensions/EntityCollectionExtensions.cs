@@ -11,8 +11,6 @@
     /// </summary>
     public static class EntityCollectionExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// Adds entity to current collection
         /// </summary>
@@ -75,7 +73,5 @@
         /// <returns></returns>
         public static EntityReferenceCollection ToEntityReferenceCollection(this EntityCollection collection) =>
             new EntityReferenceCollection(collection.Entities.Select(x => x.ToEntityReference()).ToList());
-
-        #endregion Public Methods
     }
 }

@@ -9,14 +9,8 @@
 
     public class OperationsSet5 : InformationBase
     {
-        #region Private Fields
-
         private readonly string intersectionName;
         private readonly Entity target;
-
-        #endregion Private Fields
-
-        #region Internal Constructors
 
         internal OperationsSet5(IContainable container, Entity target, string intersectionName)
             : base(container)
@@ -24,10 +18,6 @@
             this.target = target;
             this.intersectionName = intersectionName;
         }
-
-        #endregion Internal Constructors
-
-        #region Public Methods
 
         public bool LinkTo(Entity related) =>
             LinkTo(new EntityReference[] { related.ToEntityReference() });
@@ -131,7 +121,5 @@
                 return false;
             }
         }
-
-        #endregion Public Methods
     }
 }

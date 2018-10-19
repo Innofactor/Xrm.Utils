@@ -1,28 +1,22 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Fluent.Attribute
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Text;
     using Innofactor.Xrm.Utils.Common.Extensions;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Metadata;
     using Microsoft.Xrm.Sdk.Query;
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Text;
 
     public class OperationsSet2 : Information
     {
-        #region Internal Constructors
-
         internal OperationsSet2(IContainable container, string name, Entity target)
             : base(container, name, target)
         {
         }
-
-        #endregion Internal Constructors
-
-        #region Public Methods
 
         /// <summary>
         /// Will add given <paramref name="columns"/> to the operation
@@ -270,10 +264,6 @@
             }
         }
 
-        #endregion Public Methods
-
-        #region Private Methods
-
         private string ToString(string attributeName, object attributeValue)
         {
             if (attributeValue is AliasedValue)
@@ -392,7 +382,5 @@
                 return null;
             }
         }
-
-        #endregion Private Methods
     }
 }

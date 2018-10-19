@@ -11,17 +11,11 @@
 
     public class OperationsSet4 : OperationsSet3
     {
-        #region Private Fields
-
         private readonly string name;
         private FilterExpression condition;
         private bool flagNoLock;
         private bool flagOnlyActive;
         private IEnumerable<OrderExpression> order;
-
-        #endregion Private Fields
-
-        #region Public Constructors
 
         public OperationsSet4(IContainable container, string logicalName, EntityReference target, string name)
             : base(container, logicalName, target)
@@ -31,10 +25,6 @@
             flagNoLock = false;
             flagOnlyActive = false;
         }
-
-        #endregion Public Constructors
-
-        #region Public Properties
 
         public OperationsSet4 NoLock
         {
@@ -55,10 +45,6 @@
                 return this;
             }
         }
-
-        #endregion Public Properties
-
-        #region Public Methods
 
         /// <summary>
         /// Add locking flag explicitly
@@ -169,10 +155,6 @@
             return this;
         }
 
-        #endregion Public Methods
-
-        #region Private Methods
-
         private EntityCollection ExpandEntity(ColumnSet columns)
         {
             container.Logger.StartSection($"ExpandEntity");
@@ -261,7 +243,5 @@
 
             return result;
         }
-
-        #endregion Private Methods
     }
 }

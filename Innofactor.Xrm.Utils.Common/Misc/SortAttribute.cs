@@ -5,8 +5,6 @@
     /// <summary>A class used to contain the sorting attributes for the comparer class.</summary>
     public class SortAttribute
     {
-        #region Public Fields
-
         /// <summary>Property returning the sort attribute.</summary>
         /// <returns>The string that is the sort attribute.</returns>
         public string Attribute;
@@ -14,10 +12,6 @@
         /// <summary>Property returning the sorting type.</summary>
         /// <returns>The OrderType value.</returns>
         public OrderType Type;
-
-        #endregion Public Fields
-
-        #region Public Constructors
 
         /// <summary>Constructor of SortAttribute class. Takes an attribute name and an OrderType as arguments.</summary>
         /// <param name="attribute">The sort attribute</param>
@@ -27,7 +21,5 @@
             Attribute = attribute;
             Type = type;
         }
-
-        #endregion Public Constructors
     }
 }
