@@ -8,10 +8,10 @@
 
     public class EntitySet
     {
-        private readonly Lazy<Entity> target;
-        private readonly Lazy<Entity> pre;
-        private readonly Lazy<Entity> post;
         private readonly Lazy<Entity> complete;
+        private readonly Lazy<Entity> post;
+        private readonly Lazy<Entity> pre;
+        private readonly Lazy<Entity> target;
 
         public EntitySet(Lazy<IPluginExecutionContext> context)
         {

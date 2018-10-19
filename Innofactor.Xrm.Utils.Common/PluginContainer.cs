@@ -12,6 +12,7 @@
     /// </summary>
     public class PluginContainer : IPluginExecutionContainer, IDisposable
     {
+        private Lazy<EntitySet> entities;
         private Lazy<IOrganizationService> service;
         private Lazy<IPluginExecutionContext> context;
         private Lazy<ITracingService> logger;
@@ -30,7 +31,7 @@
             logger = new Lazy<ITracingService>(() => provider.Get<ITracingService>());
             service = new Lazy<IOrganizationService>(() => provider.Get<IOrganizationService>());
 
-            Entities = new EntitySet(context);
+            entities = new Lazy<EntitySet>(() => new EntitySet(context));
         }
 
         /// <summary>
@@ -44,10 +45,8 @@
             set;
         }
 
-        public EntitySet Entities
-        {
-            get;
-        }
+        public EntitySet Entities =>
+            entities.Value;
 
         /// <summary>
         /// Gets instance of the <see cref="IPluginExecutionContext"/> assosiated with current container

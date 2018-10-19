@@ -1,5 +1,6 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Interfaces
 {
+    using Innofactor.Xrm.Utils.Common.Misc;
     using Microsoft.Xrm.Sdk;
 
     /// <summary>
@@ -11,6 +12,11 @@
         /// Gets instance of the <see cref="IPluginExecutionContext"/> assosiated with current container
         /// </summary>
         IPluginExecutionContext Context
+        {
+            get;
+        }
+
+        EntitySet Entities
         {
             get;
         }
