@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics;
+    using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
 
     /// <summary>
@@ -9,15 +10,11 @@
     /// </summary>
     public abstract class PluginBase : IPlugin
     {
-        private readonly string name;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginBase"/> class. Will use refrected name of the calling plugin.
         /// </summary>
         public PluginBase()
-            : base()
         {
-            name = (new StackTrace()).GetFrame(1).GetMethod().ReflectedType.Name;
         }
 
         /// <summary>
@@ -28,7 +25,7 @@
             new PluginContainer(serviceProvider)
             {
                 Validator = new Predicate<IPluginExecutionContext>(Validate),
-                Action = new Action<PluginContainer>(Execute)
+                Action = new Action<IPluginExecutionContainer>(Execute)
             }
             .Execute();
 
@@ -36,7 +33,7 @@
         /// Main entry point for the plugin
         /// </summary>
         /// <param name="container"></param>
-        public abstract void Execute(PluginContainer container);
+        public abstract void Execute(IPluginExecutionContainer container);
 
         /// <summary>
         /// Method to validate plugin's execution context

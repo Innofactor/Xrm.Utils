@@ -11,7 +11,7 @@
     /// Container object that helps to keep all objects and methods needed for CRM development in
     /// package easy to access and operate
     /// </summary>
-    public class PluginContainer : IPluginContainer, IDisposable
+    public class PluginContainer : IPluginExecutionContainer, IDisposable
     {
         private Lazy<Entity> completeEntity;
         private Lazy<Entity> postEntity;

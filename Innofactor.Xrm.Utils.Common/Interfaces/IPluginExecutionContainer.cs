@@ -5,7 +5,7 @@
     /// <summary>
     /// Plugin specific extensions to IContainable
     /// </summary>
-    public interface IPluginContainer : IContainable
+    public interface IPluginExecutionContainer : IContainable
     {
         /// <summary>
         /// Gets instance of the <see cref="IPluginExecutionContext"/> assosiated with current container

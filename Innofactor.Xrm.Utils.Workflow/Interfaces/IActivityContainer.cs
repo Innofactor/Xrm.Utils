@@ -1,7 +1,7 @@
 ﻿namespace Innofactor.Xrm.Utils.Workflow.Interfaces
 {
     using System.Activities;
-    using Cinteros.Crm.Utils.Common.Interfaces;
+    using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk.Workflow;
 
     /// <summary>
@@ -9,8 +9,6 @@
     /// </summary>
     public interface IActivityContainer : IContainable
     {
-        #region Public Properties
-
         /// <summary>
         /// Gets instance of the <see cref="CodeActivityContext"/> assosiated with current container
         /// </summary>
@@ -26,7 +24,5 @@
         {
             get;
         }
-
-        #endregion Public Properties
     }
 }
