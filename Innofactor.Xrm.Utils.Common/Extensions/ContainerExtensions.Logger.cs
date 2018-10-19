@@ -4,10 +4,10 @@ namespace Innofactor.Xrm.Utils.Common.Extensions
 {
     public static partial class ContainerExtensions
     {
-        public static void EndSection(this IContainable container) =>
+        public static void EndSection(this IExecutionContainer container) =>
             container.Logger.EndSection();
 
-        public static void StartSection(this IContainable container, string name) =>
+        public static void StartSection(this IExecutionContainer container, string name) =>
             container.Logger.StartSection(name);
     }
 }

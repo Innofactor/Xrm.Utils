@@ -34,7 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Entity\OperationsSet4.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Entity\OperationsSet5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\InformationBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IContainable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IExecutionContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginExecutionContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\EntitySet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\EntityComparer.cs" />

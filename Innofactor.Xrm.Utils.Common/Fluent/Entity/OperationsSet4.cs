@@ -17,7 +17,7 @@
         private bool flagOnlyActive;
         private IEnumerable<OrderExpression> order;
 
-        public OperationsSet4(IContainable container, string logicalName, EntityReference target, string name)
+        public OperationsSet4(IExecutionContainer container, string logicalName, EntityReference target, string name)
             : base(container, logicalName, target)
         {
             this.name = name;

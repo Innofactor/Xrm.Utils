@@ -7,7 +7,7 @@
     /// <summary>
     /// Plugin specific extensions to IContainable
     /// </summary>
-    public interface IActivityContainer : IContainable
+    public interface IActivityContainer : IExecutionContainer
     {
         /// <summary>
         /// Gets instance of the <see cref="CodeActivityContext"/> assosiated with current container

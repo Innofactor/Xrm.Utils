@@ -5,7 +5,7 @@
 
     public class OperationsSet1 : Information
     {
-        internal OperationsSet1(IContainable container, string name)
+        internal OperationsSet1(IExecutionContainer container, string name)
             : base(container, name)
         {
         }

@@ -6,7 +6,7 @@
     /// Core object that helps to keep all objects and methods needed for CRM development in
     /// package easy to access and operate
     /// </summary>
-    public interface IContainable
+    public interface IExecutionContainer
     {
         /// <summary>
         /// Get instance of the <see cref="ITracingService"/> assosiated with current container

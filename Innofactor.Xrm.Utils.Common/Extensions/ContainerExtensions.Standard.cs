@@ -16,7 +16,7 @@
         /// <param name="container"></param>
         /// <param name="entity"></param>
         /// <returns>The Guid of the created entity.</returns>
-        public static Entity Create(this IContainable container, Entity entity)
+        public static Entity Create(this IExecutionContainer container, Entity entity)
         {
             entity.Id = container.Service.Create(entity);
             container.Logger.Log($"Created {entity.LogicalName}:{entity.Id}");
@@ -29,7 +29,7 @@
         /// </summary>
         /// <param name="container"></param>
         /// <param name="entity"></param>
-        public static void Delete(this IContainable container, Entity entity)
+        public static void Delete(this IExecutionContainer container, Entity entity)
         {
             if (entity.Id.Equals(Guid.Empty))
             {
@@ -45,7 +45,7 @@
         /// <param name="reference"></param>
         /// <param name="allColumns"></param>
         /// <returns></returns>
-        public static Entity Retrieve(this IContainable container, EntityReference reference, bool allColumns) =>
+        public static Entity Retrieve(this IExecutionContainer container, EntityReference reference, bool allColumns) =>
             container.Service.Retrieve(reference.LogicalName, reference.Id, new ColumnSet(allColumns));
 
         /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
@@ -53,7 +53,7 @@
         /// <param name="reference"></param>
         /// <param name="columns">Set of colums with which entity should be reloaded</param>
         /// <returns></returns>
-        public static Entity Retrieve(this IContainable container, EntityReference reference, params string[] columns) =>
+        public static Entity Retrieve(this IExecutionContainer container, EntityReference reference, params string[] columns) =>
             container.Service.Retrieve(reference.LogicalName, reference.Id, new ColumnSet(columns));
 
         /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
@@ -61,7 +61,7 @@
         /// <param name="reference"></param>
         /// <param name="columnSet"></param>
         /// <returns></returns>
-        public static Entity Retrieve(this IContainable container, EntityReference reference, ColumnSet columnSet) =>
+        public static Entity Retrieve(this IExecutionContainer container, EntityReference reference, ColumnSet columnSet) =>
             container.Service.Retrieve(reference.LogicalName, reference.Id, columnSet);
 
         /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
@@ -70,7 +70,7 @@
         /// <param name="id"></param>
         /// <param name="allColumns"></param>
         /// <returns></returns>
-        public static Entity Retrieve(this IContainable container, string entityName, Guid id, bool allColumns) =>
+        public static Entity Retrieve(this IExecutionContainer container, string entityName, Guid id, bool allColumns) =>
             container.Service.Retrieve(entityName, id, new ColumnSet(allColumns));
 
         /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
@@ -79,7 +79,7 @@
         /// <param name="id"></param>
         /// <param name="columns">Set of colums with which entity should be reloaded</param>
         /// <returns></returns>
-        public static Entity Retrieve(this IContainable container, string entityName, Guid id, params string[] columns) =>
+        public static Entity Retrieve(this IExecutionContainer container, string entityName, Guid id, params string[] columns) =>
             container.Service.Retrieve(entityName, id, new ColumnSet(columns));
 
         /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
@@ -88,7 +88,7 @@
         /// <param name="id"></param>
         /// <param name="columnSet"></param>
         /// <returns></returns>
-        public static Entity Retrieve(this IContainable container, string entityName, Guid id, ColumnSet columnSet) =>
+        public static Entity Retrieve(this IExecutionContainer container, string entityName, Guid id, ColumnSet columnSet) =>
             container.Service.Retrieve(entityName, id, columnSet);
 
         /// <summary>
@@ -97,7 +97,7 @@
         /// <param name="container"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static EntityCollection RetrieveMultiple(this IContainable container, QueryBase query) =>
+        public static EntityCollection RetrieveMultiple(this IExecutionContainer container, QueryBase query) =>
             container.Service.RetrieveMultiple(query);
 
         /// <summary>Retrieve objects matching given criteria</summary>
@@ -107,7 +107,7 @@
         /// <param name="value"></param>
         /// <param name="columns"></param>
         /// <returns>EntityCollection that encapsulate the resulting Entity records</returns>
-        public static EntityCollection RetrieveMultiple(this IContainable container, string entity, string[] attribute, object[] value, ColumnSet columns)
+        public static EntityCollection RetrieveMultiple(this IExecutionContainer container, string entity, string[] attribute, object[] value, ColumnSet columns)
         {
             var query = new QueryByAttribute(entity);
             query.Attributes.AddRange(attribute);
@@ -121,7 +121,7 @@
         /// </summary>
         /// <param name="container"></param>
         /// <param name="entity"></param>
-        public static void Save(this IContainable container, Entity entity)
+        public static void Save(this IExecutionContainer container, Entity entity)
         {
             if (entity.Id.Equals(Guid.Empty))
             {
@@ -138,7 +138,7 @@
         /// </summary>
         /// <param name="container"></param>
         /// <param name="entity"></param>
-        public static void Update(this IContainable container, Entity entity)
+        public static void Update(this IExecutionContainer container, Entity entity)
         {
             container.Service.Update(entity);
             container.Logger.Log($"Updated {entity.LogicalName} {entity.Id} with {entity.Attributes.Count} attributes");

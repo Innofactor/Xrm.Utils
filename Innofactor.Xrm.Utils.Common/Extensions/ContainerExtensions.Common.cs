@@ -27,7 +27,7 @@
         /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault"/>: Thrown when association already exists.
         /// </para>
         /// </exception>
-        public static void Associate(this IContainable container, Entity entity, Entity relatedentity, string intersect)
+        public static void Associate(this IExecutionContainer container, Entity entity, Entity relatedentity, string intersect)
         {
             var collection = new EntityCollection();
             collection.Add(relatedentity);
@@ -46,7 +46,7 @@
         /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault"/>: Thrown when any of the associations already exists.
         /// </para>
         /// </exception>
-        public static void Associate(this IContainable container, Entity entity, EntityCollection relatedEntities, string intersect)
+        public static void Associate(this IExecutionContainer container, Entity entity, EntityCollection relatedEntities, string intersect)
         {
             if (entity == null)
             {
@@ -69,7 +69,7 @@
         /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault"/>: Thrown when any of the associations already exists.
         /// </para>
         /// </exception>
-        public static void Associate(this IContainable container, Entity entity, EntityCollection relatedEntities, string intersect, int batchSize)
+        public static void Associate(this IExecutionContainer container, Entity entity, EntityCollection relatedEntities, string intersect, int batchSize)
         {
             if (entity == null)
             {
@@ -114,7 +114,7 @@
         /// <param name="container"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static string Convert(this IContainable container, QueryExpression query)
+        public static string Convert(this IExecutionContainer container, QueryExpression query)
         {
             container.Logger.StartSection("Slim: Convert");
 
@@ -151,7 +151,7 @@
         /// <param name="entity1"></param>
         /// <param name="entity2"></param>
         /// <returns></returns>
-        public static Entity Merge(this IContainable container, Entity entity1, Entity entity2)
+        public static Entity Merge(this IExecutionContainer container, Entity entity1, Entity entity2)
         {
             container.Logger.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
 
@@ -174,7 +174,7 @@
         /// <param name="container"></param>
         /// <param name="entity"></param>
         /// <remarks>ToStringWithEntityName() is replaced with entity.LogicalName</remarks>
-        public static Entity Reload(this IContainable container, Entity entity) =>
+        public static Entity Reload(this IExecutionContainer container, Entity entity) =>
             container.Reload(entity, new ColumnSet());
 
         /// <summary>Reloads encapsulated Entity from database</summary>
@@ -182,7 +182,7 @@
         /// <param name="entity"></param>
         /// <param name="allColumns"></param>
         /// <remarks>ToStringWithEntityName() is replaced with entity.LogicalName</remarks>
-        public static Entity Reload(this IContainable container, Entity entity, bool allColumns) =>
+        public static Entity Reload(this IExecutionContainer container, Entity entity, bool allColumns) =>
             container.Reload(entity, new ColumnSet(allColumns));
 
         /// <summary>Reloads encapsulated Entity from database</summary>
@@ -190,7 +190,7 @@
         /// <param name="entity"></param>
         /// <param name="columns">Set of colums with which entity should be reloaded</param>
         /// <remarks>ToStringWithEntityName() is replaced with entity.LogicalName</remarks>
-        public static Entity Reload(this IContainable container, Entity entity, params string[] columns) =>
+        public static Entity Reload(this IExecutionContainer container, Entity entity, params string[] columns) =>
             container.Reload(entity, new ColumnSet(columns));
 
         /// <summary>Reloads encapsulated Entity from database</summary>
@@ -198,7 +198,7 @@
         /// <param name="entity"></param>
         /// <param name="columns">Set of colums with which entity should be reloaded</param>
         /// <remarks>ToStringWithEntityName() is replaced with entity.LogicalName</remarks>
-        public static Entity Reload(this IContainable container, Entity entity, ColumnSet columns)
+        public static Entity Reload(this IExecutionContainer container, Entity entity, ColumnSet columns)
         {
             container.Logger.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
 
@@ -237,7 +237,7 @@
         /// <param name="entity"></param>
         /// <param name="state">Active=0 and Inactive=1</param>
         /// <param name="status">Active=1 and Inactive=2</param>
-        public static SetStateResponse SetState(this IContainable container, Entity entity, int state, int status)
+        public static SetStateResponse SetState(this IExecutionContainer container, Entity entity, int state, int status)
         {
             container.Logger.Log($"Setting state {state} {status} on {entity.LogicalName}");
 

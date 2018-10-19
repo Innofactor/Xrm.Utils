@@ -9,7 +9,7 @@
 
         protected readonly string logicalName;
 
-        internal OperationsSet3(IContainable container, string logicalName, EntityReference target)
+        internal OperationsSet3(IExecutionContainer container, string logicalName, EntityReference target)
             : base(container)
         {
             this.logicalName = logicalName;

@@ -7,7 +7,7 @@
 
     public class OperationsSet2 : Information
     {
-        internal OperationsSet2(IContainable container, EntityReference principal, EntityReference target)
+        internal OperationsSet2(IExecutionContainer container, EntityReference principal, EntityReference target)
             : base(container, principal, target)
         {
         }

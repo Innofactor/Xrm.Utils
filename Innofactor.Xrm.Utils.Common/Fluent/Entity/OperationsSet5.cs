@@ -12,7 +12,7 @@
         private readonly string intersectionName;
         private readonly Entity target;
 
-        internal OperationsSet5(IContainable container, Entity target, string intersectionName)
+        internal OperationsSet5(IExecutionContainer container, Entity target, string intersectionName)
             : base(container)
         {
             this.target = target;

@@ -8,11 +8,11 @@
         protected readonly string name;
         protected readonly Entity target;
 
-        internal Information(IContainable container, string name)
+        internal Information(IExecutionContainer container, string name)
             : base(container) =>
             this.name = name;
 
-        internal Information(IContainable container, string name, Entity target)
+        internal Information(IExecutionContainer container, string name, Entity target)
             : this(container, name) =>
             this.target = target;
     }

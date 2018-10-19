@@ -13,7 +13,7 @@
 
     public class OperationsSet2 : Information
     {
-        internal OperationsSet2(IContainable container, string name, Entity target)
+        internal OperationsSet2(IExecutionContainer container, string name, Entity target)
             : base(container, name, target)
         {
         }

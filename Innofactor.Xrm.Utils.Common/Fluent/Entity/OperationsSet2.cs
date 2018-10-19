@@ -16,7 +16,7 @@
         private static readonly ConcurrentDictionary<string, string> PrimaryIdAttributes = new ConcurrentDictionary<string, string>();
         private static readonly ConcurrentDictionary<string, string> PrimaryNameAttributes = new ConcurrentDictionary<string, string>();
 
-        internal OperationsSet2(IContainable container, string logicalName)
+        internal OperationsSet2(IExecutionContainer container, string logicalName)
             : base(container) =>
             this.logicalName = logicalName;
 

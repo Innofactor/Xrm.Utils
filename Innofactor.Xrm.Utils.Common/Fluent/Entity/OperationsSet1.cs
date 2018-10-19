@@ -11,7 +11,7 @@
     {
         private readonly Entity target;
 
-        internal OperationsSet1(IContainable container, Entity target)
+        internal OperationsSet1(IExecutionContainer container, Entity target)
             : base(container) =>
             this.target = target;
 

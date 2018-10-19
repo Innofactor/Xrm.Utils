@@ -5,9 +5,9 @@
 
     public class InformationBase
     {
-        protected readonly IContainable container;
+        protected readonly IExecutionContainer container;
 
-        internal InformationBase(IContainable container)
+        internal InformationBase(IExecutionContainer container)
             => this.container = container;
 
         [EditorBrowsable(EditorBrowsableState.Never)]
