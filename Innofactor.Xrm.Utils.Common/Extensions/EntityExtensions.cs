@@ -43,7 +43,6 @@
             new Entity(entity.LogicalName, entity.Id);
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="name"></param>
@@ -102,7 +101,6 @@
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="container"></param>
         /// <param name="entity1"></param>
@@ -139,7 +137,6 @@
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="name"></param>

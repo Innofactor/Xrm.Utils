@@ -25,7 +25,7 @@
         /// All available entity information from context
         /// </summary>
         /// <returns>
-        /// Complete <see cref="Entity"/>, merge of all atributes found on `target`,
+        /// Complete <see cref="Entity" />, merge of all atributes found on `target`,
         /// `preimage` and `postimage` entiies
         /// </returns>
         public Entity Complete =>
@@ -34,26 +34,25 @@
         /// <summary>
         /// Pre image information from plugin execution context. The image name is hardcoded as `preimage`
         /// </summary>
-        /// <returns>Pre <see cref="Entity"/></returns>
+        /// <returns>Pre <see cref="Entity" /></returns>
         public Entity Pre =>
             pre.Value;
 
         /// <summary>
         /// Post image information from plugin execution context. The image name is hardcoded as `postimage`
         /// </summary>
-        /// <returns>Post <see cref="Entity"/></returns>
+        /// <returns>Post <see cref="Entity" /></returns>
         public Entity Post =>
             post.Value;
 
         /// <summary>
         /// Gets target information from plugin execution context
         /// </summary>
-        /// <returns>Target <see cref="Entity"/></returns>
+        /// <returns>Target <see cref="Entity" /></returns>
         public Entity Target =>
             target.Value;
 
         /// <summary>
-        ///
         /// </summary>
         /// <returns></returns>
         protected static Entity GetCompleteEntity(Lazy<IPluginExecutionContext> context)

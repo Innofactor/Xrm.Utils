@@ -9,7 +9,7 @@
     public interface IExecutionContainer
     {
         /// <summary>
-        /// Get instance of the <see cref="ITracingService"/> assosiated with current container
+        /// Get instance of the <see cref="ITracingService" /> assosiated with current container
         /// </summary>
         ITracingService Logger
         {
@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        /// Gets instance of <see cref="IOrganizationService"/> assosiated with current container
+        /// Gets instance of <see cref="IOrganizationService" /> assosiated with current container
         /// </summary>
         IOrganizationService Service
         {

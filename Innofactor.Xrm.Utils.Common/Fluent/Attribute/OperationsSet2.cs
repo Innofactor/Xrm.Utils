@@ -19,7 +19,7 @@
         }
 
         /// <summary>
-        /// Will add given <paramref name="columns"/> to the operation
+        /// Will add given <paramref name="columns" /> to the operation
         /// </summary>
         /// <param name="columns"></param>
         /// <returns></returns>
@@ -34,6 +34,7 @@
                 refatt = refname.Substring(refname.IndexOf('.') + 1);
                 refname = refname.Substring(0, refname.IndexOf('.'));
             }
+
             if (target.Attributes.Contains(refname))
             {
                 var reference = default(EntityReference);
@@ -45,10 +46,12 @@
                 {
                     reference = new EntityReference(string.Empty, (Guid)target.Attributes[refname]);
                 }
+
                 if (string.IsNullOrEmpty(reference.LogicalName))
                 {
                     reference.LogicalName = CintDynEntity.GetRelatedEntityNameFromLookupAttributeName(refname);
                 }
+
                 if (reference != null)
                 {
                     if (refatt != string.Empty)
@@ -60,7 +63,7 @@
                         }
 
                         container.Logger.Log($"Loading {reference.LogicalName} {reference.Id} column {nextref}");
-                        var cdNextRelated = container.Retrieve(reference, new ColumnSet(new string[] { nextref }));
+                        var cdNextRelated = container.Retrieve(reference, new ColumnSet(new string[] {nextref}));
                         if (cdNextRelated != null)
                         {
                             result = container
@@ -79,6 +82,7 @@
             {
                 container.Logger.Log($"Record does not contain attribute {refname}");
             }
+
             if (result == null)
             {
                 container.Logger.Log("Could not load related record");
@@ -93,7 +97,7 @@
         }
 
         /// <summary>
-        /// Will add given <paramref name="columns"/> to the operation
+        /// Will add given <paramref name="columns" /> to the operation
         /// </summary>
         /// <param name="columns"></param>
         /// <returns></returns>
@@ -140,7 +144,7 @@
         }
 
         /// <summary>
-        /// Gets a readable string representation of given attribute using  <paramref name="format"/>
+        /// Gets a readable string representation of given attribute using  <paramref name="format" />
         /// </summary>
         /// <param name="format"></param>
         /// <returns>Formatted value of the attribute</returns>
@@ -237,7 +241,9 @@
                         {
                             result = tmpInt.ToString(format);
                         }
-                        else if (decimal.TryParse(result.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator).Replace(",", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator), out var tmpDecimal))
+                        else if (decimal.TryParse(
+                            result.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator).Replace(",", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator),
+                            out var tmpDecimal))
                         {
                             result = tmpDecimal.ToString(format);
                         }
@@ -247,15 +253,18 @@
                             {
                                 format = "{0:" + format + "}";
                             }
+
                             result = string.Format(format, result);
                         }
                     }
                 }
+
                 // Applicera eventuella egna implementerade formatsträngar
                 foreach (var extraFormat in extraFormats)
                 {
                     result = PPH_Utils.FormatByTag(result, extraFormat);
                 }
+
                 return result;
             }
             finally
@@ -312,18 +321,22 @@
                         {
                             party = ((EntityReference)activityparty["partyid"]).Name;
                         }
+
                         if (string.IsNullOrEmpty(party) && activityparty.Contains("addressused"))
                         {
                             party = activityparty["addressused"].ToString();
                         }
+
                         if (string.IsNullOrEmpty(party))
                         {
                             party = activityparty.Id.ToString();
                         }
+
                         if (partyAdded)
                         {
                             result.Append(", ");
                         }
+
                         result.Append(party);
                         partyAdded = true;
                     }
@@ -353,7 +366,7 @@
                         }
                     }
 
-                    return "";  // OptionSet value not found!
+                    return ""; // OptionSet value not found!
                 }
             }
             else if (attributeValue is DateTime)

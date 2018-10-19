@@ -30,6 +30,7 @@
                             return (Guid)context.OutputParameters[ParameterName.Id];
                         }
                     }
+
                     break;
 
                 case MessageName.DeliverIncoming:
@@ -45,6 +46,7 @@
                             return (Guid)context.OutputParameters[ParameterName.EmailId];
                         }
                     }
+
                     break;
 
                 case MessageName.Update:
@@ -53,6 +55,7 @@
                     {
                         return ((Entity)context.InputParameters[ParameterName.Target]).Id;
                     }
+
                     break;
 
                 case MessageName.Delete:
@@ -63,6 +66,7 @@
                     {
                         return ((EntityReference)context.InputParameters[ParameterName.Target]).Id;
                     }
+
                     break;
 
                 case MessageName.SetState:

@@ -41,6 +41,7 @@
             {
                 return string.Empty;
             }
+
             foreach (var commonattribute in "name;fullname;title;subject".Split(';'))
             {
                 if (target.Contains(commonattribute))
@@ -48,6 +49,7 @@
                     return container.Attribute(commonattribute).On(target).ToString();
                 }
             }
+
             foreach (var prefix in Prefixes)
             {
                 if (target.Contains(prefix + "name"))
@@ -55,6 +57,7 @@
                     return container.Attribute(prefix + "name").On(target).ToString();
                 }
             }
+
             if (target.Id.Equals(Guid.Empty))
             {
                 return string.Empty;

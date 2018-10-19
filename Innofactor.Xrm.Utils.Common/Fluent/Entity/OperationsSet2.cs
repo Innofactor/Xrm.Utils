@@ -11,10 +11,9 @@
 
     public class OperationsSet2 : InformationBase
     {
-        protected readonly string logicalName;
-
         private static readonly ConcurrentDictionary<string, string> PrimaryIdAttributes = new ConcurrentDictionary<string, string>();
         private static readonly ConcurrentDictionary<string, string> PrimaryNameAttributes = new ConcurrentDictionary<string, string>();
+        protected readonly string logicalName;
 
         internal OperationsSet2(IExecutionContainer container, string logicalName)
             : base(container) =>
@@ -24,7 +23,7 @@
         /// Primary Id attribute of the entity
         /// </summary>
         public string PrimaryIdAttribute =>
-           primaryIdAttribute.Value;
+            primaryIdAttribute.Value;
 
         /// <summary>
         /// Primary Name attribute of the entity
@@ -83,6 +82,7 @@
                         throw new InvalidPluginExecutionException(
                             $"Unable to retrieve metadata/primaryattribute for entity: {logicalName}. Metadata is: {metabase}");
                     }
+
                     container.Logger.Log($"Returning {result}");
                 }
                 catch (FaultException<OrganizationServiceFault> ex)
@@ -102,6 +102,7 @@
                     container.Logger.EndSection();
                 }
             }
+
             return new Lazy<string>(() => result);
         }
 
@@ -144,6 +145,7 @@
                         throw new InvalidPluginExecutionException(
                             $"Unable to retrieve metadata/primaryattribute for entity: {logicalName}. Metadata is: {metabase.ToString()}");
                     }
+
                     container.Logger.Log($"Returning {result}");
                 }
                 catch (FaultException<OrganizationServiceFault> ex)

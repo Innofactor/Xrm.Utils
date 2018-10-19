@@ -20,7 +20,7 @@
         }
 
         public bool LinkTo(Entity related) =>
-            LinkTo(new EntityReference[] { related.ToEntityReference() });
+            LinkTo(new EntityReference[] {related.ToEntityReference()});
 
         public bool LinkTo(EntityCollection related) =>
             LinkTo(related.Entities.Select(x => x.ToEntityReference()));
@@ -29,7 +29,7 @@
             LinkTo(related.Select(x => x.ToEntityReference()));
 
         public bool LinkTo(EntityReference related) =>
-            LinkTo(new EntityReference[] { related });
+            LinkTo(new EntityReference[] {related});
 
         public bool LinkTo(EntityReferenceCollection related) =>
             LinkTo(related.ToArray());
@@ -44,7 +44,8 @@
 
                 var role = default(EntityRole?);
                 if (related.Count() > 0 && related.First().LogicalName == target.LogicalName)
-                {   // N:N-relation till samma entitet, då måste man ange en roll, tydligen.
+                {
+                    // N:N-relation till samma entitet, då måste man ange en roll, tydligen.
                     role = EntityRole.Referencing;
                 }
 
@@ -76,7 +77,7 @@
         }
 
         public bool UnlinkFrom(Entity related) =>
-            UnlinkFrom(new EntityReference[] { related.ToEntityReference() });
+            UnlinkFrom(new EntityReference[] {related.ToEntityReference()});
 
         public bool UnlinkFrom(EntityCollection related) =>
             UnlinkFrom(related.Entities.Select(x => x.ToEntityReference()));
@@ -85,7 +86,7 @@
             UnlinkFrom(related.Select(x => x.ToEntityReference()));
 
         public bool UnlinkFrom(EntityReference related) =>
-            UnlinkFrom(new EntityReference[] { related });
+            UnlinkFrom(new EntityReference[] {related});
 
         public bool UnlinkFrom(EntityReferenceCollection related) =>
             UnlinkFrom(related.ToArray());

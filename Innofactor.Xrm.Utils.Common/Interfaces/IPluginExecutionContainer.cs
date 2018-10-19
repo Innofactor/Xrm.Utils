@@ -9,7 +9,7 @@
     public interface IPluginExecutionContainer : IExecutionContainer
     {
         /// <summary>
-        /// Gets instance of the <see cref="IPluginExecutionContext"/> assosiated with current container
+        /// Gets instance of the <see cref="IPluginExecutionContext" /> assosiated with current container
         /// </summary>
         IPluginExecutionContext Context
         {

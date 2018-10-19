@@ -61,7 +61,7 @@
         /// <summary>
         /// Retrieves records (children) relating to current record (parent)
         /// </summary>
-        /// <param name="columns"><see cref="ColumnSet"/> to expand</param>
+        /// <param name="columns"><see cref="ColumnSet" /> to expand</param>
         /// <returns></returns>
         public EntityCollection Expand(ColumnSet columns)
         {
@@ -81,7 +81,7 @@
         }
 
         /// <summary>
-        /// Will add given <paramref name="columns"/> to the operation
+        /// Will add given <paramref name="columns" /> to the operation
         /// </summary>
         /// <param name="columns"></param>
         /// <returns></returns>
@@ -98,7 +98,7 @@
         /// <summary>
         /// Add fintering condition to composed query
         /// </summary>
-        /// <param name="condition"><see cref="FilterExpression"/> to apply</param>
+        /// <param name="condition"><see cref="FilterExpression" /> to apply</param>
         /// <returns></returns>
         public OperationsSet4 FilteredBy(FilterExpression condition)
         {
@@ -122,13 +122,13 @@
         /// <summary>
         /// Add sorting order to composed query
         /// </summary>
-        /// <param name="order"><see cref="OrderExpression"/> to apply</param>
+        /// <param name="order"><see cref="OrderExpression" /> to apply</param>
         /// <returns></returns>
         public OperationsSet4 SortedBy(OrderExpression order)
         {
             if (order != null)
             {
-                this.order = new OrderExpression[] { order };
+                this.order = new OrderExpression[] {order};
             }
 
             return this;
@@ -146,7 +146,7 @@
         /// <summary>
         /// Add sorting order to composed query
         /// </summary>
-        /// <param name="order">Collection of <see cref="OrderExpression"/> to apply</param>
+        /// <param name="order">Collection of <see cref="OrderExpression" /> to apply</param>
         /// <returns></returns>
         public OperationsSet4 SortedBy(IEnumerable<OrderExpression> order)
         {
@@ -208,15 +208,18 @@
 
             var query = new QueryExpression(logicalName);
             if (logicalName != target.LogicalName)
-            {   // N:N mellan olika entiteter
+            {
+                // N:N mellan olika entiteter
                 var leSource = CintQryExp.AppendLinkMM(query.LinkEntities, name, logicalName, otherIdAttribute, target.LogicalName, thisIdAttribute);
                 CintQryExp.AppendCondition(leSource.LinkCriteria, LogicalOperator.And, thisIdAttribute, ConditionOperator.Equal, target.Id);
             }
             else
-            {   // N:N till samma enititet
+            {
+                // N:N till samma enititet
                 var leSource = CintQryExp.AppendLink(query.LinkEntities, logicalName, name, otherIdAttribute, thisIdAttribute + "two");
                 CintQryExp.AppendCondition(leSource.LinkCriteria, LogicalOperator.And, thisIdAttribute + "one", ConditionOperator.Equal, target.Id);
             }
+
             if (flagOnlyActive)
             {
                 CintQryExp.AppendConditionActive(query.Criteria);

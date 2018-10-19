@@ -5,11 +5,14 @@
     using System.ServiceModel;
     using Innofactor.Xrm.Utils.Workflow.Interfaces;
     using Microsoft.Xrm.Sdk;
-    using Microsoft.Xrm.Sdk.Query;
     using Microsoft.Xrm.Sdk.Workflow;
 
     public class ActivityContainer : IActivityContainer
     {
+        private Lazy<IWorkflowContext> workflowContext;
+        private Lazy<ITracingService> logger;
+        private Lazy<IOrganizationService> service;
+
         public ActivityContainer(CodeActivityContext context)
         {
             ActivityContext = context;
@@ -21,14 +24,19 @@
             service = new Lazy<IOrganizationService>(() => provider.Get<IOrganizationService>());
         }
 
-        public new Action<ActivityContainer> Action { get; set; }
+        public new Action<ActivityContainer> Action
+        {
+            get;
+            set;
+        }
 
-        public CodeActivityContext ActivityContext { get; }
-
-        private Lazy<IWorkflowContext> workflowContext;
-
-        public EntityReference TargetReference => 
+        public EntityReference TargetReference =>
             new EntityReference(WorkflowContext.PrimaryEntityName, WorkflowContext.PrimaryEntityId);
+
+        public CodeActivityContext ActivityContext
+        {
+            get;
+        }
 
         public IWorkflowContext WorkflowContext =>
             workflowContext.Value;
@@ -41,6 +49,7 @@
                 {
                     throw new InvalidPluginExecutionException(string.Format("Main action is not set for {0}", Name));
                 }
+
                 Init();
                 Action.Invoke(this);
             }
@@ -51,6 +60,7 @@
                 {
                     log = new WorkflowLogger(ActivityContext, LogName, true);
                 }
+
                 log.Log(ex);
                 log.CloseLog();
                 throw new InvalidPluginExecutionException(string.Format("An error occurred in plug-in {0}. {1}: {2}", Name, ex, ex.Detail.Message));
@@ -62,6 +72,7 @@
                 {
                     log = new WorkflowLogger(ActivityContext, LogName, true);
                 }
+
                 log.Log(ex);
                 log.CloseLog();
                 throw;
@@ -89,6 +100,7 @@
             {
                 return new WorkflowLogger(ActivityContext, this.LogName, true);
             }
+
             return null;
         }
 
@@ -101,6 +113,7 @@
                 {
                     Logger.StartSection("CintActivityContainer Service initialization");
                 }
+
                 svc = new CrmServiceProxy(ActivityUtils.GetOrganizationService(ActivityContext, Logger))
                 {
                     CacheMode = CacheMode.Single,
@@ -110,6 +123,7 @@
                     Logger.EndSection();
                 }
             }
+
             return svc;
         }
     }

@@ -1,7 +1,7 @@
-﻿using Innofactor.Xrm.Utils.Common.Interfaces;
-
-namespace Innofactor.Xrm.Utils.Common.Extensions
+﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
+    using Innofactor.Xrm.Utils.Common.Interfaces;
+
     public static partial class ContainerExtensions
     {
         public static void EndSection(this IExecutionContainer container) =>

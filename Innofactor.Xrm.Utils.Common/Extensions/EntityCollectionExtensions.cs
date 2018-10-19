@@ -67,7 +67,7 @@
             new List<Entity>(collection.Entities).Sort(new EntityComparer(attributes));
 
         /// <summary>
-        /// Turns collection of <see cref="Entity"/> into collection of <see cref="EntityReference"/>
+        /// Turns collection of <see cref="Entity" /> into collection of <see cref="EntityReference" />
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>

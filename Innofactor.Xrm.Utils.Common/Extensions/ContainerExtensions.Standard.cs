@@ -11,7 +11,6 @@
     public static partial class ContainerExtensions
     {
         /// <summary>
-        ///
         /// </summary>
         /// <param name="container"></param>
         /// <param name="entity"></param>
@@ -25,7 +24,6 @@
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="container"></param>
         /// <param name="entity"></param>
@@ -36,6 +34,7 @@
                 container.Logger.Log("Cannot delete - guid is empty");
                 return;
             }
+
             container.Service.Delete(entity.LogicalName, entity.Id);
             container.Logger.Log($"Deleted {entity.LogicalName}:{entity.Id}");
         }
@@ -92,7 +91,6 @@
             container.Service.Retrieve(entityName, id, columnSet);
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="container"></param>
         /// <param name="query"></param>
@@ -134,7 +132,6 @@
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="container"></param>
         /// <param name="entity"></param>

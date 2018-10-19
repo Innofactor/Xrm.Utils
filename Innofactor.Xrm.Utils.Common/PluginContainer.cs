@@ -12,16 +12,16 @@
     /// </summary>
     public class PluginContainer : IPluginExecutionContainer, IDisposable
     {
-        private Lazy<EntitySet> entities;
-        private Lazy<IOrganizationService> service;
         private Lazy<IPluginExecutionContext> context;
+        private Lazy<EntitySet> entities;
         private Lazy<ITracingService> logger;
+        private Lazy<IOrganizationService> service;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PluginContainer"/> class.
+        /// Initializes a new instance of the <see cref="PluginContainer" /> class.
         /// </summary>
         /// <param name="provider">
-        /// Instance of <see cref="IServiceProvider"/> taken from MS CRM server
+        /// Instance of <see cref="IServiceProvider" /> taken from MS CRM server
         /// </param>
         public PluginContainer(IServiceProvider provider)
         {
@@ -36,7 +36,7 @@
 
         /// <summary>
         /// Gets or sets link to method that should execute main logic of the plugin. This method
-        /// should have one input parameter of <see cref="PluginContainer"/> type, and should not have
+        /// should have one input parameter of <see cref="PluginContainer" /> type, and should not have
         /// return value
         /// </summary>
         internal Action<PluginContainer> Action
@@ -45,31 +45,10 @@
             set;
         }
 
-        public EntitySet Entities =>
-            entities.Value;
-
-        /// <summary>
-        /// Gets instance of the <see cref="IPluginExecutionContext"/> assosiated with current container
-        /// </summary>
-        public IPluginExecutionContext Context =>
-            context.Value;
-
-        /// <summary>
-        /// Get instance of the <see cref="ILoggable"/> assosiated with current container
-        /// </summary>
-        public ITracingService Logger =>
-            logger.Value;
-
-        /// <summary>
-        /// Gets instance of <see cref="IServicable"/> assosiated with current container
-        /// </summary>
-        public IOrganizationService Service =>
-            service.Value;
-
         /// <summary>
         /// Gets or sets link to method that should validate plugin execution context. This method
-        /// should have one input parameter of <see cref="IPluginExecutionContext"/> type, and should return
-        /// <see cref="bool"/> value.
+        /// should have one input parameter of <see cref="IPluginExecutionContext" /> type, and should return
+        /// <see cref="bool" /> value.
         /// </summary>
         internal Predicate<IPluginExecutionContext> Validator
         {
@@ -78,11 +57,31 @@
         }
 
         /// <summary>
-        ///
         /// </summary>
         public void Dispose()
         {
         }
+
+        public EntitySet Entities =>
+            entities.Value;
+
+        /// <summary>
+        /// Gets instance of the <see cref="IPluginExecutionContext" /> assosiated with current container
+        /// </summary>
+        public IPluginExecutionContext Context =>
+            context.Value;
+
+        /// <summary>
+        /// Get instance of the <see cref="ILoggable" /> assosiated with current container
+        /// </summary>
+        public ITracingService Logger =>
+            logger.Value;
+
+        /// <summary>
+        /// Gets instance of <see cref="IServicable" /> assosiated with current container
+        /// </summary>
+        public IOrganizationService Service =>
+            service.Value;
 
         /// <summary>
         /// Container's main entance point. Validater will be executed. In case of success, log will
@@ -97,7 +96,7 @@
                     throw new InvalidPluginExecutionException(string.Format("Main action is not set!"));
                 }
 
-                if (Validator != null && !Validator.Invoke(Context))    // Running context validator
+                if (Validator != null && !Validator.Invoke(Context)) // Running context validator
                 {
                     // In case if context is invalid, exitiong without notification
                     return;

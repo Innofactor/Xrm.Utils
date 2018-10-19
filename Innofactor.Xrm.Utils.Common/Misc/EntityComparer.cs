@@ -8,7 +8,6 @@
     /// <summary>A class used to compare cintdynentity instances</summary>
     public sealed class EntityComparer : IComparer<Entity>
     {
-
         /// <summary>Constructor of CintDynEntity class. Takes a list of attribute names as an argument.</summary>
         /// <param name="attributes">The attributes to sort the comparison by......</param>
         public EntityComparer(params string[] attributes)
@@ -75,6 +74,7 @@
                     }
                 }
             }
+
             return result;
         }
 
@@ -85,6 +85,7 @@
             {
                 return 0;
             }
+
             if (xAttrValue == null)
             {
                 result = 1;
@@ -99,6 +100,7 @@
                 var yDateTime = (DateTime)yAttrValue;
                 result = xDateTime.CompareTo(yDateTime);
             }
+
             return result;
         }
 
@@ -112,6 +114,7 @@
             {
                 return 0;
             }
+
             if (xEntRef == null)
             {
                 result = 1;
@@ -129,6 +132,7 @@
             {
                 result = xEntRef.Id.CompareTo(yEntRef.Id);
             }
+
             return result;
         }
     }

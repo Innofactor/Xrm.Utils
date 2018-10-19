@@ -1,7 +1,9 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
+    using Innofactor.Xrm.Utils.Common.Fluent.Attribute;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
+    using OperationsSet2 = Innofactor.Xrm.Utils.Common.Fluent.Entity.OperationsSet2;
 
     public static partial class ContainerExtensions
     {
@@ -11,8 +13,8 @@
         /// <param name="container"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Fluent.Attribute.OperationsSet1 Attribute(this IExecutionContainer container, string name) =>
-            new Fluent.Attribute.OperationsSet1(container, name);
+        public static OperationsSet1 Attribute(this IExecutionContainer container, string name) =>
+            new OperationsSet1(container, name);
 
         /// <summary>
         /// Initiates work with entitites
@@ -38,8 +40,8 @@
         /// <param name="container"></param>
         /// <param name="logicalName"></param>
         /// <returns></returns>
-        public static Fluent.Entity.OperationsSet2 Entity(this IExecutionContainer container, string logicalName) =>
-            new Fluent.Entity.OperationsSet2(container, logicalName);
+        public static OperationsSet2 Entity(this IExecutionContainer container, string logicalName) =>
+            new OperationsSet2(container, logicalName);
 
         /// <summary>
         /// Initiates work with principals which is followed with access related opetations: Grant / Revoke / Assign

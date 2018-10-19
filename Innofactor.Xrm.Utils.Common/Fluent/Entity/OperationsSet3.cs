@@ -5,9 +5,8 @@
 
     public class OperationsSet3 : InformationBase
     {
-        protected readonly EntityReference target;
-
         protected readonly string logicalName;
+        protected readonly EntityReference target;
 
         internal OperationsSet3(IExecutionContainer container, string logicalName, EntityReference target)
             : base(container)
@@ -17,7 +16,7 @@
         }
 
         /// <summary>
-        /// Sets <paramref name="name"/> of the attribute or relation via which association was perfomed
+        /// Sets <paramref name="name" /> of the attribute or relation via which association was perfomed
         /// </summary>
         /// <param name="name">Name of the attribute or relation</param>
         /// <returns></returns>

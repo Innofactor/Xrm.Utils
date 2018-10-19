@@ -24,7 +24,7 @@
         /// <exception cref="FaultException{TDetail}">
         /// <strong>TDetail</strong> may be typed as:
         /// <para>
-        /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault"/>: Thrown when association already exists.
+        /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault" />: Thrown when association already exists.
         /// </para>
         /// </exception>
         public static void Associate(this IExecutionContainer container, Entity entity, Entity relatedentity, string intersect)
@@ -43,7 +43,7 @@
         /// <exception cref="FaultException{TDetail}">
         /// <strong>TDetail</strong> may be typed as:
         /// <para>
-        /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault"/>: Thrown when any of the associations already exists.
+        /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault" />: Thrown when any of the associations already exists.
         /// </para>
         /// </exception>
         public static void Associate(this IExecutionContainer container, Entity entity, EntityCollection relatedEntities, string intersect)
@@ -66,7 +66,7 @@
         /// <exception cref="FaultException{TDetail}">
         /// <strong>TDetail</strong> may be typed as:
         /// <para>
-        /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault"/>: Thrown when any of the associations already exists.
+        /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault" />: Thrown when any of the associations already exists.
         /// </para>
         /// </exception>
         public static void Associate(this IExecutionContainer container, Entity entity, EntityCollection relatedEntities, string intersect, int batchSize)
@@ -78,7 +78,8 @@
 
             EntityRole? role = null;
             if (relatedEntities.Entities.Count > 0 && relatedEntities[0].LogicalName == entity.LogicalName)
-            {   // N:N-relation till samma entitet, då måste man ange en roll, tydligen.
+            {
+                // N:N-relation till samma entitet, då måste man ange en roll, tydligen.
                 role = EntityRole.Referencing;
             }
 
@@ -145,7 +146,6 @@
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="container"></param>
         /// <param name="entity1"></param>
@@ -165,6 +165,7 @@
                     merge.Attributes.Add(prop);
                 }
             }
+
             container.Logger.Log($"Base entity had {entity1.Attributes.Count} attributes. Second entity {entity2.Attributes.Count}. Merged entity has {merge.Attributes.Count}");
             container.Logger.EndSection();
             return merge;
@@ -224,6 +225,7 @@
                     columns.AddColumn(attr);
                 }
             }
+
             entity = container.Retrieve(entity.ToEntityReference(), columns);
             container.Logger.EndSection();
 
@@ -231,8 +233,10 @@
         }
 
         /// <summary>Update state and status of current record</summary>
-        /// <remarks>http://msdynamicscrmblog.wordpress.com/2013/10/26/status-and-status-reason-values-in-dynamics-crm-2013/comment-page-1/
-        /// ToStringWithEntityName() is replaced with entity.LogicalName</remarks>
+        /// <remarks>
+        /// http://msdynamicscrmblog.wordpress.com/2013/10/26/status-and-status-reason-values-in-dynamics-crm-2013/comment-page-1/
+        /// ToStringWithEntityName() is replaced with entity.LogicalName
+        /// </remarks>
         /// <param name="container"></param>
         /// <param name="entity"></param>
         /// <param name="state">Active=0 and Inactive=1</param>
