@@ -16,12 +16,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContainerExtensions.Common.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContainerExtensions.Fluent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContainerExtensions.Logger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContainerExtensions.Service.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContainerExtensions.Standard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\LoggerExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ProviderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\TracingServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ServiceProviderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Access\Information.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Access\OperationsSet1.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Access\OperationsSet2.cs" />

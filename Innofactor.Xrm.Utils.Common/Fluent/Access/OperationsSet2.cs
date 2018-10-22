@@ -25,7 +25,7 @@
                     Assignee = principal,
                     Target = target
                 });
-                container.Logger.Log($"Assigned {target.LogicalName} to {principal.LogicalName} {principal.Id}");
+                container.Log($"Assigned {target.LogicalName} to {principal.LogicalName} {principal.Id}");
 
                 return true;
             }
@@ -54,7 +54,7 @@
                     Target = target
                 });
 
-                container.Logger.Log($"{principal.LogicalName}:{principal.Id} was granted {accessMask} to {target.LogicalName}:{target.Id}");
+                container.Log($"{principal.LogicalName}:{principal.Id} was granted {accessMask} to {target.LogicalName}:{target.Id}");
 
                 return true;
             }
@@ -78,7 +78,7 @@
                     Target = target
                 });
 
-                container.Logger.Log($"{principal.LogicalName}:{principal.Id} was revoked from {target.LogicalName}:{target.Id}");
+                container.Log($"{principal.LogicalName}:{principal.Id} was revoked from {target.LogicalName}:{target.Id}");
 
                 return true;
             }

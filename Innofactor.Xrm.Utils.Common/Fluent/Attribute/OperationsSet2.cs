@@ -25,7 +25,7 @@
         /// <returns></returns>
         public Entity Expand(ColumnSet columns)
         {
-            container.Logger.StartSection($"Slim: GetRelated {name} from {target.LogicalName} {target.ToStringExt()}");
+            container.StartSection($"Slim: GetRelated {name} from {target.LogicalName} {target.ToStringExt()}");
             var result = default(Entity);
             var refname = name;
             var refatt = string.Empty;
@@ -62,7 +62,7 @@
                             nextref = nextref.Substring(0, nextref.IndexOf('.'));
                         }
 
-                        container.Logger.Log($"Loading {reference.LogicalName} {reference.Id} column {nextref}");
+                        container.Log($"Loading {reference.LogicalName} {reference.Id} column {nextref}");
                         var cdNextRelated = container.Retrieve(reference, new ColumnSet(new string[] {nextref}));
                         if (cdNextRelated != null)
                         {
@@ -80,19 +80,19 @@
             }
             else
             {
-                container.Logger.Log($"Record does not contain attribute {refname}");
+                container.Log($"Record does not contain attribute {refname}");
             }
 
             if (result == null)
             {
-                container.Logger.Log("Could not load related record");
+                container.Log("Could not load related record");
             }
             else
             {
-                container.Logger.Log($"Loaded related {result.LogicalName} {result.ToStringExt()}");
+                container.Log($"Loaded related {result.LogicalName} {result.ToStringExt()}");
             }
 
-            container.Logger.EndSection();
+            container.EndSection();
             return result;
         }
 
@@ -117,7 +117,7 @@
         /// <returns>Formatted value of the attribute</returns>
         public override string ToString()
         {
-            container.Logger.StartSection("ToString");
+            container.StartSection("ToString");
 
             try
             {
@@ -139,7 +139,7 @@
             }
             finally
             {
-                container.Logger.EndSection();
+                container.EndSection();
             }
         }
 
@@ -150,7 +150,7 @@
         /// <returns>Formatted value of the attribute</returns>
         public string ToString(string format)
         {
-            container.Logger.StartSection($"ToString with format '{format}'");
+            container.StartSection($"ToString with format '{format}'");
 
             try
             {
@@ -162,8 +162,8 @@
 
                     if (!target.Contains(name))
                     {
-                        container.Logger.Log($"'{name}' not found in entity {target.LogicalName}:{target.Id}");
-                        container.Logger.Log($"It is impossible to perform formatting — returning empty string instead");
+                        container.Log($"'{name}' not found in entity {target.LogicalName}:{target.Id}");
+                        container.Log($"It is impossible to perform formatting — returning empty string instead");
 
                         return string.Empty;
                     }
@@ -206,13 +206,13 @@
                     }
                 }
 
-                container.Logger.Log($"Resulting value is '{result}'");
+                container.Log($"Resulting value is '{result}'");
 
                 if (result == null)
                 {
                     if (oAttrValue != null && oAttrValue is EntityReference)
                     {
-                        container.Logger.Log($"Attribute is of 'EntityReference' type it needed to be treated differently.");
+                        container.Log($"Attribute is of 'EntityReference' type it needed to be treated differently.");
 
                         // Introducerat för att nyttja metadata- och entitetscache på CrmServiceProxy
                         var related = container
@@ -269,7 +269,7 @@
             }
             finally
             {
-                container.Logger.EndSection();
+                container.EndSection();
             }
         }
 
@@ -277,17 +277,17 @@
         {
             if (attributeValue is AliasedValue)
             {
-                container.Logger.Log("Attribute is of type `AliasedValue`");
+                container.Log("Attribute is of type `AliasedValue`");
 
                 return ToString(((AliasedValue)attributeValue).AttributeLogicalName, ((AliasedValue)attributeValue).Value);
             }
             else if (attributeValue is EntityReference reference)
             {
-                container.Logger.Log("Attribute is of type `EntityReference`");
+                container.Log("Attribute is of type `EntityReference`");
 
                 if (!string.IsNullOrEmpty(reference.Name))
                 {
-                    container.Logger.Log("Reference name was given");
+                    container.Log("Reference name was given");
                     return reference.Name;
                 }
                 else if (container.Service != null)
@@ -308,7 +308,7 @@
             }
             else if (attributeValue is EntityCollection && ((EntityCollection)attributeValue).EntityName == "activityparty")
             {
-                container.Logger.Log("Attribute is of type `EntityCollection`");
+                container.Log("Attribute is of type `EntityCollection`");
 
                 var result = new StringBuilder();
                 if (((EntityCollection)attributeValue).Entities.Count > 0)
@@ -346,7 +346,7 @@
             }
             else if (attributeValue is OptionSetValue)
             {
-                container.Logger.Log("Attribute is of type `OptionSetValue`");
+                container.Log("Attribute is of type `OptionSetValue`");
 
                 if (container.Service != null)
                 {
@@ -371,26 +371,26 @@
             }
             else if (attributeValue is DateTime)
             {
-                container.Logger.Log("Attribute is of type `DateTime`");
+                container.Log("Attribute is of type `DateTime`");
 
                 return ((DateTime)attributeValue).ToString("G");
             }
             else if (attributeValue is Money)
             {
-                container.Logger.Log("Attribute is of type `Money`");
+                container.Log("Attribute is of type `Money`");
 
                 return ((Money)attributeValue).Value.ToString("C");
             }
 
             if (attributeValue != null)
             {
-                container.Logger.Log("Attribute will be automatically converted to string");
+                container.Log("Attribute will be automatically converted to string");
 
                 return attributeValue.ToString();
             }
             else
             {
-                container.Logger.Log("Attribute will be evaluated to null");
+                container.Log("Attribute will be evaluated to null");
 
                 return null;
             }

@@ -157,9 +157,9 @@
 
         private EntityCollection ExpandEntity(ColumnSet columns)
         {
-            container.Logger.StartSection($"ExpandEntity");
+            container.StartSection($"ExpandEntity");
 
-            container.Logger.Log($"Searching for records in '{logicalName}' where '{name}' attribute is '{target.Id}' and active={flagOnlyActive}");
+            container.Log($"Searching for records in '{logicalName}' where '{name}' attribute is '{target.Id}' and active={flagOnlyActive}");
 
             try
             {
@@ -167,41 +167,41 @@
                 query.Criteria.AddCondition(name, ConditionOperator.Equal, target.Id);
                 if (flagOnlyActive)
                 {
-                    container.Logger.Log($"Adding active condition");
+                    container.Log($"Adding active condition");
                     CintQryExp.AppendConditionActive(query.Criteria);
                 }
 
                 query.ColumnSet = columns;
                 if (condition != null)
                 {
-                    container.Logger.Log($"Adding filter with {condition.Conditions.Count} conditions");
+                    container.Log($"Adding filter with {condition.Conditions.Count} conditions");
                     query.Criteria.AddFilter(condition);
                 }
 
                 if (order != null && order.Count() > 0)
                 {
-                    container.Logger.Log($"Adding orders ({order.Count()})");
+                    container.Log($"Adding orders ({order.Count()})");
                     query.Orders.AddRange(order);
                 }
 
                 query.NoLock = flagNoLock;
-                container.Logger.Log($"Setting `NoLock` to {flagNoLock}");
+                container.Log($"Setting `NoLock` to {flagNoLock}");
 
                 var result = container.Service.RetrieveMultiple(query);
 
-                container.Logger.Log($"Got {result.Entities.Count} records");
+                container.Log($"Got {result.Entities.Count} records");
 
                 return result;
             }
             finally
             {
-                container.Logger.EndSection();
+                container.EndSection();
             }
         }
 
         private EntityCollection ExpandRelation(ColumnSet columns)
         {
-            container.Logger.StartSection($"Slim: GetAssociated({logicalName}, {name}, {flagOnlyActive})");
+            container.StartSection($"Slim: GetAssociated({logicalName}, {name}, {flagOnlyActive})");
 
             var thisIdAttribute = container.Service.IdAttribute(target.LogicalName, container.Logger);
             var otherIdAttribute = container.Service.IdAttribute(logicalName, container.Logger);
@@ -228,21 +228,21 @@
             query.ColumnSet = columns;
             if (condition != null)
             {
-                container.Logger.Log($"Adding filter with {condition.Conditions.Count} conditions");
+                container.Log($"Adding filter with {condition.Conditions.Count} conditions");
                 query.Criteria.AddFilter(condition);
             }
 
             if (order != null && order.Count() > 0)
             {
-                container.Logger.Log($"Adding orders ({order.Count()})");
+                container.Log($"Adding orders ({order.Count()})");
                 query.Orders.AddRange(order);
             }
 
             query.NoLock = flagNoLock;
             var result = container.Service.RetrieveMultiple(query);
 
-            container.Logger.Log($"Got {result.Entities.Count} records");
-            container.Logger.EndSection();
+            container.Log($"Got {result.Entities.Count} records");
+            container.EndSection();
 
             return result;
         }

@@ -65,7 +65,7 @@
                         RelatedEntities = batch
                     };
                     container.Service.Execute(req);
-                    container.Logger.Log("Associated {0} {1} with {2}", batch.Count, related.Count() > 0 ? related.First().LogicalName : string.Empty, target.LogicalName);
+                    container.Log("Associated {0} {1} with {2}", batch.Count, related.Count() > 0 ? related.First().LogicalName : string.Empty, target.LogicalName);
                 }
 
                 return true;
@@ -112,7 +112,7 @@
                         RelatedEntities = batch
                     };
                     container.Service.Execute(req);
-                    container.Logger.Log("Disassociated {0} {1} from {2}", batch.Count, related.Count() > 0 ? related.First().LogicalName : string.Empty, target.LogicalName);
+                    container.Log("Disassociated {0} {1} from {2}", batch.Count, related.Count() > 0 ? related.First().LogicalName : string.Empty, target.LogicalName);
                 }
 
                 return true;

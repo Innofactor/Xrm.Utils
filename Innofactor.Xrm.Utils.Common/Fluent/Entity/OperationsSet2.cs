@@ -71,7 +71,7 @@
 
                     var metabase = response.EntityMetadata;
 
-                    container.Logger.Log("Metadata retrieved");
+                    container.Log("Metadata retrieved");
                     if (metabase is EntityMetadata meta)
                     {
                         result = meta.PrimaryIdAttribute;
@@ -83,13 +83,13 @@
                             $"Unable to retrieve metadata/primaryattribute for entity: {logicalName}. Metadata is: {metabase}");
                     }
 
-                    container.Logger.Log($"Returning {result}");
+                    container.Log($"Returning {result}");
                 }
                 catch (FaultException<OrganizationServiceFault> ex)
                 {
                     if (ex.Message.Contains("Could not find an entity with specified entity name"))
                     {
-                        container.Logger.Log("Slim: PrimaryAttribute: Entity not found");
+                        container.Log("Slim: PrimaryAttribute: Entity not found");
                         PrimaryNameAttributes.TryRemove(logicalName, out result);
                     }
                     else
@@ -99,7 +99,7 @@
                 }
                 finally
                 {
-                    container.Logger.EndSection();
+                    container.EndSection();
                 }
             }
 
@@ -120,7 +120,7 @@
             }
             else
             {
-                container.Logger.StartSection($"Getting name of primary attribute on '{logicalName}'");
+                container.StartSection($"Getting name of primary attribute on '{logicalName}'");
                 try
                 {
                     var request = new RetrieveEntityRequest()
@@ -134,7 +134,7 @@
 
                     var metabase = response.EntityMetadata;
 
-                    container.Logger.Log("Metadata retrieved");
+                    container.Log("Metadata retrieved");
                     if (metabase is EntityMetadata meta)
                     {
                         result = meta.PrimaryNameAttribute;
@@ -146,13 +146,13 @@
                             $"Unable to retrieve metadata/primaryattribute for entity: {logicalName}. Metadata is: {metabase.ToString()}");
                     }
 
-                    container.Logger.Log($"Returning {result}");
+                    container.Log($"Returning {result}");
                 }
                 catch (FaultException<OrganizationServiceFault> ex)
                 {
                     if (ex.Message.Contains("Could not find an entity with specified entity name"))
                     {
-                        container.Logger.Log("Slim: PrimaryAttribute: Entity not found");
+                        container.Log("Slim: PrimaryAttribute: Entity not found");
                         PrimaryNameAttributes.TryRemove(logicalName, out result);
                     }
                     else
@@ -162,7 +162,7 @@
                 }
                 finally
                 {
-                    container.Logger.EndSection();
+                    container.EndSection();
                 }
             }
 
