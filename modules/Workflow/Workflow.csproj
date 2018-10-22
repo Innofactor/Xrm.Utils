@@ -68,93 +68,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Constants\MessageName.cs">
-      <Link>Constants\MessageName.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Constants\MessageProcessingMode.cs">
-      <Link>Constants\MessageProcessingMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Constants\MessageProcessingStage.cs">
-      <Link>Constants\MessageProcessingStage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Constants\ParameterName.cs">
-      <Link>Constants\ParameterName.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\Container\Common.cs">
-      <Link>Extensions\Container\Common.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\Container\Fluent.cs">
-      <Link>Extensions\Container\Fluent.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\Container\Logger.cs">
-      <Link>Extensions\Container\Logger.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\Container\Service.cs">
-      <Link>Extensions\Container\Service.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\Container\Standard.cs">
-      <Link>Extensions\Container\Standard.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\ContextExtensions.cs">
-      <Link>Extensions\ContextExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\EntityCollectionExtensions.cs">
-      <Link>Extensions\EntityCollectionExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\EntityExtensions.cs">
-      <Link>Extensions\EntityExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\ServiceProviderExtensions.cs">
-      <Link>Extensions\ServiceProviderExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Access\Information.cs">
-      <Link>Fluent\Access\Information.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Access\OperationsSet1.cs">
-      <Link>Fluent\Access\OperationsSet1.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Access\OperationsSet2.cs">
-      <Link>Fluent\Access\OperationsSet2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Attribute\Information.cs">
-      <Link>Fluent\Attribute\Information.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Attribute\OperationsSet1.cs">
-      <Link>Fluent\Attribute\OperationsSet1.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Attribute\OperationsSet2.cs">
-      <Link>Fluent\Attribute\OperationsSet2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Entity\OperationsSet1.cs">
-      <Link>Fluent\Entity\OperationsSet1.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Entity\OperationsSet2.cs">
-      <Link>Fluent\Entity\OperationsSet2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Entity\OperationsSet3.cs">
-      <Link>Fluent\Entity\OperationsSet3.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Entity\OperationsSet4.cs">
-      <Link>Fluent\Entity\OperationsSet4.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Entity\OperationsSet5.cs">
-      <Link>Fluent\Entity\OperationsSet5.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\InformationBase.cs">
-      <Link>Fluent\InformationBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Interfaces\IExecutionContainer.cs">
-      <Link>Interfaces\IExecutionContainer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\EntityComparer.cs">
-      <Link>Misc\EntityComparer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\EntitySet.cs">
-      <Link>Misc\EntitySet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\SortAttribute.cs">
-      <Link>Misc\SortAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Workflow\ActivityBase.cs">
       <Link>ActivityBase.cs</Link>
     </Compile>
@@ -169,5 +82,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <Import Project="..\..\Innofactor.Xrm.Utils.Common\Innofactor.Xrm.Utils.Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

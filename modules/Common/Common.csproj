@@ -162,6 +162,9 @@
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\EntitySet.cs">
       <Link>Misc\EntitySet.cs</Link>
     </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\Query.cs">
+      <Link>Misc\Query.cs</Link>
+    </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\SortAttribute.cs">
       <Link>Misc\SortAttribute.cs</Link>
     </Compile>

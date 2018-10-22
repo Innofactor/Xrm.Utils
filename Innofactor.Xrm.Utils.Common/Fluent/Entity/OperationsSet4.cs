@@ -4,6 +4,7 @@
     using System.Linq;
     using Innofactor.Xrm.Utils.Common.Extensions;
     using Innofactor.Xrm.Utils.Common.Interfaces;
+    using Innofactor.Xrm.Utils.Common.Misc;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Metadata;
@@ -186,7 +187,7 @@
                 if (flagOnlyActive)
                 {
                     container.Log($"Adding active condition");
-                    CintQryExp.AppendConditionActive(query.Criteria);
+                    Query.AppendConditionActive(query.Criteria);
                 }
 
                 query.ColumnSet = columns;
@@ -228,19 +229,19 @@
             if (logicalName != target.LogicalName)
             {
                 // N:N mellan olika entiteter
-                var leSource = CintQryExp.AppendLinkMM(query.LinkEntities, name, logicalName, otherIdAttribute, target.LogicalName, thisIdAttribute);
-                CintQryExp.AppendCondition(leSource.LinkCriteria, LogicalOperator.And, thisIdAttribute, ConditionOperator.Equal, target.Id);
+                var leSource = Query.AppendLinkMM(query.LinkEntities, name, logicalName, otherIdAttribute, target.LogicalName, thisIdAttribute);
+                Query.AppendCondition(leSource.LinkCriteria, LogicalOperator.And, thisIdAttribute, ConditionOperator.Equal, target.Id);
             }
             else
             {
                 // N:N till samma enititet
-                var leSource = CintQryExp.AppendLink(query.LinkEntities, logicalName, name, otherIdAttribute, thisIdAttribute + "two");
-                CintQryExp.AppendCondition(leSource.LinkCriteria, LogicalOperator.And, thisIdAttribute + "one", ConditionOperator.Equal, target.Id);
+                var leSource = Query.AppendLink(query.LinkEntities, logicalName, name, otherIdAttribute, thisIdAttribute + "two");
+                Query.AppendCondition(leSource.LinkCriteria, LogicalOperator.And, thisIdAttribute + "one", ConditionOperator.Equal, target.Id);
             }
 
             if (flagOnlyActive)
             {
-                CintQryExp.AppendConditionActive(query.Criteria);
+                Query.AppendConditionActive(query.Criteria);
             }
 
             query.ColumnSet = columns;

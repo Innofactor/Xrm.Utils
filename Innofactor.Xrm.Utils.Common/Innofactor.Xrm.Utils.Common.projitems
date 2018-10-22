@@ -38,6 +38,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginExecutionContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\EntitySet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\EntityComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Misc\Query.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\SortAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PluginBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PluginContainer.cs" />
