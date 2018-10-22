@@ -18,7 +18,7 @@
         public static Entity Create(this IExecutionContainer container, Entity entity)
         {
             entity.Id = container.Service.Create(entity);
-            container.Logger.Log($"Created {entity.LogicalName}:{entity.Id}");
+            container.Log($"Created {entity.LogicalName}:{entity.Id}");
 
             return entity;
         }
@@ -31,12 +31,12 @@
         {
             if (entity.Id.Equals(Guid.Empty))
             {
-                container.Logger.Log("Cannot delete - guid is empty");
+                container.Log("Cannot delete - guid is empty");
                 return;
             }
 
             container.Service.Delete(entity.LogicalName, entity.Id);
-            container.Logger.Log($"Deleted {entity.LogicalName}:{entity.Id}");
+            container.Log($"Deleted {entity.LogicalName}:{entity.Id}");
         }
 
         /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
@@ -138,7 +138,7 @@
         public static void Update(this IExecutionContainer container, Entity entity)
         {
             container.Service.Update(entity);
-            container.Logger.Log($"Updated {entity.LogicalName} {entity.Id} with {entity.Attributes.Count} attributes");
+            container.Log($"Updated {entity.LogicalName} {entity.Id} with {entity.Attributes.Count} attributes");
         }
     }
 }

@@ -105,7 +105,7 @@
                     RelatedEntities = batch
                 };
                 container.Service.Execute(req);
-                container.Logger.Log("Associated {0} {1} with {2}", batch.Count, relatedEntities.Entities.Count > 0 ? relatedEntities[0].LogicalName : "", entity.LogicalName);
+                container.Log("Associated {0} {1} with {2}", batch.Count, relatedEntities.Entities.Count > 0 ? relatedEntities[0].LogicalName : "", entity.LogicalName);
             }
         }
 
@@ -117,7 +117,7 @@
         /// <returns></returns>
         public static string Convert(this IExecutionContainer container, QueryExpression query)
         {
-            container.Logger.StartSection("Slim: Convert");
+            container.StartSection("Slim: Convert");
 
             try
             {
@@ -130,18 +130,18 @@
 
                 if (response != null)
                 {
-                    container.Logger.Log("Query was converted successfully.");
+                    container.Log("Query was converted successfully.");
                 }
                 else
                 {
-                    container.Logger.Log("It was an issue converting query.");
+                    container.Log("It was an issue converting query.");
                 }
 
                 return response?.FetchXml;
             }
             finally
             {
-                container.Logger.EndSection();
+                container.EndSection();
             }
         }
 
@@ -153,9 +153,9 @@
         /// <returns></returns>
         public static Entity Merge(this IExecutionContainer container, Entity entity1, Entity entity2)
         {
-            container.Logger.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
 
-            container.Logger.Log($"Merging {entity1.LogicalName} {entity1.ToStringExt()} with {entity2.LogicalName} {entity2.ToStringExt()}");
+            container.Log($"Merging {entity1.LogicalName} {container.Entity(entity1).ToString()} with {entity2.LogicalName} {container.Entity(entity2).ToString()}");
 
             var merge = entity1.CloneAttributes();
             foreach (var prop in entity2.Attributes)
@@ -166,8 +166,8 @@
                 }
             }
 
-            container.Logger.Log($"Base entity had {entity1.Attributes.Count} attributes. Second entity {entity2.Attributes.Count}. Merged entity has {merge.Attributes.Count}");
-            container.Logger.EndSection();
+            container.Log($"Base entity had {entity1.Attributes.Count} attributes. Second entity {entity2.Attributes.Count}. Merged entity has {merge.Attributes.Count}");
+            container.EndSection();
             return merge;
         }
 
@@ -201,9 +201,9 @@
         /// <remarks>ToStringWithEntityName() is replaced with entity.LogicalName</remarks>
         public static Entity Reload(this IExecutionContainer container, Entity entity, ColumnSet columns)
         {
-            container.Logger.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
 
-            container.Logger.StartSection($"Reloading {entity.LogicalName}:{entity.Id}");
+            container.StartSection($"Reloading {entity.LogicalName}:{entity.Id}");
 
             foreach (var attr in entity.Attributes.Keys)
             {
@@ -227,7 +227,7 @@
             }
 
             entity = container.Retrieve(entity.ToEntityReference(), columns);
-            container.Logger.EndSection();
+            container.EndSection();
 
             return entity;
         }
@@ -243,7 +243,7 @@
         /// <param name="status">Active=1 and Inactive=2</param>
         public static SetStateResponse SetState(this IExecutionContainer container, Entity entity, int state, int status)
         {
-            container.Logger.Log($"Setting state {state} {status} on {entity.LogicalName}");
+            container.Log($"Setting state {state} {status} on {entity.LogicalName}");
 
             var response = container.Service.Execute(new SetStateRequest()
             {
@@ -252,7 +252,7 @@
                 Status = new OptionSetValue(status)
             }) as SetStateResponse;
 
-            container.Logger.Log("SetState completed");
+            container.Log("SetState completed");
 
             return response;
         }

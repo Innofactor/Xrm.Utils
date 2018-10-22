@@ -3,7 +3,7 @@
     using System;
     using Microsoft.Xrm.Sdk;
 
-    public static class ProviderExtensions
+    public static class ServiceProviderExtensions
     {
         public static T Get<T>(this IServiceProvider provider) =>
             (T)provider.GetService(typeof(T));
