@@ -9,12 +9,18 @@
     /// </summary>
     public abstract class PluginBase : IPlugin
     {
+        #region Public Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginBase" /> class. Will use refrected name of the calling plugin.
         /// </summary>
         public PluginBase()
         {
         }
+
+        #endregion Public Constructors
+
+        #region Public Methods
 
         /// <summary>
         /// Default entry point for CRM plugin. Validater will be executed. In case of success, log will
@@ -44,5 +50,7 @@
         /// <param name="context"></param>
         /// <returns></returns>
         public abstract bool Validate(IPluginExecutionContext context);
+
+        #endregion Public Methods
     }
 }

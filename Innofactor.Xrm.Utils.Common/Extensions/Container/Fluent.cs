@@ -6,6 +6,8 @@
 
     public static partial class ContainerExtensions
     {
+        #region Public Methods
+
         /// <summary>
         /// Initiates work with attributes
         /// </summary>
@@ -59,5 +61,7 @@
         /// <returns></returns>
         public static Fluent.Access.OperationsSet1 Principal(this IExecutionContainer container, EntityReference principal) =>
             new Fluent.Access.OperationsSet1(container, principal);
+
+        #endregion Public Methods
     }
 }

@@ -12,10 +12,16 @@
     /// </summary>
     public class PluginContainer : IPluginExecutionContainer, IDisposable
     {
+        #region Private Fields
+
         private IPluginExecutionContext context;
         private Lazy<EntitySet> entities;
         private Lazy<ITracingService> logger;
         private Lazy<IOrganizationService> service;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PluginContainer" /> class.
@@ -36,19 +42,9 @@
             entities = new Lazy<EntitySet>(() => new EntitySet(context));
         }
 
-        /// <summary>
-        /// </summary>
-        public void Dispose()
-        {
-        }
+        #endregion Public Constructors
 
-        public EntitySet Entities =>
-            entities.Value;
-
-        public IServiceProvider Provider
-        {
-            get;
-        }
+        #region Public Properties
 
         /// <summary>
         /// Gets instance of the <see cref="IPluginExecutionContext" /> assosiated with current container
@@ -58,16 +54,36 @@
             get;
         }
 
+        public EntitySet Entities =>
+                    entities.Value;
+
         /// <summary>
         /// Get instance of the <see cref="ILoggable" /> assosiated with current container
         /// </summary>
         public ITracingService Logger =>
             logger.Value;
 
+        public IServiceProvider Provider
+        {
+            get;
+        }
+
         /// <summary>
         /// Gets instance of <see cref="IServicable" /> assosiated with current container
         /// </summary>
         public IOrganizationService Service =>
             service.Value;
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        /// <summary>
+        /// </summary>
+        public void Dispose()
+        {
+        }
+
+        #endregion Public Methods
     }
 }

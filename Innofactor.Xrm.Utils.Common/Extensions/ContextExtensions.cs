@@ -7,6 +7,8 @@
 
     public static class ContextExtensions
     {
+        #region Public Methods
+
         /// <summary>
         /// Retrieves EntityId from the Context
         /// Create, Update, Delete, SetState, Assign, DeliverIncoming
@@ -106,5 +108,7 @@
                 return false;
             }
         }
+
+        #endregion Public Methods
     }
 }

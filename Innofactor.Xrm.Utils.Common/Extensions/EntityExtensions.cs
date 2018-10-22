@@ -9,6 +9,8 @@
     /// </summary>
     public static class EntityExtensions
     {
+        #region Public Methods
+
         /// <summary>
         /// Clones entity instance to a new C# instance
         /// </summary>
@@ -174,5 +176,7 @@
         /// <param name="user"></param>
         public static void SetOwner(this Entity entity, Guid user) =>
             entity.SetAttribute("ownerid", new EntityReference("systemuser", user));
+
+        #endregion Public Methods
     }
 }

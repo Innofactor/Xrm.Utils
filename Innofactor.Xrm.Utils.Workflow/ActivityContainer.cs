@@ -8,9 +8,15 @@
 
     public class ActivityContainer : IActivityContainer
     {
-        private Lazy<IWorkflowContext> workflowContext;
+        #region Private Fields
+
         private Lazy<ITracingService> logger;
         private Lazy<IOrganizationService> service;
+        private Lazy<IWorkflowContext> workflowContext;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public ActivityContainer(CodeActivityContext activityContext)
         {
@@ -23,21 +29,22 @@
             service = new Lazy<IOrganizationService>(() => activityContext.GetExtension<IOrganizationService>());
         }
 
-        public EntityReference PrimaryEntityReference =>
-            new EntityReference(WorkflowContext.PrimaryEntityName, WorkflowContext.PrimaryEntityId);
+        #endregion Public Constructors
+
+        #region Public Properties
 
         public CodeActivityContext ActivityContext
         {
             get;
         }
 
-        public IWorkflowContext WorkflowContext =>
-            workflowContext.Value;
-
         /// Get instance of the <see cref="ILoggable" /> assosiated with current container
         /// </summary>
         public ITracingService Logger =>
             logger.Value;
+
+        public EntityReference PrimaryEntityReference =>
+                            new EntityReference(WorkflowContext.PrimaryEntityName, WorkflowContext.PrimaryEntityId);
 
         /// <summary>
         /// Gets instance of <see cref="IServicable" /> assosiated with current container
@@ -45,10 +52,19 @@
         public IOrganizationService Service =>
             service.Value;
 
+        public IWorkflowContext WorkflowContext =>
+                    workflowContext.Value;
+
+        #endregion Public Properties
+
+        #region Public Methods
+
         public T GetCodeActivityParameter<T>(InArgument<T> parameter) =>
             parameter.Get(ActivityContext);
 
         public void SetCodeActivityParameter<T>(OutArgument<T> parameter, T value) =>
             parameter.Set(ActivityContext, value);
+
+        #endregion Public Methods
     }
 }

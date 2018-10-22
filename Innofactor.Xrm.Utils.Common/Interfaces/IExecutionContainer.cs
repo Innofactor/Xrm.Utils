@@ -8,6 +8,8 @@
     /// </summary>
     public interface IExecutionContainer
     {
+        #region Public Properties
+
         /// <summary>
         /// Get instance of the <see cref="ITracingService" /> assosiated with current container
         /// </summary>
@@ -23,5 +25,7 @@
         {
             get;
         }
+
+        #endregion Public Properties
     }
 }

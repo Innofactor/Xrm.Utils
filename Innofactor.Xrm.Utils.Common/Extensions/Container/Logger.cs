@@ -7,25 +7,13 @@
 
     public static partial class ContainerExtensions
     {
+        #region Private Fields
+
         private static readonly ConcurrentDictionary<int, int> indentations = new ConcurrentDictionary<int, int>();
 
-        /// <summary>
-        /// Starts a section in the log file
-        /// </summary>
-        /// <param name="name"></param>
-        public static void StartSection(this IExecutionContainer container, string name)
-        {
-            var indentation = indentations.GetOrAdd(container.GetHashCode(), 0);
+        #endregion Private Fields
 
-            container.Logger.Trace($"{Set(indentation)}↓ {name}");
-
-            Interlocked.Increment(ref indentation);
-
-            indentations.TryUpdate(container.GetHashCode(), indentation, 0);
-        }
-
-        private static object Set(int indentation) =>
-            new string(' ', (indentation > 0) ? indentation * 2 : 0);
+        #region Public Methods
 
         /// <summary>
         /// End section in the log file.
@@ -68,5 +56,29 @@
             container.Logger.Trace("{0}{1}", padding, ex.StackTrace);
             container.Logger.Trace("---------------------------------------------------------");
         }
+
+        /// <summary>
+        /// Starts a section in the log file
+        /// </summary>
+        /// <param name="name"></param>
+        public static void StartSection(this IExecutionContainer container, string name)
+        {
+            var indentation = indentations.GetOrAdd(container.GetHashCode(), 0);
+
+            container.Logger.Trace($"{Set(indentation)}↓ {name}");
+
+            Interlocked.Increment(ref indentation);
+
+            indentations.TryUpdate(container.GetHashCode(), indentation, 0);
+        }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private static object Set(int indentation) =>
+            new string(' ', (indentation > 0) ? indentation * 2 : 0);
+
+        #endregion Private Methods
     }
 }

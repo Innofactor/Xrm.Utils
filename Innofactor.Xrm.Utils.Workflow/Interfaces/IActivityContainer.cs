@@ -9,6 +9,8 @@
     /// </summary>
     public interface IActivityContainer : IExecutionContainer
     {
+        #region Public Properties
+
         /// <summary>
         /// Gets instance of the <see cref="CodeActivityContext" /> assosiated with current container
         /// </summary>
@@ -24,5 +26,7 @@
         {
             get;
         }
+
+        #endregion Public Properties
     }
 }

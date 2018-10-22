@@ -15,6 +15,8 @@
     /// </summary>
     public static partial class ContainerExtensions
     {
+        #region Public Methods
+
         /// <summary>Associates current record with relatedentity, using specified intersect relationship</summary>
         /// <param name="container"></param>
         /// <param name="entity">Current entity</param>
@@ -256,5 +258,7 @@
 
             return response;
         }
+
+        #endregion Public Methods
     }
 }

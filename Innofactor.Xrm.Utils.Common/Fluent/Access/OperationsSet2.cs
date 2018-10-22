@@ -7,10 +7,16 @@
 
     public class OperationsSet2 : Information
     {
+        #region Internal Constructors
+
         internal OperationsSet2(IExecutionContainer container, EntityReference principal, EntityReference target)
             : base(container, principal, target)
         {
         }
+
+        #endregion Internal Constructors
+
+        #region Public Methods
 
         /// <summary>
         /// Assigns current record to given principal
@@ -87,5 +93,7 @@
                 return false;
             }
         }
+
+        #endregion Public Methods
     }
 }

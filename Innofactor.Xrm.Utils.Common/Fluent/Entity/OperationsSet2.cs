@@ -11,13 +11,28 @@
 
     public class OperationsSet2 : InformationBase
     {
+        #region Protected Fields
+
+        protected readonly string logicalName;
+
+        #endregion Protected Fields
+
+        #region Private Fields
+
         private static readonly ConcurrentDictionary<string, string> PrimaryIdAttributes = new ConcurrentDictionary<string, string>();
         private static readonly ConcurrentDictionary<string, string> PrimaryNameAttributes = new ConcurrentDictionary<string, string>();
-        protected readonly string logicalName;
+
+        #endregion Private Fields
+
+        #region Internal Constructors
 
         internal OperationsSet2(IExecutionContainer container, string logicalName)
             : base(container) =>
             this.logicalName = logicalName;
+
+        #endregion Internal Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// Primary Id attribute of the entity
@@ -31,17 +46,29 @@
         public string PrimaryNameAttribute =>
             primaryNameAttribute.Value;
 
+        #endregion Public Properties
+
+        #region Private Properties
+
         private Lazy<string> primaryIdAttribute =>
             GetPrimaryIdAttribute();
 
         private Lazy<string> primaryNameAttribute =>
             GetPrimaryNameAttribute();
 
+        #endregion Private Properties
+
+        #region Public Methods
+
         public OperationsSet3 LinkedTo(Entity target) =>
             LinkedTo(target.ToEntityReference());
 
         public OperationsSet3 LinkedTo(EntityReference target) =>
             new OperationsSet3(container, logicalName, target);
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         /// <summary>
         /// Get the primary id attribute of the target entity
@@ -168,5 +195,7 @@
 
             return new Lazy<string>(() => result);
         }
+
+        #endregion Private Methods
     }
 }

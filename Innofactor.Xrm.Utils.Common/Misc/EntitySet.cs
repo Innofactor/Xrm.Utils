@@ -8,10 +8,16 @@
 
     public class EntitySet
     {
+        #region Private Fields
+
         private readonly Lazy<Entity> complete;
         private readonly Lazy<Entity> post;
         private readonly Lazy<Entity> pre;
         private readonly Lazy<Entity> target;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public EntitySet(IPluginExecutionContext context)
         {
@@ -20,6 +26,10 @@
             pre = new Lazy<Entity>(() => GetPreEntity(context));
             target = new Lazy<Entity>(() => GetTargetEntity(context));
         }
+
+        #endregion Public Constructors
+
+        #region Public Properties
 
         /// <summary>
         /// All available entity information from context
@@ -32,13 +42,6 @@
             complete.Value;
 
         /// <summary>
-        /// Pre image information from plugin execution context. The image name is hardcoded as `preimage`
-        /// </summary>
-        /// <returns>Pre <see cref="Entity" /></returns>
-        public Entity Pre =>
-            pre.Value;
-
-        /// <summary>
         /// Post image information from plugin execution context. The image name is hardcoded as `postimage`
         /// </summary>
         /// <returns>Post <see cref="Entity" /></returns>
@@ -46,11 +49,22 @@
             post.Value;
 
         /// <summary>
+        /// Pre image information from plugin execution context. The image name is hardcoded as `preimage`
+        /// </summary>
+        /// <returns>Pre <see cref="Entity" /></returns>
+        public Entity Pre =>
+            pre.Value;
+
+        /// <summary>
         /// Gets target information from plugin execution context
         /// </summary>
         /// <returns>Target <see cref="Entity" /></returns>
         public Entity Target =>
             target.Value;
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         /// <summary>
         /// </summary>
@@ -111,6 +125,10 @@
             return result;
         }
 
+        #endregion Protected Methods
+
+        #region Private Methods
+
         private static Entity GetPostEntity(IPluginExecutionContext context)
         {
             if (context.PostEntityImages.Keys.Count > 0 && context.PostEntityImages[context.PostEntityImages.Keys.First()] != null)
@@ -155,5 +173,7 @@
                 return null;
             }
         }
+
+        #endregion Private Methods
     }
 }

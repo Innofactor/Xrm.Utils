@@ -9,8 +9,14 @@
 
     public class OperationsSet5 : InformationBase
     {
+        #region Private Fields
+
         private readonly string intersectionName;
         private readonly Entity target;
+
+        #endregion Private Fields
+
+        #region Internal Constructors
 
         internal OperationsSet5(IExecutionContainer container, Entity target, string intersectionName)
             : base(container)
@@ -19,8 +25,12 @@
             this.intersectionName = intersectionName;
         }
 
+        #endregion Internal Constructors
+
+        #region Public Methods
+
         public bool LinkTo(Entity related) =>
-            LinkTo(new EntityReference[] {related.ToEntityReference()});
+            LinkTo(new EntityReference[] { related.ToEntityReference() });
 
         public bool LinkTo(EntityCollection related) =>
             LinkTo(related.Entities.Select(x => x.ToEntityReference()));
@@ -29,7 +39,7 @@
             LinkTo(related.Select(x => x.ToEntityReference()));
 
         public bool LinkTo(EntityReference related) =>
-            LinkTo(new EntityReference[] {related});
+            LinkTo(new EntityReference[] { related });
 
         public bool LinkTo(EntityReferenceCollection related) =>
             LinkTo(related.ToArray());
@@ -77,7 +87,7 @@
         }
 
         public bool UnlinkFrom(Entity related) =>
-            UnlinkFrom(new EntityReference[] {related.ToEntityReference()});
+            UnlinkFrom(new EntityReference[] { related.ToEntityReference() });
 
         public bool UnlinkFrom(EntityCollection related) =>
             UnlinkFrom(related.Entities.Select(x => x.ToEntityReference()));
@@ -86,7 +96,7 @@
             UnlinkFrom(related.Select(x => x.ToEntityReference()));
 
         public bool UnlinkFrom(EntityReference related) =>
-            UnlinkFrom(new EntityReference[] {related});
+            UnlinkFrom(new EntityReference[] { related });
 
         public bool UnlinkFrom(EntityReferenceCollection related) =>
             UnlinkFrom(related.ToArray());
@@ -122,5 +132,7 @@
                 return false;
             }
         }
+
+        #endregion Public Methods
     }
 }

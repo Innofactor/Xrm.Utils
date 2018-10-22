@@ -3,6 +3,8 @@
     /// <summary>Message names for plugin steps</summary>
     public static class MessageName
     {
+        #region Public Fields
+
         public const string AddItem = "AddItem";
         public const string AddMember = "AddMember";
         public const string AddMembers = "AddMembers";
@@ -42,5 +44,7 @@
         public const string SetStateDynamicEntity = "SetStateDynamicEntity";
         public const string Update = "Update";
         public const string Win = "Win";
+
+        #endregion Public Fields
     }
 }
