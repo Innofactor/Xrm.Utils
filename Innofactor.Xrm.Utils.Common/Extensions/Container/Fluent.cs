@@ -3,7 +3,6 @@
     using Innofactor.Xrm.Utils.Common.Fluent.Attribute;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
-    using OperationsSet2 = Innofactor.Xrm.Utils.Common.Fluent.Entity.OperationsSet2;
 
     public static partial class ContainerExtensions
     {
@@ -40,8 +39,8 @@
         /// <param name="container"></param>
         /// <param name="logicalName"></param>
         /// <returns></returns>
-        public static OperationsSet2 Entity(this IExecutionContainer container, string logicalName) =>
-            new OperationsSet2(container, logicalName);
+        public static Fluent.Entity.OperationsSet2 Entity(this IExecutionContainer container, string logicalName) =>
+            new Fluent.Entity.OperationsSet2(container, logicalName);
 
         /// <summary>
         /// Initiates work with principals which is followed with access related opetations: Grant / Revoke / Assign

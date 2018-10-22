@@ -24,7 +24,7 @@
         /// <exception cref="FaultException{TDetail}">
         /// <strong>TDetail</strong> may be typed as:
         /// <para>
-        /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault" />: Thrown when association already exists.
+        /// <see cref="OrganizationServiceFault" />: Thrown when association already exists.
         /// </para>
         /// </exception>
         public static void Associate(this IExecutionContainer container, Entity entity, Entity relatedentity, string intersect)
@@ -43,7 +43,7 @@
         /// <exception cref="FaultException{TDetail}">
         /// <strong>TDetail</strong> may be typed as:
         /// <para>
-        /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault" />: Thrown when any of the associations already exists.
+        /// <see cref="OrganizationServiceFault" />: Thrown when any of the associations already exists.
         /// </para>
         /// </exception>
         public static void Associate(this IExecutionContainer container, Entity entity, EntityCollection relatedEntities, string intersect)
@@ -66,7 +66,7 @@
         /// <exception cref="FaultException{TDetail}">
         /// <strong>TDetail</strong> may be typed as:
         /// <para>
-        /// <see cref="Microsoft.Xrm.Sdk.OrganizationServiceFault" />: Thrown when any of the associations already exists.
+        /// <see cref="OrganizationServiceFault" />: Thrown when any of the associations already exists.
         /// </para>
         /// </exception>
         public static void Associate(this IExecutionContainer container, Entity entity, EntityCollection relatedEntities, string intersect, int batchSize)

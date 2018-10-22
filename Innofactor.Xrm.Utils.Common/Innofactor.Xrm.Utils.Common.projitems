@@ -13,11 +13,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageProcessingMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageProcessingStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Constants\ParameterName.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContainerExtensions.Common.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContainerExtensions.Fluent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContainerExtensions.Logger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContainerExtensions.Service.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContainerExtensions.Standard.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Common.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Fluent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Logger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Service.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Standard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityExtensions.cs" />
@@ -42,5 +42,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Misc\SortAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PluginBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PluginContainer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Extensions\Container\" />
   </ItemGroup>
 </Project>
