@@ -2,7 +2,6 @@
 {
     using System;
     using System.Activities;
-    using System.ServiceModel;
     using Innofactor.Xrm.Utils.Workflow.Interfaces;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Workflow;
@@ -13,24 +12,18 @@
         private Lazy<ITracingService> logger;
         private Lazy<IOrganizationService> service;
 
-        public ActivityContainer(CodeActivityContext context)
+        public ActivityContainer(CodeActivityContext activityContext)
         {
-            ActivityContext = context;
-            workflowContext = new Lazy<IWorkflowContext>(() => context.GetExtension<IWorkflowContext>());
+            ActivityContext = activityContext;
+            workflowContext = new Lazy<IWorkflowContext>(() => activityContext.GetExtension<IWorkflowContext>());
 
             // Reset values of entities, if they was already used —
             // this move will set fresh values for cached loggers and services
-            logger = new Lazy<ITracingService>(() => provider.Get<ITracingService>());
-            service = new Lazy<IOrganizationService>(() => provider.Get<IOrganizationService>());
+            logger = new Lazy<ITracingService>(() => activityContext.GetExtension<ITracingService>());
+            service = new Lazy<IOrganizationService>(() => activityContext.GetExtension<IOrganizationService>());
         }
 
-        public new Action<ActivityContainer> Action
-        {
-            get;
-            set;
-        }
-
-        public EntityReference TargetReference =>
+        public EntityReference PrimaryEntityReference =>
             new EntityReference(WorkflowContext.PrimaryEntityName, WorkflowContext.PrimaryEntityId);
 
         public CodeActivityContext ActivityContext
@@ -41,90 +34,21 @@
         public IWorkflowContext WorkflowContext =>
             workflowContext.Value;
 
-        public void Execute()
-        {
-            try
-            {
-                if (Action == null)
-                {
-                    throw new InvalidPluginExecutionException(string.Format("Main action is not set for {0}", Name));
-                }
+        /// Get instance of the <see cref="ILoggable" /> assosiated with current container
+        /// </summary>
+        public ITracingService Logger =>
+            logger.Value;
 
-                Init();
-                Action.Invoke(this);
-            }
-            catch (FaultException<OrganizationServiceFault> ex)
-            {
-                var log = Logger;
-                if (log == null)
-                {
-                    log = new WorkflowLogger(ActivityContext, LogName, true);
-                }
+        /// <summary>
+        /// Gets instance of <see cref="IServicable" /> assosiated with current container
+        /// </summary>
+        public IOrganizationService Service =>
+            service.Value;
 
-                log.Log(ex);
-                log.CloseLog();
-                throw new InvalidPluginExecutionException(string.Format("An error occurred in plug-in {0}. {1}: {2}", Name, ex, ex.Detail.Message));
-            }
-            catch (Exception ex)
-            {
-                var log = Logger;
-                if (log == null)
-                {
-                    log = new WorkflowLogger(ActivityContext, LogName, true);
-                }
+        public T GetCodeActivityParameter<T>(InArgument<T> parameter) =>
+            parameter.Get(ActivityContext);
 
-                log.Log(ex);
-                log.CloseLog();
-                throw;
-            }
-            finally
-            {
-                if (Logger != null)
-                {
-                    Logger.CloseLog("Exit");
-                }
-            }
-        }
-
-        public T GetCodeActivityParameter<T>(InArgument<T> parameter)
-        {
-            var result = parameter.Get(ActivityContext);
-            return result;
-        }
-
-        public void SetCodeActivityParameter<T>(OutArgument<T> parameter, T value) => parameter.Set(ActivityContext, value);
-
-        protected override ILoggable GetContextLogger()
-        {
-            if (WorkflowContext != null)
-            {
-                return new WorkflowLogger(ActivityContext, this.LogName, true);
-            }
-
-            return null;
-        }
-
-        protected override CrmServiceProxy GetServiceFromContext()
-        {
-            CrmServiceProxy svc = null;
-            if (ActivityContext != null)
-            {
-                if (Logger != null)
-                {
-                    Logger.StartSection("CintActivityContainer Service initialization");
-                }
-
-                svc = new CrmServiceProxy(ActivityUtils.GetOrganizationService(ActivityContext, Logger))
-                {
-                    CacheMode = CacheMode.Single,
-                };
-                if (Logger != null)
-                {
-                    Logger.EndSection();
-                }
-            }
-
-            return svc;
-        }
+        public void SetCodeActivityParameter<T>(OutArgument<T> parameter, T value) =>
+            parameter.Set(ActivityContext, value);
     }
 }

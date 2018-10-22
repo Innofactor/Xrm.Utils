@@ -17,16 +17,20 @@
         }
 
         /// <summary>
-        /// Default entry point for CRM plugin
+        /// Default entry point for CRM plugin. Validater will be executed. In case of success, log will
+        /// be initialized and main code will be invoked
         /// </summary>
-        /// <param name="serviceProvider"></param>
-        public void Execute(IServiceProvider serviceProvider) =>
-            new PluginContainer(serviceProvider)
-                {
-                    Validator = new Predicate<IPluginExecutionContext>(Validate),
-                    Action = new Action<IPluginExecutionContainer>(Execute)
-                }
-                .Execute();
+        public void Execute(IServiceProvider provider)
+        {
+            var container = new PluginContainer(provider);
+
+            if (!new Predicate<IPluginExecutionContext>(Validate).Invoke(container.Context))
+            {
+                return;
+            }
+
+            new Action<IPluginExecutionContainer>(Execute).Invoke(container);
+        }
 
         /// <summary>
         /// Main entry point for the plugin

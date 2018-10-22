@@ -15,9 +15,6 @@
         public abstract void Execute(ActivityContainer container);
 
         protected override void Execute(CodeActivityContext context) =>
-            new ActivityContainer(context)
-            {
-                Action = new Action<ActivityContainer>(Execute)
-            }.Execute();
+            new Action<ActivityContainer>(Execute).Invoke(new ActivityContainer(context));
     }
 }
