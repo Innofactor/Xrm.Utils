@@ -221,8 +221,8 @@
         {
             container.StartSection($"Slim: GetAssociated({logicalName}, {name}, {flagOnlyActive})");
 
-            var thisIdAttribute = container.Service.IdAttribute(target.LogicalName, container.Logger);
-            var otherIdAttribute = container.Service.IdAttribute(logicalName, container.Logger);
+            var thisIdAttribute = container.Entity(target.LogicalName).PrimaryIdAttribute;
+            var otherIdAttribute = container.Entity(logicalName).PrimaryIdAttribute;
 
             var query = new QueryExpression(logicalName);
             if (logicalName != target.LogicalName)

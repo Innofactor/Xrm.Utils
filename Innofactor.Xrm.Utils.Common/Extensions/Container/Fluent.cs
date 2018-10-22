@@ -1,6 +1,5 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
-    using Innofactor.Xrm.Utils.Common.Fluent.Attribute;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
 
@@ -14,8 +13,8 @@
         /// <param name="container"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static OperationsSet1 Attribute(this IExecutionContainer container, string name) =>
-            new OperationsSet1(container, name);
+        public static Fluent.Attribute.OperationsSet1 Attribute(this IExecutionContainer container, string name) =>
+            new Fluent.Attribute.OperationsSet1(container, name);
 
         /// <summary>
         /// Initiates work with entitites

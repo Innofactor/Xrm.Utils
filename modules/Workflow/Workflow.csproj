@@ -107,9 +107,6 @@
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\ServiceProviderExtensions.cs">
       <Link>Extensions\ServiceProviderExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\TracingServiceExtensions.cs">
-      <Link>Extensions\TracingServiceExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Fluent\Access\Information.cs">
       <Link>Fluent\Access\Information.cs</Link>
     </Compile>
