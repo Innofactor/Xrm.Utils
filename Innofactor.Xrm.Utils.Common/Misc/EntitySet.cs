@@ -13,7 +13,7 @@
         private readonly Lazy<Entity> pre;
         private readonly Lazy<Entity> target;
 
-        public EntitySet(Lazy<IPluginExecutionContext> context)
+        public EntitySet(IPluginExecutionContext context)
         {
             complete = new Lazy<Entity>(() => GetCompleteEntity(context));
             post = new Lazy<Entity>(() => GetPostEntity(context));
@@ -55,18 +55,18 @@
         /// <summary>
         /// </summary>
         /// <returns></returns>
-        protected static Entity GetCompleteEntity(Lazy<IPluginExecutionContext> context)
+        protected static Entity GetCompleteEntity(IPluginExecutionContext context)
         {
             var result = default(Entity);
 
-            if (context.Value.InputParameters.Contains(ParameterName.Target) && context.Value.InputParameters[ParameterName.Target] is Entity)
+            if (context.InputParameters.Contains(ParameterName.Target) && context.InputParameters[ParameterName.Target] is Entity)
             {
-                result = (Entity)context.Value.InputParameters[ParameterName.Target];
+                result = (Entity)context.InputParameters[ParameterName.Target];
             }
 
-            if (context.Value.PostEntityImages.Keys.Count > 0)
+            if (context.PostEntityImages.Keys.Count > 0)
             {
-                var postImage = context.Value.PostEntityImages[context.Value.PostEntityImages.Keys.First()];
+                var postImage = context.PostEntityImages[context.PostEntityImages.Keys.First()];
 
                 if (result == null)
                 {
@@ -78,9 +78,9 @@
                 }
             }
 
-            if (context.Value.PreEntityImages.Keys.Count > 0)
+            if (context.PreEntityImages.Keys.Count > 0)
             {
-                var preImage = context.Value.PreEntityImages[context.Value.PreEntityImages.Keys.First()];
+                var preImage = context.PreEntityImages[context.PreEntityImages.Keys.First()];
 
                 if (result == null)
                 {
@@ -94,12 +94,12 @@
 
             if (result == null || result.Id.Equals(Guid.Empty))
             {
-                var id = context.Value.GetEntityId();
+                var id = context.GetEntityId();
                 if (!id.Equals(Guid.Empty))
                 {
                     if (result == null)
                     {
-                        result = new Entity(context.Value.PrimaryEntityName, id);
+                        result = new Entity(context.PrimaryEntityName, id);
                     }
                     else
                     {
@@ -111,38 +111,38 @@
             return result;
         }
 
-        private static Entity GetPostEntity(Lazy<IPluginExecutionContext> context)
+        private static Entity GetPostEntity(IPluginExecutionContext context)
         {
-            if (context.Value.PostEntityImages.Keys.Count > 0 && context.Value.PostEntityImages[context.Value.PostEntityImages.Keys.First()] != null)
+            if (context.PostEntityImages.Keys.Count > 0 && context.PostEntityImages[context.PostEntityImages.Keys.First()] != null)
             {
-                return context.Value.PostEntityImages[context.Value.PostEntityImages.Keys.First()];
+                return context.PostEntityImages[context.PostEntityImages.Keys.First()];
             }
 
             return null;
         }
 
-        private static Entity GetPreEntity(Lazy<IPluginExecutionContext> context)
+        private static Entity GetPreEntity(IPluginExecutionContext context)
         {
-            if (context.Value.PreEntityImages.Keys.Count > 0 && context.Value.PreEntityImages[context.Value.PostEntityImages.Keys.First()] != null)
+            if (context.PreEntityImages.Keys.Count > 0 && context.PreEntityImages[context.PostEntityImages.Keys.First()] != null)
             {
-                return context.Value.PreEntityImages[context.Value.PostEntityImages.Keys.First()];
+                return context.PreEntityImages[context.PostEntityImages.Keys.First()];
             }
 
             return null;
         }
 
-        private static Entity GetTargetEntity(Lazy<IPluginExecutionContext> context)
+        private static Entity GetTargetEntity(IPluginExecutionContext context)
         {
             try
             {
-                if (context.Value.InputParameters.Contains(ParameterName.Target) && context.Value.InputParameters[ParameterName.Target] is Entity)
+                if (context.InputParameters.Contains(ParameterName.Target) && context.InputParameters[ParameterName.Target] is Entity)
                 {
-                    return (Entity)context.Value.InputParameters[ParameterName.Target];
+                    return (Entity)context.InputParameters[ParameterName.Target];
                 }
-                else if (context.Value.InputParameters.Contains(ParameterName.Target) && context.Value.InputParameters[ParameterName.Target] is EntityReference)
+                else if (context.InputParameters.Contains(ParameterName.Target) && context.InputParameters[ParameterName.Target] is EntityReference)
                 {
                     // In case of reference supplied — return entity no attributes
-                    var reference = (EntityReference)context.Value.InputParameters[ParameterName.Target];
+                    var reference = (EntityReference)context.InputParameters[ParameterName.Target];
 
                     return new Entity(reference.LogicalName, reference.Id);
                 }
