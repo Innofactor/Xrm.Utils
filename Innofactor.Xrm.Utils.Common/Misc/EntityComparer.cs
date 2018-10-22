@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using Innofactor.Xrm.Utils.Common.Extensions;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Query;
 
@@ -57,9 +58,9 @@
                 }
                 else
                 {
-                    var xstr = x.PropertyAsString(sortAttribute.Attribute, string.Empty, true);
-                    var ystr = y.PropertyAsString(sortAttribute.Attribute, string.Empty, true);
-                    result = String.Compare(xstr, ystr, StringComparison.Ordinal);
+                    var xstr = x.GetAttribute(sortAttribute.Attribute, string.Empty);
+                    var ystr = y.GetAttribute(sortAttribute.Attribute, string.Empty);
+                    result = string.Compare(xstr, ystr, StringComparison.Ordinal);
                 }
 
                 if (result != 0)
@@ -125,7 +126,7 @@
             }
             else
             {
-                result = String.Compare(xEntRef.LogicalName, yEntRef.LogicalName, StringComparison.Ordinal);
+                result = string.Compare(xEntRef.LogicalName, yEntRef.LogicalName, StringComparison.Ordinal);
             }
 
             if (result == 0)

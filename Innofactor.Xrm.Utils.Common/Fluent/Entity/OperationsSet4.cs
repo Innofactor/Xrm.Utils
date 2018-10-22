@@ -65,7 +65,7 @@
         /// <returns></returns>
         public EntityCollection Expand(ColumnSet columns)
         {
-            var metadata = (EntityMetadata)container.Service.ExecuteMetadataRequest(
+            var metadata = (EntityMetadata)container.Execute(
                 new RetrieveEntityRequest()
                 {
                     LogicalName = logicalName,

@@ -25,7 +25,7 @@
         /// <returns></returns>
         public Entity Expand(ColumnSet columns)
         {
-            container.StartSection($"Slim: GetRelated {name} from {target.LogicalName} {target.ToStringExt()}");
+            container.StartSection($"Slim: GetRelated {name} from {target.LogicalName} {container.Entity(target).ToString()}");
             var result = default(Entity);
             var refname = name;
             var refatt = string.Empty;
@@ -89,7 +89,7 @@
             }
             else
             {
-                container.Log($"Loaded related {result.LogicalName} {result.ToStringExt()}");
+                container.Log($"Loaded related {result.LogicalName} {container.Entity(result).ToString()}");
             }
 
             container.EndSection();
