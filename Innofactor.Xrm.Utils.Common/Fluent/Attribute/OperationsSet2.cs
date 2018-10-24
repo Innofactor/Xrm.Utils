@@ -69,13 +69,6 @@
             Expand(new ColumnSet(columns));
 
         /// <summary>
-        /// Will perform the operation with all columns available
-        /// </summary>
-        /// <returns></returns>
-        public Entity ExpandAll() =>
-            Expand(new ColumnSet(true));
-
-        /// <summary>
         /// Gets a readable string representation of given attribute
         /// </summary>
         /// <returns>Formatted value of the attribute</returns>

@@ -104,13 +104,6 @@
             Expand(new ColumnSet(columns));
 
         /// <summary>
-        /// Will perform the operation with all columns available
-        /// </summary>
-        /// <returns></returns>
-        public EntityCollection ExpandAll() =>
-            Expand(new ColumnSet(true));
-
-        /// <summary>
         /// Add fintering condition to composed query
         /// </summary>
         /// <param name="condition"><see cref="FilterExpression" /> to apply</param>
