@@ -27,6 +27,7 @@
         public const string Lose = "Lose";
         public const string Merge = "Merge";
         public const string ModifyAccess = "ModifyAccess";
+        public const string QualifyLead = "QualifyLead";
         public const string RemoveItem = "RemoveItem";
         public const string RemoveMember = "RemoveMember";
         public const string RemoveMembers = "RemoveMembers";
