@@ -112,6 +112,19 @@
         }
 
         /// <summary>
+        /// Checks if a property exists in the encapsulated Entity
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="entity"></param>
+        /// <param name="attribute">Name of property to check</param>
+        /// <returns></returns>
+        public static Entity Ensure(this IExecutionContainer container, Entity entity, string attribute) =>
+            entity.Contains(attribute)
+            ? entity
+            : container.Reload(entity, attribute);
+
+
+        /// <summary>
         /// Converts QueryExpression to FetchXml
         /// </summary>
         /// <param name="container"></param>
@@ -119,7 +132,7 @@
         /// <returns></returns>
         public static string Convert(this IExecutionContainer container, QueryExpression query)
         {
-            container.StartSection("Slim: Convert");
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
 
             try
             {
@@ -205,7 +218,7 @@
         {
             container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
 
-            container.StartSection($"Reloading {entity.LogicalName}:{entity.Id}");
+            container.StartSection($"Reloading {container.Entity(entity).ToString()}.");
 
             foreach (var attr in entity.Attributes.Keys)
             {
