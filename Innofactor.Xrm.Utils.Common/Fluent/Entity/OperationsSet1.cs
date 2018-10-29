@@ -56,30 +56,42 @@
                 return string.Empty;
             }
 
-            foreach (var commonattribute in "name;fullname;title;subject".Split(';'))
+            var result = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(target.LogicalName))
             {
-                if (target.Contains(commonattribute))
+                // Adding entity logical name
+                result.Append(target.LogicalName);
+            }
+
+            if (!target.Id.Equals(Guid.Empty))
+            {
+                if (result.Length > 0)
                 {
-                    return container.Attribute(commonattribute).On(target).ToString();
+                    result.Append(":");
+                }
+
+                result.Append(target.Id.ToString());
+            }
+
+            foreach (var key in "name;fullname;title;subject".Split(';'))
+            {
+                if (target.Contains(key))
+                {
+                    if (result.Length > 0)
+                    {
+                        result.Append(" ");
+                    }
+
+                    result.Append("(");
+                    result.Append(target.Attributes[key] as string);
+                    result.Append(")");
+
+                    break;
                 }
             }
 
-            foreach (var prefix in Prefixes)
-            {
-                if (target.Contains(prefix + "name"))
-                {
-                    return container.Attribute(prefix + "name").On(target).ToString();
-                }
-            }
-
-            if (target.Id.Equals(Guid.Empty))
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return target.Id.ToString();
-            }
+            return result.ToString();
         }
 
         public OperationsSet5 Via(string intersectionName) =>
