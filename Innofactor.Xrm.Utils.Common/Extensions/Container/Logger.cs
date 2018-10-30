@@ -1,18 +1,11 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Threading;
     using Innofactor.Xrm.Utils.Common.Interfaces;
 
     public static partial class ContainerExtensions
     {
-        #region Private Fields
-
-        private static readonly ConcurrentDictionary<int, int> indentations = new ConcurrentDictionary<int, int>();
-
-        #endregion Private Fields
-
         #region Public Methods
 
         /// <summary>
@@ -20,18 +13,18 @@
         /// </summary>
         public static void EndSection(this IExecutionContainer container)
         {
-            var indentation = indentations.GetOrAdd(container.GetHashCode(), 0);
+            var indentation = (int)container?.Values?.IndentationLevel;
 
             Interlocked.Decrement(ref indentation);
 
             container.Logger.Trace($"{Set(indentation)}↑");
 
-            indentations.TryUpdate(container.GetHashCode(), indentation, 0);
+            container.Values.IndentationLevel = indentation;
         }
 
         public static void Log(this IExecutionContainer container, string message)
         {
-            var indentation = indentations.GetOrAdd(container.GetHashCode(), 0);
+            var indentation = (int)container?.Values?.IndentationLevel;
 
             container.Logger.Trace("{0}{1}", Set(indentation), message);
         }
@@ -46,7 +39,8 @@
 
         public static void Log(this IExecutionContainer container, Exception ex)
         {
-            var indentation = indentations.GetOrAdd(container.GetHashCode(), 0);
+            var indentation = (int)container?.Values?.IndentationLevel;
+
             var padding = Set(indentation);
 
             container.Logger.Trace("---------------------------------------------------------");
@@ -63,13 +57,13 @@
         /// <param name="name"></param>
         public static void StartSection(this IExecutionContainer container, string name)
         {
-            var indentation = indentations.GetOrAdd(container.GetHashCode(), 0);
+            var indentation = (int)container?.Values?.IndentationLevel;
 
             container.Logger.Trace($"{Set(indentation)}↓ {name}");
 
             Interlocked.Increment(ref indentation);
 
-            indentations.TryUpdate(container.GetHashCode(), indentation, 0);
+            container.Values.IndentationLevel = indentation;
         }
 
         #endregion Public Methods
