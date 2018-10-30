@@ -9,15 +9,12 @@
 
     public class ActivityContainer : IActivityContainer
     {
-        public dynamic Values
-        {
-            get;
-        }
-
         #region Private Fields
 
         private Lazy<ITracingService> logger;
+
         private Lazy<IOrganizationService> service;
+
         private Lazy<IWorkflowContext> workflowContext;
 
         #endregion Private Fields
@@ -60,6 +57,11 @@
         /// </summary>
         public IOrganizationService Service =>
             service.Value;
+
+        public dynamic Values
+        {
+            get;
+        }
 
         public IWorkflowContext WorkflowContext =>
                     workflowContext.Value;

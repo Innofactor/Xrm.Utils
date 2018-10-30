@@ -1,7 +1,6 @@
 ﻿namespace Innofactor.Xrm.Utils.Common
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Dynamic;
     using Innofactor.Xrm.Utils.Common.Extensions;
     using Innofactor.Xrm.Utils.Common.Interfaces;
@@ -14,15 +13,12 @@
     /// </summary>
     public class PluginContainer : IPluginExecutionContainer, IDisposable
     {
-        public dynamic Values
-        {
-            get;
-        }
-
         #region Private Fields
 
         private Lazy<EntitySet> entities;
+
         private Lazy<ITracingService> logger;
+
         private Lazy<IOrganizationService> service;
 
         #endregion Private Fields
@@ -82,6 +78,11 @@
         /// </summary>
         public IOrganizationService Service =>
             service.Value;
+
+        public dynamic Values
+        {
+            get;
+        }
 
         #endregion Public Properties
 

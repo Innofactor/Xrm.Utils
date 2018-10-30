@@ -34,7 +34,7 @@
             container.StartSection($"Slim: GetRelated {name} from {container.Entity(target).ToString()}");
 
             var result = default(Entity);
-  
+
             if (target.Attributes.Contains(name))
             {
                 if (target.Attributes[name] is EntityReference)

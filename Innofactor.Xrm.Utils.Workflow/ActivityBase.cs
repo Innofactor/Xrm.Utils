@@ -39,7 +39,6 @@
                 throw;
             }
         }
-            
 
         #endregion Protected Methods
     }
