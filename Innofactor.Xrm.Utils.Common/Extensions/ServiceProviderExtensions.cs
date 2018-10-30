@@ -10,8 +10,14 @@
         public static T Get<T>(this IServiceProvider provider) =>
             (T)provider.GetService(typeof(T));
 
+        public static IOrganizationService GetOrganizationService(this IServiceProvider provider, Guid? userId) =>
+            provider.GetOrganizationServiceFactory().CreateOrganizationService(userId);
+
         public static IOrganizationService GetOrganizationService(this IServiceProvider provider) =>
-            (IOrganizationService)provider.GetService(typeof(IOrganizationService));
+            provider.GetOrganizationServiceFactory().CreateOrganizationService(provider.GetPluginExecutionContext().UserId);
+
+        public static IOrganizationServiceFactory GetOrganizationServiceFactory(this IServiceProvider provider) =>
+            (IOrganizationServiceFactory)provider.GetService(typeof(IOrganizationServiceFactory));
 
         public static IPluginExecutionContext GetPluginExecutionContext(this IServiceProvider provider) =>
                     (IPluginExecutionContext)provider.GetService(typeof(IPluginExecutionContext));
