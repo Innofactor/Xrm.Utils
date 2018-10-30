@@ -1,6 +1,8 @@
 ﻿namespace Innofactor.Xrm.Utils.Common
 {
     using System;
+    using System.Collections.Concurrent;
+    using System.Dynamic;
     using Innofactor.Xrm.Utils.Common.Extensions;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Innofactor.Xrm.Utils.Common.Misc;
@@ -12,9 +14,13 @@
     /// </summary>
     public class PluginContainer : IPluginExecutionContainer, IDisposable
     {
+        public dynamic Values
+        {
+            get;
+        }
+
         #region Private Fields
 
-        private IPluginExecutionContext context;
         private Lazy<EntitySet> entities;
         private Lazy<ITracingService> logger;
         private Lazy<IOrganizationService> service;
@@ -37,9 +43,12 @@
             Context = Provider.Get<IPluginExecutionContext>();
 
             logger = new Lazy<ITracingService>(() => Provider.Get<ITracingService>());
-            service = new Lazy<IOrganizationService>(() => Provider.Get<IOrganizationService>());
+            service = new Lazy<IOrganizationService>(() => Provider.GetOrganizationService(Context.UserId));
 
-            entities = new Lazy<EntitySet>(() => new EntitySet(context));
+            entities = new Lazy<EntitySet>(() => new EntitySet(Context));
+
+            Values = new ExpandoObject();
+            Values.IndentationLevel = 0;
         }
 
         #endregion Public Constructors
@@ -55,7 +64,7 @@
         }
 
         public EntitySet Entities =>
-                    entities.Value;
+            entities.Value;
 
         /// <summary>
         /// Get instance of the <see cref="ILoggable" /> assosiated with current container

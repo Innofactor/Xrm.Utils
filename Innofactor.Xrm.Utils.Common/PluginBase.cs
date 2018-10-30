@@ -1,6 +1,7 @@
 ﻿namespace Innofactor.Xrm.Utils.Common
 {
     using System;
+    using Innofactor.Xrm.Utils.Common.Extensions;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
 
@@ -30,12 +31,20 @@
         {
             var container = new PluginContainer(provider);
 
-            if (!new Predicate<IPluginExecutionContext>(Validate).Invoke(container.Context))
+            try
             {
-                return;
-            }
+                if (!new Predicate<IPluginExecutionContext>(Validate).Invoke(container.Context))
+                {
+                    return;
+                }
 
-            new Action<IPluginExecutionContainer>(Execute).Invoke(container);
+                new Action<IPluginExecutionContainer>(Execute).Invoke(container);
+            }
+            catch (Exception ex)
+            {
+                container.Log(ex);
+                throw;
+            }
         }
 
         /// <summary>

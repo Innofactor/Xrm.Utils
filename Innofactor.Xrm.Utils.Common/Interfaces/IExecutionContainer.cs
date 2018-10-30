@@ -10,6 +10,11 @@
     {
         #region Public Properties
 
+        dynamic Values
+        {
+            get;
+        }
+
         /// <summary>
         /// Get instance of the <see cref="ITracingService" /> assosiated with current container
         /// </summary>

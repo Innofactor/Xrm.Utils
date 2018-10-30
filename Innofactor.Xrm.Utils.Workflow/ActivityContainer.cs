@@ -2,12 +2,18 @@
 {
     using System;
     using System.Activities;
+    using System.Dynamic;
     using Innofactor.Xrm.Utils.Workflow.Interfaces;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Workflow;
 
     public class ActivityContainer : IActivityContainer
     {
+        public dynamic Values
+        {
+            get;
+        }
+
         #region Private Fields
 
         private Lazy<ITracingService> logger;
@@ -27,6 +33,9 @@
             // this move will set fresh values for cached loggers and services
             logger = new Lazy<ITracingService>(() => activityContext.GetExtension<ITracingService>());
             service = new Lazy<IOrganizationService>(() => activityContext.GetExtension<IOrganizationService>());
+
+            Values = new ExpandoObject();
+            Values.IndentationLevel = 0;
         }
 
         #endregion Public Constructors
