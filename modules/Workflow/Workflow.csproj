@@ -74,6 +74,9 @@
     <Compile Include="..\..\Innofactor.Xrm.Utils.Workflow\ActivityContainer.cs">
       <Link>ActivityContainer.cs</Link>
     </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Workflow\Extensions\CodeActivityContextExtensions.cs">
+      <Link>Extensions\CodeActivityContextExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Workflow\Interfaces\IActivityContainer.cs">
       <Link>Interfaces\IActivityContainer.cs</Link>
     </Compile>

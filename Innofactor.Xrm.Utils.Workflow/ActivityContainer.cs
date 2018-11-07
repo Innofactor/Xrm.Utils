@@ -3,6 +3,7 @@
     using System;
     using System.Activities;
     using System.Dynamic;
+    using Innofactor.Xrm.Utils.Workflow.Extensions;
     using Innofactor.Xrm.Utils.Workflow.Interfaces;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Workflow;
@@ -15,8 +16,6 @@
 
         private Lazy<IOrganizationService> service;
 
-        private Lazy<IWorkflowContext> workflowContext;
-
         #endregion Private Fields
 
         #region Public Constructors
@@ -24,12 +23,12 @@
         public ActivityContainer(CodeActivityContext activityContext)
         {
             ActivityContext = activityContext;
-            workflowContext = new Lazy<IWorkflowContext>(() => activityContext.GetExtension<IWorkflowContext>());
+            WorkflowContext = ActivityContext.GetExtension<IWorkflowContext>();
 
             // Reset values of entities, if they was already used —
             // this move will set fresh values for cached loggers and services
-            logger = new Lazy<ITracingService>(() => activityContext.GetExtension<ITracingService>());
-            service = new Lazy<IOrganizationService>(() => activityContext.GetExtension<IOrganizationService>());
+            logger = new Lazy<ITracingService>(() => ActivityContext.GetExtension<ITracingService>());
+            service = new Lazy<IOrganizationService>(() => ActivityContext.GetOrganizationService(WorkflowContext.UserId));
 
             Values = new ExpandoObject();
             Values.IndentationLevel = 0;
@@ -50,7 +49,7 @@
             logger.Value;
 
         public EntityReference PrimaryEntityReference =>
-                            new EntityReference(WorkflowContext.PrimaryEntityName, WorkflowContext.PrimaryEntityId);
+            new EntityReference(WorkflowContext.PrimaryEntityName, WorkflowContext.PrimaryEntityId);
 
         /// <summary>
         /// Gets instance of <see cref="IServicable" /> assosiated with current container
@@ -63,8 +62,10 @@
             get;
         }
 
-        public IWorkflowContext WorkflowContext =>
-                    workflowContext.Value;
+        public IWorkflowContext WorkflowContext
+        {
+            get;
+        }
 
         #endregion Public Properties
 
