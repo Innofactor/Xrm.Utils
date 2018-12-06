@@ -143,7 +143,7 @@
         {
             if (context.PreEntityImages.Keys.Count > 0 && context.PreEntityImages[context.PostEntityImages.Keys.First()] != null)
             {
-                return context.PreEntityImages[context.PostEntityImages.Keys.First()];
+                return context.PreEntityImages[context.PreEntityImages.Keys.First()];
             }
 
             return null;
