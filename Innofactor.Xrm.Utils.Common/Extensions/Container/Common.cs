@@ -196,14 +196,6 @@
         /// <summary>Reloads encapsulated Entity from database</summary>
         /// <param name="container"></param>
         /// <param name="entity"></param>
-        /// <param name="allColumns"></param>
-        /// <remarks>ToStringWithEntityName() is replaced with entity.LogicalName</remarks>
-        public static Entity Reload(this IExecutionContainer container, Entity entity, bool allColumns) =>
-            container.Reload(entity, new ColumnSet(allColumns));
-
-        /// <summary>Reloads encapsulated Entity from database</summary>
-        /// <param name="container"></param>
-        /// <param name="entity"></param>
         /// <param name="columns">Set of colums with which entity should be reloaded</param>
         /// <remarks>ToStringWithEntityName() is replaced with entity.LogicalName</remarks>
         public static Entity Reload(this IExecutionContainer container, Entity entity, params string[] columns) =>

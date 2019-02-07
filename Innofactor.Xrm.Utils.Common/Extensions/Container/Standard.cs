@@ -44,14 +44,6 @@
         /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
         /// <param name="container"></param>
         /// <param name="reference"></param>
-        /// <param name="allColumns"></param>
-        /// <returns></returns>
-        public static Entity Retrieve(this IExecutionContainer container, EntityReference reference, bool allColumns) =>
-            container.Service.Retrieve(reference.LogicalName, reference.Id, new ColumnSet(allColumns));
-
-        /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
-        /// <param name="container"></param>
-        /// <param name="reference"></param>
         /// <param name="columns">Set of colums with which entity should be reloaded</param>
         /// <returns></returns>
         public static Entity Retrieve(this IExecutionContainer container, EntityReference reference, params string[] columns) =>
@@ -64,15 +56,6 @@
         /// <returns></returns>
         public static Entity Retrieve(this IExecutionContainer container, EntityReference reference, ColumnSet columnSet) =>
             container.Service.Retrieve(reference.LogicalName, reference.Id, columnSet);
-
-        /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
-        /// <param name="container"></param>
-        /// <param name="entityName"></param>
-        /// <param name="id"></param>
-        /// <param name="allColumns"></param>
-        /// <returns></returns>
-        public static Entity Retrieve(this IExecutionContainer container, string entityName, Guid id, bool allColumns) =>
-            container.Service.Retrieve(entityName, id, new ColumnSet(allColumns));
 
         /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
         /// <param name="container"></param>
