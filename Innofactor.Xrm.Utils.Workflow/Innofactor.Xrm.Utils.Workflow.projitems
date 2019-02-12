@@ -12,6 +12,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ActivityBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ActivityContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\CodeActivityContextExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IActivityContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IActivityExecutionContainer.cs" />
   </ItemGroup>
 </Project>

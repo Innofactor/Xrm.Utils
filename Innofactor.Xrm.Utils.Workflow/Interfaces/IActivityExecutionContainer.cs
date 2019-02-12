@@ -7,7 +7,7 @@
     /// <summary>
     /// Plugin specific extensions to IContainable
     /// </summary>
-    public interface IActivityContainer : IExecutionContainer
+    public interface IActivityExecutionContainer : IExecutionContainer
     {
         #region Public Properties
 

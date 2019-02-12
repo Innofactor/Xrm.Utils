@@ -8,7 +8,7 @@
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Workflow;
 
-    public class ActivityContainer : IActivityContainer
+    public class ActivityContainer : IActivityExecutionContainer
     {
         #region Private Fields
 
