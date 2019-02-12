@@ -7,8 +7,8 @@
     <ProjectGuid>{7D2358E1-ED0E-4FE9-99FF-8554F2D02DF0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Workflow</RootNamespace>
-    <AssemblyName>Workflow</AssemblyName>
+    <RootNamespace>Innofactor.Xrm.Utils.Workflow</RootNamespace>
+    <AssemblyName>Innofactor.Xrm.Utils.Workflow</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
