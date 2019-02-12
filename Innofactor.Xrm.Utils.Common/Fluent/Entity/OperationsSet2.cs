@@ -96,18 +96,18 @@
 
                     var response = (RetrieveEntityResponse)container.Service.Execute(request);
 
-                    var metabase = response.EntityMetadata;
+                    var metadata = response.EntityMetadata;
 
                     container.Log("Metadata retrieved");
-                    if (metabase is EntityMetadata meta)
+                    if (metadata is EntityMetadata)
                     {
-                        result = meta.PrimaryIdAttribute;
+                        result = metadata.PrimaryIdAttribute;
                         PrimaryIdAttributes.TryAdd(logicalName, result);
                     }
                     else
                     {
                         throw new InvalidPluginExecutionException(
-                            $"Unable to retrieve metadata/primaryattribute for entity: {logicalName}. Metadata is: {metabase}");
+                            $"Unable to retrieve metadata/primaryattribute for entity: {logicalName}. Metadata is: {metadata}");
                     }
 
                     container.Log($"Returning {result}");
@@ -159,18 +159,18 @@
 
                     var response = (RetrieveEntityResponse)container.Service.Execute(request);
 
-                    var metabase = response.EntityMetadata;
+                    var metadata = response.EntityMetadata;
 
                     container.Log("Metadata retrieved");
-                    if (metabase is EntityMetadata meta)
+                    if (metadata is EntityMetadata)
                     {
-                        result = meta.PrimaryNameAttribute;
+                        result = metadata.PrimaryNameAttribute;
                         PrimaryNameAttributes.TryAdd(logicalName, result);
                     }
                     else
                     {
                         throw new InvalidPluginExecutionException(
-                            $"Unable to retrieve metadata/primaryattribute for entity: {logicalName}. Metadata is: {metabase.ToString()}");
+                            $"Unable to retrieve metadata/primaryattribute for entity: {logicalName}. Metadata is: {metadata.ToString()}");
                     }
 
                     container.Log($"Returning {result}");
