@@ -13,8 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "modules\Common\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workflow", "modules\Workflow\Workflow.csproj", "{7D2358E1-ED0E-4FE9-99FF-8554F2D02DF0}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Innofactor.Xrm.Utils.Plugin", "Innofactor.Xrm.Utils.Plugin\Innofactor.Xrm.Utils.Plugin.shproj", "{5878BE73-CF3F-4946-AB03-C3B1039E3A62}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Innofactor.Xrm.Utils.Plugin\Innofactor.Xrm.Utils.Plugin.projitems*{5878be73-cf3f-4946-ab03-c3b1039e3a62}*SharedItemsImports = 13
 		Innofactor.Xrm.Utils.Common\Innofactor.Xrm.Utils.Common.projitems*{6b4f59ae-7903-47b0-b888-b7b2ead40b2c}*SharedItemsImports = 13
 		Innofactor.Xrm.Utils.Workflow\Innofactor.Xrm.Utils.Workflow.projitems*{757d7e0d-bcbb-4773-a06c-dd27904b939b}*SharedItemsImports = 13
 		Innofactor.Xrm.Utils.Common\Innofactor.Xrm.Utils.Common.projitems*{7d2358e1-ed0e-4fe9-99ff-8554f2d02df0}*SharedItemsImports = 4
