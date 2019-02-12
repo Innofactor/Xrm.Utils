@@ -9,16 +9,11 @@
     <Import_RootNamespace>Innofactor.Xrm.Utils.Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageName.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageProcessingMode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageProcessingStage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Constants\ParameterName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Common.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Fluent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Logger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Service.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Standard.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityCollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ServiceProviderExtensions.cs" />
@@ -35,13 +30,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Entity\OperationsSet5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\InformationBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IExecutionContainer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginExecutionContainer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Misc\EntitySet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\EntityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\Query.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\SortAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PluginBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PluginContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Extensions\Container\" />

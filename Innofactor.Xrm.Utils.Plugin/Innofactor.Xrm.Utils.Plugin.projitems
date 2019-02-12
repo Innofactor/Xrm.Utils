@@ -9,5 +9,14 @@
     <Import_RootNamespace>Innofactor.Xrm.Utils.Plugin</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageProcessingMode.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\MessageProcessingStage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Constants\ParameterName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPluginExecutionContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Misc\EntitySet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PluginBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PluginContainer.cs" />
   </ItemGroup>
 </Project>
