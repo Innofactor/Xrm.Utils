@@ -8,7 +8,7 @@ build:
   verbosity: minimal
 after_build:
 - cmd: nuget pack modules\Innofactor.Xrm.Utils.Common\Innofactor.Xrm.Utils.Common.csproj -Properties Configuration=Release;Platform=AnyCPU -Version %APPVEYOR_BUILD_VERSION%
-- cmd: nuget pack modules\Innofactor.Xrm.Utils.Common\Innofactor.Xrm.Utils.Plugin.csproj -Properties Configuration=Release;Platform=AnyCPU -Version %APPVEYOR_BUILD_VERSION%
-- cmd: nuget pack modules\Innofactor.Xrm.Utils.Common\Innofactor.Xrm.Utils.Workflow.csproj -Properties Configuration=Release;Platform=AnyCPU -Version %APPVEYOR_BUILD_VERSION%
+- cmd: nuget pack modules\Innofactor.Xrm.Utils.Plugin\Innofactor.Xrm.Utils.Plugin.csproj -Properties Configuration=Release;Platform=AnyCPU -Version %APPVEYOR_BUILD_VERSION%
+- cmd: nuget pack modules\Innofactor.Xrm.Utils.Workflow\Innofactor.Xrm.Utils.Workflow.csproj -Properties Configuration=Release;Platform=AnyCPU -Version %APPVEYOR_BUILD_VERSION%
 artifacts:
 - path: '*.nupkg'
