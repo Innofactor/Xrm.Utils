@@ -15,16 +15,12 @@
         #region Internal Constructors
 
         internal Information(IExecutionContainer container, string name)
-            : base(container)
-        {
+            : base(container) =>
             this.name = name;
-        }
 
         internal Information(IExecutionContainer container, string name, Entity target)
-            : this(container, name)
-        {
+            : this(container, name) =>
             this.target = target;
-        }
 
         #endregion Internal Constructors
     }
