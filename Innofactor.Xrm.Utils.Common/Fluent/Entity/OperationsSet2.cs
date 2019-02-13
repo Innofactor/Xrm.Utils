@@ -27,10 +27,8 @@
         #region Internal Constructors
 
         internal OperationsSet2(IExecutionContainer container, string logicalName)
-            : base(container)
-        {
+            : base(container) =>
             this.logicalName = logicalName;
-        }
 
         #endregion Internal Constructors
 
