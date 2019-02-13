@@ -112,12 +112,8 @@
 
                 return ToString(((AliasedValue)attributeValue).AttributeLogicalName, ((AliasedValue)attributeValue).Value);
             }
-            else if (attributeValue is EntityReference)
+            else if (attributeValue is EntityReference reference)
             {
-#pragma warning disable IDE0020 // Use pattern matching
-                var reference = (EntityReference)attributeValue;
-#pragma warning restore IDE0020 // Use pattern matching
-
                 container.Log("Attribute is of type `EntityReference`");
 
                 if (!string.IsNullOrEmpty(reference.Name))

@@ -3,18 +3,27 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using Innofactor.Xrm.Utils.Common.Extensions;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
 
     public class OperationsSet1 : InformationBase
     {
+        #region Private Fields
+
         private readonly Entity target;
 
+        #endregion Private Fields
+
+        #region Internal Constructors
+
         internal OperationsSet1(IExecutionContainer container, Entity target)
-            : base(container)
-        {
+            : base(container) =>
             this.target = target;
-        }
+
+        #endregion Internal Constructors
+
+        #region Private Properties
 
         private IEnumerable<string> Prefixes
         {
@@ -35,6 +44,10 @@
                 return result;
             }
         }
+
+        #endregion Private Properties
+
+        #region Public Methods
 
         public override string ToString()
         {
@@ -83,5 +96,7 @@
 
         public OperationsSet5 Via(string intersectionName) =>
             new OperationsSet5(container, target, intersectionName);
+
+        #endregion Public Methods
     }
 }
