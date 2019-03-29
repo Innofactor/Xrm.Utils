@@ -65,8 +65,13 @@
         /// <summary>Sort the collection based on given attribute names</summary>
         /// <param name="collection"></param>
         /// <param name="attributes">Array of attribute names to sort by. Prepend attribute name with ! to sort DESC.</param>
-        public static void Sort(this EntityCollection collection, params string[] attributes) =>
-            new List<Entity>(collection.Entities).Sort(new EntityComparer(attributes));
+        public static void Sort(this EntityCollection collection, params string[] attributes)
+        {
+            var temp = new List<Entity>(collection.Entities);
+            temp.Sort(new EntityComparer(attributes));
+
+            collection = new EntityCollection(temp);
+        }
 
         /// <summary>
         /// Turns collection of <see cref="Entity" /> into collection of <see cref="EntityReference" />
