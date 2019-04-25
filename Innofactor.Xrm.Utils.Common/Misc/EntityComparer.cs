@@ -66,10 +66,19 @@
                 {
                     result = CompareDateTimes(xAttrValue, yAttrValue);
                 }
+                else if (xAttrValue is string || yAttrValue is string)
+                {
+                    result = string.Compare(xAttrValue as string, yAttrValue as string, StringComparison.Ordinal);
+                }
+                else if (xAttrValue is int || yAttrValue is int)
+                {
+                    result = (int)xAttrValue - (int)yAttrValue;
+                }
                 else
                 {
                     var xstr = x.GetAttribute(sortAttribute.Attribute, string.Empty);
                     var ystr = y.GetAttribute(sortAttribute.Attribute, string.Empty);
+
                     result = string.Compare(xstr, ystr, StringComparison.Ordinal);
                 }
 

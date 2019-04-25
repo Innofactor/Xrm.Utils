@@ -65,12 +65,23 @@
         /// <summary>Sort the collection based on given attribute names</summary>
         /// <param name="collection"></param>
         /// <param name="attributes">Array of attribute names to sort by. Prepend attribute name with ! to sort DESC.</param>
-        public static void Sort(this EntityCollection collection, params string[] attributes)
+        public static EntityCollection Sort(this EntityCollection collection, params string[] attributes)
         {
             var temp = new List<Entity>(collection.Entities);
             temp.Sort(new EntityComparer(attributes));
 
-            collection = new EntityCollection(temp);
+            return new EntityCollection(temp);
+        }
+
+        /// <summary>Sort the collection based on given attribute names</summary>
+        /// <param name="collection"></param>
+        /// <param name="attributes">Array of attribute names to sort by. Prepend attribute name with ! to sort DESC.</param>
+        public static IEnumerable<Entity> Sort(this IEnumerable<Entity> collection, params string[] attributes)
+        {
+            var temp = new List<Entity>(collection);
+            temp.Sort(new EntityComparer(attributes));
+
+            return temp;
         }
 
         /// <summary>
