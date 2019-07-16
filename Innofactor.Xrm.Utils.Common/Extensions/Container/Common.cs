@@ -160,6 +160,100 @@
             }
         }
 
+        /// <summary>Disassociates current record from relatedentities, using specified intersect relationship</summary>
+        /// <param name="container"></param>
+        /// <param name="entity">Current entity</param>
+        /// <param name="relatedentity">Related entity</param>
+        /// <param name="intersect">Name of the intersect relationship/entity</param>
+        /// <remarks>To be used with N:N-relationships.</remarks>
+        /// <exception cref="FaultException{TDetail}">
+        /// <strong>TDetail</strong> may be typed as:
+        /// <para>
+        /// <see cref="OrganizationServiceFault" />: Thrown when association already exists.
+        /// </para>
+        /// </exception>
+        public static void Disassociate(this IExecutionContainer container, Entity entity, Entity relatedentity, string intersect)
+        {
+            var collection = new EntityCollection();
+            collection.Add(relatedentity);
+            container.Disassociate(entity, collection, intersect);
+        }
+
+        /// <summary>Disassociates current record from relatedentities, using specified intersect relationship</summary>
+        /// <param name="container"></param>
+        /// <param name="entity"></param>
+        /// <param name="relatedEntities">Collection of the entities related to current entity</param>
+        /// <param name="intersect">Name of the intersect relationship/entity</param>
+        /// <remarks>To be used with N:N-relationships.</remarks>
+        /// <exception cref="FaultException{TDetail}">
+        /// <strong>TDetail</strong> may be typed as:
+        /// <para>
+        /// <see cref="OrganizationServiceFault" />: Thrown when any of the associations already exists.
+        /// </para>
+        /// </exception>
+        public static void Disassociate(this IExecutionContainer container, Entity entity, EntityCollection relatedEntities, string intersect)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            container.Disassociate(entity, relatedEntities, intersect, int.MaxValue);
+        }
+
+        /// <summary>Disassociates current record from relatedentities, using specified intersect relationship</summary>
+        /// <param name="entity"></param>
+        /// <param name="container"></param>
+        /// <param name="relatedEntities">Collection of the entities related to current entity</param>
+        /// <param name="intersect">Name of the intersect relationship/entity</param>
+        /// <param name="batchSize">Optional. Determines the max number of entities to associate per request</param>
+        /// <remarks>To be used with N:N-relationships.</remarks>
+        /// <exception cref="FaultException{TDetail}">
+        /// <strong>TDetail</strong> may be typed as:
+        /// <para>
+        /// <see cref="OrganizationServiceFault" />: Thrown when any of the associations already exists.
+        /// </para>
+        /// </exception>
+        public static void Disassociate(this IExecutionContainer container, Entity entity, EntityCollection relatedEntities, string intersect, int batchSize)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            var role = default(EntityRole?);
+            if (relatedEntities.Entities.Count > 0 && relatedEntities[0].LogicalName == entity.LogicalName)
+            {
+                // N:N-relation to the same entity, so role have to be specified.
+                role = EntityRole.Referencing;
+            }
+
+            if (batchSize < 1)
+            {
+                throw new ArgumentException("batchSize must be larger than zero.");
+            }
+
+            var entRefCollection = relatedEntities.ToEntityReferenceCollection();
+            var processed = 0;
+            while (processed < relatedEntities.Entities.Count)
+            {
+                var batch = new EntityReferenceCollection(entRefCollection.Skip(processed).Take(batchSize).ToList());
+                processed += batch.Count();
+
+                var req = new DisassociateRequest
+                {
+                    Target = entity.ToEntityReference(),
+                    Relationship = new Relationship(intersect)
+                    {
+                        PrimaryEntityRole = role
+                    },
+                    RelatedEntities = batch
+                };
+                container.Service.Execute(req);
+                container.Log("Disassociated {0} {1} with {2}", batch.Count, relatedEntities.Entities.Count > 0 ? relatedEntities[0].LogicalName : "", entity.LogicalName);
+            }
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="container"></param>
