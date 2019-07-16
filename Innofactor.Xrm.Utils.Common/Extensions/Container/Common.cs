@@ -78,10 +78,10 @@
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            EntityRole? role = null;
+            var role = default(EntityRole?);
             if (relatedEntities.Entities.Count > 0 && relatedEntities[0].LogicalName == entity.LogicalName)
             {
-                // N:N-relation till samma entitet, då måste man ange en roll, tydligen.
+                // N:N-relation to the same entity, so role have to be specified.
                 role = EntityRole.Referencing;
             }
 
