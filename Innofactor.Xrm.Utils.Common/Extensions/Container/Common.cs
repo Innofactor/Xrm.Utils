@@ -1,10 +1,16 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
     using System;
+    using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.Serialization;
     using System.ServiceModel;
+    using System.Text;
+    using System.Xml;
     using Innofactor.Xrm.Utils.Common.Interfaces;
+    using Innofactor.Xrm.Utils.Common.Misc;
     using Microsoft.Crm.Sdk.Messages;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
@@ -15,8 +21,6 @@
     /// </summary>
     public static partial class ContainerExtensions
     {
-        #region Public Methods
-
         /// <summary>Associates current record with relatedentity, using specified intersect relationship</summary>
         /// <param name="container"></param>
         /// <param name="entity">Current entity</param>
@@ -122,7 +126,6 @@
             entity.Contains(attribute)
             ? entity
             : container.Reload(entity, attribute);
-
 
         /// <summary>
         /// Converts QueryExpression to FetchXml
@@ -357,7 +360,211 @@
 
             return response;
         }
+        /// <summary>Serialize a list of entities to file</summary>
+        /// <param name="container"></param>
+        /// <param name="entity">Entity to serialize</param>
+        /// <param name="filename">Target file</param>
+        /// <param name="formatting">Formatting, determines if indentation and line feeds are used in the file</param>
+        public static void Serialize(this IExecutionContainer container, Entity entity, string filename, Formatting formatting)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            try
+            {
+                var serializer = new DataContractSerializer(typeof(Entity), null, int.MaxValue, false, false, null, new KnownTypesResolver());
+                var writer = new XmlTextWriter(filename, Encoding.UTF8)
+                {
+                    Formatting = formatting
+                };
+                serializer.WriteObject(writer, entity);
+                writer.Close();
+            }
+            catch (Exception ex)
+            {
+                container.Log(ex);
+                throw;
+            }
+            finally
+            {
+                container.EndSection();
+            }
+        }
 
-        #endregion Public Methods
+        /// <summary>Serialize a list of entities to file</summary>
+        /// <param name="container"></param>
+        /// <param name="entities">List of entities to serialize</param>
+        /// <param name="filename">Target file</param>
+        /// <param name="formatting">Formatting, determines if indentation and line feeds are used in the file</param>
+        public static void Serialize(this IExecutionContainer container, List<Entity> entities, string filename, Formatting formatting)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+
+            var serializer = new DataContractSerializer(typeof(List<Entity>), null, int.MaxValue, false, false, null, new KnownTypesResolver());
+            var writer = new XmlTextWriter(filename, Encoding.UTF8)
+            {
+                Formatting = formatting
+            };
+            try
+            {
+                serializer.WriteObject(writer, entities);
+            }
+            catch (Exception ex)
+            {
+                container.Log(ex);
+                throw;
+            }
+            finally
+            {
+                writer.Close();
+                container.EndSection();
+            }
+        }
+
+        /// <summary>Deserializes a file into a list of entities</summary>
+        /// <param name="container"></param>
+        /// <param name="filename">Source file</param>
+        /// <returns>List of entities</returns>
+        public static List<Entity> Deserialize(this IExecutionContainer container, string filename)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            List<Entity> oObject;
+
+            try
+            {
+                var serializer = new DataContractSerializer(typeof(List<Entity>), null, int.MaxValue, false, false, null, new KnownTypesResolver());
+                var reader = new XmlTextReader(filename);
+
+                oObject = (List<Entity>)serializer.ReadObject(reader);
+                return oObject;
+            }
+            catch (Exception ex)
+            {
+                container.Log(ex);
+                throw;
+            }
+            finally
+            {
+                container.EndSection();
+            }
+        }
+        /// <summary>Deserialize Entity from XML node</summary>
+        /// <param name="container"></param>
+        /// <param name="xEntity"></param>
+        /// <returns></returns>
+        public static Entity Deserialize(this IExecutionContainer container, XmlNode xEntity)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            Entity result;
+            var name = xEntity.Name == "Entity" ? XML.GetAttribute(xEntity, "name") : xEntity.Name;
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new XmlException("Cannot deserialize entity, missing entity name");
+            }
+            var strId = XML.GetAttribute(xEntity, "id");
+            var id = StringToGuidish(container, strId);
+            if (!id.Equals(Guid.Empty))
+            {
+                result = new Entity(name, id);
+            }
+            else
+            {
+                result = new Entity(name);
+            }
+            foreach (XmlNode xAttribute in xEntity.ChildNodes)
+            {
+                if (xAttribute.NodeType == XmlNodeType.Element)
+                {
+                    var attribute = xAttribute.Name == "Attribute" ? XML.GetAttribute(xAttribute, "name") : xAttribute.Name;
+                    var type = XML.GetAttribute(xAttribute, "type");
+                    var value = xAttribute.ChildNodes.Count > 0 ? xAttribute.ChildNodes[0].InnerText : "";
+                    if (type == "EntityReference")
+                    {
+                        var entity = XML.GetAttribute(xAttribute, "entity");
+                        value = entity + ":" + value;
+                        var entrefname = XML.GetAttribute(xAttribute, "value");
+                        if (!string.IsNullOrEmpty(entrefname))
+                        {
+                            value += ":" + entrefname;
+                        }
+                    }
+                    result.Attributes.Add(attribute, value); 
+                }
+            }
+            container.EndSection();
+            return result;
+        }
+        internal static Guid StringToGuidish(IExecutionContainer container, string strId)
+        {
+            var id = Guid.Empty;
+            if (!string.IsNullOrWhiteSpace(strId) &&
+                !Guid.TryParse(strId, out id))
+            {
+                container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+                container.Log("String: {0}", strId);
+
+                var template = "FFFFEEEEDDDDCCCCBBBBAAAA99998888";
+
+                if (Guid.TryParse(template.Substring(0, 32 - strId.Length) + strId, out id))
+                {
+                    container.Log("Composed temporary guid from template + incomplete id: {0}", id);
+                }
+                else
+                {
+                    container.Log("Failed to compose temporary guid from: {0}", strId);
+                }
+                container.EndSection();
+            }
+            return id;
+        }
+
+        /// <summary>Constructor for EntityCollection class, initializing collection with serialized entities</summary>
+        /// <param name="container"></param>
+        /// <param name="serializedEntities"></param>
+        public static EntityCollection CreateEntityCollection(this IExecutionContainer container, XmlDocument serializedEntities)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            try
+            {
+                if (serializedEntities != null && serializedEntities.ChildNodes.Count > 0)
+                {
+                    var entityCollection = new EntityCollection();
+                    if (serializedEntities.ChildNodes[0].Name == "Entities")
+                    {
+                        foreach (XmlNode xEntity in serializedEntities.ChildNodes[0].ChildNodes)
+                        {
+                            entityCollection.Add(container.Deserialize(xEntity));
+                        }
+                    }
+                    else
+                    {
+                        List<Entity> entities;
+                        var serializer = new DataContractSerializer(typeof(List<Entity>), null, int.MaxValue, false, false, null, new KnownTypesResolver());
+                        var sr = new StringReader(serializedEntities.OuterXml);
+                        using (var reader = new XmlTextReader(sr))
+                        {
+                            entities = (List<Entity>)serializer.ReadObject(reader);
+                        }
+                        sr.Close();
+                        foreach (var entity in entities)
+                        {
+                            entityCollection.Add(entity);
+                        }
+                    }
+                    return entityCollection;
+                }
+                else
+                {
+                    return new EntityCollection();
+                }
+            }
+            catch (Exception ex)
+            {
+                container.Log(ex);
+                throw;
+            }
+            finally
+            {
+                container.EndSection();
+            }
+        }
     }
 }

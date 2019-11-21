@@ -2,7 +2,9 @@
 {
     using System;
     using Innofactor.Xrm.Utils.Common.Interfaces;
+    
     using Microsoft.Xrm.Sdk;
+    using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Query;
 
     /// <summary>
@@ -10,8 +12,6 @@
     /// </summary>
     public static partial class ContainerExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// </summary>
         /// <param name="container"></param>
@@ -100,6 +100,59 @@
         }
 
         /// <summary>
+        /// Retrieve All records using QueryExpression
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static EntityCollection RetrieveAll(this IExecutionContainer container, QueryExpression query)
+        {
+            query.PageInfo = new PagingInfo
+            {
+                Count = 5000,
+                PageNumber = 1,
+                ReturnTotalRecordCount = false,
+                PagingCookie = null
+            };
+
+            var results = new EntityCollection();
+
+            while (true)
+            {
+                var request = GetRequest(query);
+
+                var response = container.Service.Execute(request);
+
+                var batch = ((RetrieveMultipleResponse)((OrganizationResponseCollection)response.Results["Responses"])[0])
+                    .EntityCollection;
+
+                results.AddRange(batch);
+
+                if (!batch.MoreRecords)
+                {
+                    break;
+                }
+
+                query.PageInfo.PageNumber++;
+                query.PageInfo.PagingCookie = batch.PagingCookie;
+            }
+
+            return results;
+        }
+
+        private static ExecuteTransactionRequest GetRequest(QueryExpression query)
+        {
+            var request = new ExecuteTransactionRequest()
+            {
+                ReturnResponses = true,
+                Requests = new OrganizationRequestCollection()
+            };
+
+            request.Requests.Add(new RetrieveMultipleRequest { Query = query });
+
+            return request;
+        }
+        /// <summary>
         /// Save the entity record. If it has a valid Id it will be updated, otherwise new record created.
         /// </summary>
         /// <param name="container"></param>
@@ -125,7 +178,5 @@
             container.Service.Update(entity);
             container.Log($"Updated {entity.LogicalName} {entity.Id} with {entity.Attributes.Count} attributes");
         }
-
-        #endregion Public Methods
     }
 }

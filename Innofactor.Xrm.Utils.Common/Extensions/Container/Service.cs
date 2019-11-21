@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Caching;
     using Innofactor.Xrm.Utils.Common.Interfaces;
+    using Microsoft.Crm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Metadata;
 
@@ -62,6 +63,17 @@
             }
 
             return value;
+        }
+
+        /// <summary>
+        /// Method for converting query expression to fetchXml by executing QueryExpressionToFetchXmlRequest
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static QueryExpressionToFetchXmlResponse Execute(this IExecutionContainer container, QueryExpressionToFetchXmlRequest request)
+        {
+            return (QueryExpressionToFetchXmlResponse)container.Service.Execute(request);
         }
 
         #endregion Public Methods

@@ -3,7 +3,7 @@
     using System;
     using System.Linq;
     using Microsoft.Xrm.Sdk;
-
+    
     /// <summary>
     /// Light-weight features inspired by CintDynEntity
     /// </summary>
@@ -177,6 +177,60 @@
         public static void SetOwner(this Entity entity, Guid user) =>
             entity.SetAttribute("ownerid", new EntityReference("systemuser", user));
 
+        /// <summary>Gets the value of a property derived to its base type</summary>
+        /// <param name="entity"></param>
+        /// <param name="name"></param>
+        /// <param name="default"></param>
+        /// <param name="supresserrors"></param>
+        /// <returns>Base type of attribute</returns>
+        /// <remarks>Translates <c>AliasedValue, EntityReference, OptionSetValue and Money</c> to their underlying base types</remarks>
+        public static object PropertyAsBaseType(this Entity entity, string name, object @default, bool supresserrors)
+        {
+            if (!entity.Contains(name))
+            {
+                if (!supresserrors)
+                {
+                    throw new InvalidPluginExecutionException($"Attribute {name} not found in entity {entity?.LogicalName} {entity?.Id}");
+                }
+                else
+                {
+                    return @default;
+                }
+            }
+            return AttributeToBaseType(entity[name]);
+        }
+
+        private static object Entity(object p)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>Gets base type of given attribute object</summary>
+        /// <param name="attribute">Attribute object containing the data</param>
+        /// <returns>Translates AliasedValue, EntityReference, OptionSetValue and Money to their underlying base types</returns>
+        private static object AttributeToBaseType(object attribute)
+        {
+            if (attribute is AliasedValue)
+            {
+                return AttributeToBaseType(((AliasedValue)attribute).Value);
+            }
+            else if (attribute is EntityReference)
+            {
+                return ((EntityReference)attribute).Id;
+            }
+            else if (attribute is OptionSetValue)
+            {
+                return ((OptionSetValue)attribute).Value;
+            }
+            else if (attribute is Money)
+            {
+                return ((Money)attribute).Value;
+            }
+            else
+            {
+                return attribute;
+            }
+        }
         #endregion Public Methods
     }
 }
