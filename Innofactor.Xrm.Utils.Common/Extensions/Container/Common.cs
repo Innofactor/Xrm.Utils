@@ -9,11 +9,13 @@
     using System.ServiceModel;
     using System.Text;
     using System.Xml;
+    using ElencySolutions.CsvHelper;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Innofactor.Xrm.Utils.Common.Misc;
     using Microsoft.Crm.Sdk.Messages;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
+    using Microsoft.Xrm.Sdk.Metadata;
     using Microsoft.Xrm.Sdk.Query;
 
     /// <summary>
@@ -486,30 +488,36 @@
                             value += ":" + entrefname;
                         }
                     }
-                    result.Attributes.Add(attribute, value); 
+                    result.Attributes.Add(attribute, value);
                 }
             }
             container.EndSection();
             return result;
         }
-        internal static Guid StringToGuidish(IExecutionContainer container, string strId)
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="strId"></param>
+        /// <returns></returns>
+        public static Guid StringToGuidish(this IExecutionContainer container, string strId)
         {
             var id = Guid.Empty;
             if (!string.IsNullOrWhiteSpace(strId) &&
                 !Guid.TryParse(strId, out id))
             {
                 container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
-                container.Log("String: {0}", strId);
+                container.Log($"String: {strId}");
 
                 var template = "FFFFEEEEDDDDCCCCBBBBAAAA99998888";
 
                 if (Guid.TryParse(template.Substring(0, 32 - strId.Length) + strId, out id))
                 {
-                    container.Log("Composed temporary guid from template + incomplete id: {0}", id);
+                    container.Log($"Composed temporary guid from template + incomplete id: {id}");
                 }
                 else
                 {
-                    container.Log("Failed to compose temporary guid from: {0}", strId);
+                    container.Log($"Failed to compose temporary guid from: {strId}");
                 }
                 container.EndSection();
             }
@@ -560,6 +568,88 @@
             {
                 container.Log(ex);
                 throw;
+            }
+            finally
+            {
+                container.EndSection();
+            }
+        }
+        /// <summary>Constructor for EntityCollection class, initializing collection with text file entities</summary>
+        /// <param name="container"></param>
+        /// <param name="text"></param>
+        /// <param name="delimeter"></param>
+        public static EntityCollection CreateEntityCollection(this IExecutionContainer container, string text, char delimeter)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            try
+            {
+                container.Log($"Text {text.Length} characters, Delimeter: {delimeter}");
+                var entityCollection = new EntityCollection();
+                if (text.Length > 0)
+                {
+                    List<string> columns;
+                    List<string> types = null;
+                    var reader = new CsvReader(Encoding.UTF8, text) { Delimeter = delimeter, RemoveEmptyTrailingFields = true };
+                    if (!reader.ReadNextRecord())
+                    {
+                        throw new InvalidDataContractException("CSV file does not contain a column names header row.");
+                    }
+                    columns = reader.Fields;
+                    while (reader.ReadNextRecord())
+                    {
+                        var current = reader.Fields;
+                        if (current.Count >= 1)
+                        {   // Two columns must exist to have anything at all - Entity and Id (although Id can actually be empty)
+                            if (types == null)
+                            {   //
+                                if (current[0] == "String" && current[1] == "Guid")
+                                {   // Types not yet defined
+                                    container.Log("Assigning types from serialized text");
+                                    types = current;
+                                    continue;
+                                }
+                                else
+                                {   
+                                    container.StartSection("Retrieving types from metadata");
+                                    var entity = current[0];
+                                    types = new List<string>(columns.Count);
+                                    // Idiotisk kod bara för att jag inte vet hur man hanterar listor vettigt, eller nåt //JR
+                                    for (var i = 0; i < columns.Count; i++) { types.Add(""); }
+
+                                    types[0] = "String";    // Entity name type
+                                    types[1] = "Guid";      // Record id type
+                                    container.Log($"Retrieving metadata for {entity}");
+
+                                    var metadata = (EntityMetadata)container.Execute(new RetrieveEntityRequest()
+                                    {
+                                        LogicalName = entity,
+                                        EntityFilters = EntityFilters.Attributes,
+                                        RetrieveAsIfPublished = true
+                                    });
+                                    foreach (var attrmeta in metadata.Attributes)
+                                    {
+                                        if (columns.Contains(attrmeta.LogicalName))
+                                        {
+                                            container.Log($"Column: {attrmeta.LogicalName} is {attrmeta.AttributeType}");
+                                            types[columns.IndexOf(attrmeta.LogicalName)] = attrmeta.AttributeType.ToString();
+                                        }
+                                    }
+                                    for (var i = 0; i < columns.Count; i++)
+                                    {
+                                        if (string.IsNullOrWhiteSpace(types[i]))
+                                        {
+                                            throw new ArgumentNullException("Type", "Cannot find type for column " + columns[i]);
+                                        }
+                                    }
+                                    container.EndSection();
+                                }
+                            }
+
+                            entityCollection.Add(container.InitFromTextLine(columns, types, current));
+                        }
+                    }
+                }
+                return entityCollection;
             }
             finally
             {

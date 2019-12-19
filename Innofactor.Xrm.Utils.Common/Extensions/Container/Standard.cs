@@ -1,8 +1,10 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
     using System;
+    using System.Collections.Generic;
+    using System.Reflection;
     using Innofactor.Xrm.Utils.Common.Interfaces;
-    
+
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Query;
@@ -23,6 +25,53 @@
             container.Log($"Created {entity.LogicalName}:{entity.Id}");
 
             return entity;
+        }
+        /// <summary>
+        /// Used in Shuffle as InitFromTextLine
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="columns"></param>
+        /// <param name="types"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static Entity InitFromTextLine(this IExecutionContainer container, List<string> columns, List<string> types, List<string> values)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            try
+            {
+                container.Log($"Columns: {columns.Count} Types: {types.Count} Fields: {values.Count}");
+                var name = values[0];
+                var strId = values[1];
+                container.Log($"Entity: {name} Id: {strId}");
+                var id = StringToGuidish(container, strId);
+                Entity entity;
+                if (!id.Equals(Guid.Empty))
+                {
+                    entity = new Entity(name, id);
+                }
+                else
+                {
+                    entity = new Entity(name);
+                }
+                for (var col = 2; col < columns.Count; col++)
+                {
+                    var attribute = columns[col];
+                    var type = types[col];
+                    var value = values.Count > col ? values[col] : "";
+                    if (value == "<null>")
+                    {
+                        type = "null";
+                    }
+
+                    entity.SetAttribute(container, attribute, type, value);
+                }
+                container.Log($@"Initiated {entity.LogicalName} ""{entity}"" with {entity.Attributes.Count} attributes");
+                return entity;
+            }
+            finally
+            {
+                container.EndSection();
+            }
         }
 
         /// <summary>

@@ -9,13 +9,7 @@
 
     public static partial class ContainerExtensions
     {
-        #region Private Fields
-
         private static readonly MemoryCache cache = new MemoryCache("metadata");
-
-        #endregion Private Fields
-
-        #region Public Methods
 
         /// <summary>
         /// Method to be used when retrieving metadata, to be able to benefit from metadata caching abilities
@@ -71,11 +65,14 @@
         /// <param name="container"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static QueryExpressionToFetchXmlResponse Execute(this IExecutionContainer container, QueryExpressionToFetchXmlRequest request)
-        {
-            return (QueryExpressionToFetchXmlResponse)container.Service.Execute(request);
-        }
+        public static QueryExpressionToFetchXmlResponse Execute(this IExecutionContainer container, QueryExpressionToFetchXmlRequest request) => (QueryExpressionToFetchXmlResponse)container.Service.Execute(request);
 
-        #endregion Public Methods
+        /// <summary>
+        /// Method for retrieving metadata changes
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static RetrieveMetadataChangesResponse Execute(this IExecutionContainer container, RetrieveMetadataChangesRequest request) => (RetrieveMetadataChangesResponse)container.Service.Execute(request);
     }
 }

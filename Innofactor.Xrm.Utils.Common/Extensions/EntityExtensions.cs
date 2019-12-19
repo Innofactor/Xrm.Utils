@@ -1,16 +1,17 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
     using System;
+    using System.Globalization;
     using System.Linq;
+    using System.Reflection;
+    using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
-    
+
     /// <summary>
     /// Light-weight features inspired by CintDynEntity
     /// </summary>
     public static class EntityExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// Clones entity instance to a new C# instance
         /// </summary>
@@ -104,7 +105,6 @@
 
         /// <summary>
         /// </summary>
-        /// <param name="container"></param>
         /// <param name="entity1"></param>
         /// <param name="entity2"></param>
         /// <returns></returns>
@@ -231,6 +231,144 @@
                 return attribute;
             }
         }
-        #endregion Public Methods
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="container"></param>
+        /// <param name="attribute"></param>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <remarks>Previously called AddProperty </remarks>
+        public static void SetAttribute(this Entity entity, IExecutionContainer container, string attribute, string type, string value)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            try
+            {
+                container.Log($@"{attribute} = ""{value}\"" ({type})");
+                switch (type)
+                {
+                    case "String":
+                    case "Memo":
+                        entity.SetAttribute(attribute, value);
+
+                        break;
+
+                    case "Int32":
+                    case "Integer":
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            entity.SetAttribute(attribute, int.Parse(value));
+                        }
+                        break;
+
+                    case "Int64":
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            entity.SetAttribute(attribute, long.Parse(value));
+                        }
+                        break;
+
+                    case "OptionSetValue":
+                    case "Picklist":
+                    case "State":
+                    case "Status":
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            entity.SetAttribute(attribute, new OptionSetValue(int.Parse(value)));
+                        }
+                        break;
+
+                    case "EntityReference":
+                    case "Lookup":
+                    case "Customer":
+                    case "Owner":
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            var valueparts = value.Split(':');
+                            var entityRef = valueparts[0];
+                            value = valueparts[1];
+                            var refId = container.StringToGuidish(value);
+                            var entref = new EntityReference(entityRef, refId);
+                            if (valueparts.Length > 2)
+                            {
+                                entref.Name = valueparts[2];
+                            }
+                            entity.SetAttribute(attribute, entref);
+                        }
+                        break;
+
+                    case "DateTime":
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            entity.SetAttribute(attribute, DateTime.Parse(value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal));
+                        }
+                        break;
+
+                    case "Boolean":
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            entity.SetAttribute(attribute, StringToBool(value));
+                        }
+                        break;
+
+                    case "Guid":
+                    case "Uniqueidentifier":
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            var uId = container.StringToGuidish(value);
+                            entity.SetAttribute(attribute, uId);
+                        }
+                        break;
+
+                    case "Decimal":
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            entity.SetAttribute(attribute, decimal.Parse(value));
+                        }
+                        break;
+
+                    case "Money":
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            entity.SetAttribute(attribute, new Money(decimal.Parse(value)));
+                        }
+                        break;
+
+                    case "null":
+                    case "<null>":
+                        entity.Attributes.Remove(attribute);
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException("Type", type, "Cannot parse attibute type");
+                }
+            }
+            finally
+            {
+                container.EndSection();
+            }
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static bool StringToBool(string value)
+        {
+            if (value == "0")
+            {
+                return false;
+            }
+            else if (value == "1")
+            {
+                return true;
+            }
+            else
+            {
+                return bool.Parse(value);
+            }
+        }
     }
 }
