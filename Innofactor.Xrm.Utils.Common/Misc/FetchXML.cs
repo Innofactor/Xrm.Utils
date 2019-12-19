@@ -1,4 +1,8 @@
 ﻿using System.Xml;
+using Innofactor.Xrm.Utils.Common.Extensions;
+using Innofactor.Xrm.Utils.Common.Interfaces;
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Query;
 
 namespace Innofactor.Xrm.Utils.Common.Misc
 {
@@ -336,6 +340,18 @@ namespace Innofactor.Xrm.Utils.Common.Misc
                 }
             }
             return null;
+        }
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static string ConvertToFetchXml(this IExecutionContainer container, QueryExpression query)
+        {
+            var request = new QueryExpressionToFetchXmlRequest() { Query = query };
+            var response = container.Execute(request);
+            return response.FetchXml;
         }
     }
 }
