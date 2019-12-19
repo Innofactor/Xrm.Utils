@@ -1,23 +1,57 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Misc
 {
     using System.Xml;
+
     /// <summary>
     /// Utility class with XML utilities.
     /// </summary>
     public static class XML
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static XmlDocument Load(string str)
+        #region Public Methods
+
+        /// <summary>Add subnode of type CDATA to given entitynode</summary>
+        /// <param name="node"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public static XmlNode AddCDATANode(XmlNode node, string name, string value)
         {
-            return FromString(str, false);
+            XmlNode textNode = node.OwnerDocument.CreateElement(name);
+            node.AppendChild(textNode);
+            textNode.AppendChild(node.OwnerDocument.CreateCDataSection(value));
+            return textNode;
+        }
+
+        /// <summary>Appends attribute to the parentNode</summary>
+        /// <param name="node"></param>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public static void AppendAttribute(XmlNode node, string name, string value)
+        {
+            var attr = node.OwnerDocument.CreateAttribute(name);
+            attr.Value = value;
+            node.Attributes.Append(attr);
         }
 
         /// <summary>
-        /// 
+        ///
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static XmlNode FindChild(XmlNode node, string name)
+        {
+            for (var i = 0; i < node.ChildNodes.Count; i++)
+            {
+                if (node.ChildNodes[i].Name == name)
+                {
+                    return node.ChildNodes[i];
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        ///
         /// </summary>
         /// <param name="str"></param>
         /// <param name="supresserrors"></param>
@@ -49,8 +83,9 @@
                 }
             }
         }
+
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="node"></param>
         /// <param name="attribute"></param>
@@ -69,7 +104,7 @@
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="node"></param>
         /// <param name="attribute"></param>
@@ -96,7 +131,7 @@
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="node"></param>
         /// <param name="attribute"></param>
@@ -113,44 +148,15 @@
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="name"></param>
+        /// <param name="str"></param>
         /// <returns></returns>
-        public static XmlNode FindChild(XmlNode node, string name)
+        public static XmlDocument Load(string str)
         {
-            for (var i = 0; i < node.ChildNodes.Count; i++)
-            {
-                if (node.ChildNodes[i].Name == name)
-                {
-                    return node.ChildNodes[i];
-                }
-            }
-            return null;
+            return FromString(str, false);
         }
 
-        /// <summary>Appends attribute to the parentNode</summary>
-        /// <param name="node"></param>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public static void AppendAttribute(XmlNode node, string name, string value)
-        {
-            var attr = node.OwnerDocument.CreateAttribute(name);
-            attr.Value = value;
-            node.Attributes.Append(attr);
-        }
-
-        /// <summary>Add subnode of type CDATA to given entitynode</summary>
-        /// <param name="node"></param>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public static XmlNode AddCDATANode(XmlNode node, string name, string value)
-        {
-            XmlNode textNode = node.OwnerDocument.CreateElement(name);
-            node.AppendChild(textNode);
-            textNode.AppendChild(node.OwnerDocument.CreateCDataSection(value));
-            return textNode;
-        }
+        #endregion Public Methods
     }
 }

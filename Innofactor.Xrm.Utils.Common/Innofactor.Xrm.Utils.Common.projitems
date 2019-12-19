@@ -34,6 +34,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\InformationBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IExecutionContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\EntityComparer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Misc\FetchXML.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\Query.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\SortAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\XML.cs" />
