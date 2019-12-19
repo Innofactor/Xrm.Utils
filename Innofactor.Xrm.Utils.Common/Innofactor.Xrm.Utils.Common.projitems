@@ -9,6 +9,9 @@
     <Import_RootNamespace>Innofactor.Xrm.Utils.Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CsvHelper\CsvFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CsvHelper\CsvReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CsvHelper\CsvWriter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Common.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Fluent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Logger.cs" />
@@ -37,5 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Extensions\Container\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)CsvHelper\readme.txt" />
   </ItemGroup>
 </Project>
