@@ -350,7 +350,7 @@ namespace Innofactor.Xrm.Utils.Common.Misc
         public static string ConvertToFetchXml(this IExecutionContainer container, QueryExpression query)
         {
             var request = new QueryExpressionToFetchXmlRequest() { Query = query };
-            var response = container.Execute(request);
+            var response = (QueryExpressionToFetchXmlResponse)container.Execute(request);
             return response.FetchXml;
         }
     }

@@ -4,6 +4,7 @@
     using System.Runtime.Caching;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Crm.Sdk.Messages;
+    using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Metadata;
 
@@ -60,56 +61,11 @@
         }
 
         /// <summary>
-        /// Method for converting query expression to fetchXml by executing QueryExpressionToFetchXmlRequest
+        /// Generic execute method
         /// </summary>
         /// <param name="container"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static QueryExpressionToFetchXmlResponse Execute(this IExecutionContainer container, QueryExpressionToFetchXmlRequest request) => (QueryExpressionToFetchXmlResponse)container.Service.Execute(request);
-
-        /// <summary>
-        /// Method for retrieving metadata changes
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public static RetrieveMetadataChangesResponse Execute(this IExecutionContainer container, RetrieveMetadataChangesRequest request) => (RetrieveMetadataChangesResponse)container.Service.Execute(request);
-
-        /// <summary>
-        /// Method for publishing all Xml request
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="request"></param>
-        /// <remarks>Used in Shuffle</remarks>
-        /// <returns></returns>
-        public static PublishAllXmlResponse Execute(this IExecutionContainer container, PublishAllXmlRequest request) => (PublishAllXmlResponse)container.Service.Execute(request);
-
-        /// <summary>
-        /// Method for executing async request
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="request"></param>
-        /// <remarks>Used in Shuffle</remarks>
-        /// <returns></returns>
-        public static ExecuteAsyncResponse Execute(this IExecutionContainer container, ExecuteAsyncRequest request) => (ExecuteAsyncResponse)container.Service.Execute(request);
-
-        /// <summary>
-        /// Method for executing export solution request
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="request"></param>
-        /// <remarks>Used in Shuffle</remarks>
-        /// <returns></returns>
-        public static ExportSolutionResponse Execute(this IExecutionContainer container, ExportSolutionRequest request) => (ExportSolutionResponse)container.Service.Execute(request);
-
-        /// <summary>
-        /// Method for executing import solution request
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public static ImportSolutionResponse Execute(this IExecutionContainer container, ImportSolutionRequest request) => (ImportSolutionResponse)container.Service.Execute(request);
-
-
+        public static OrganizationResponse Execute(this IExecutionContainer container, OrganizationRequest request) => container.Service.Execute(request);
     }
 }

@@ -134,7 +134,15 @@
             }
             return result;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="attributes"></param>
+        /// <param name="values"></param>
+        /// <param name="columns"></param>
+        /// <param name="nolock"></param>
+        /// <returns></returns>
         public static QueryExpression QueryExpressionByAttributes(string entity, string[] attributes, object[] values, ColumnSet columns, bool nolock)
         {
             var qx = new QueryExpression(entity);
