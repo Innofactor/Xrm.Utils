@@ -327,7 +327,7 @@
                 return bool.Parse(value);
             }
         }
-
+        
         #endregion Private Methods
     }
 }

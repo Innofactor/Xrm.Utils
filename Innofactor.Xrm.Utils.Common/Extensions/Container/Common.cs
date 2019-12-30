@@ -23,8 +23,6 @@
     /// </summary>
     public static partial class ContainerExtensions
     {
-        #region Public Methods
-
         /// <summary>Associates current record with relatedentity, using specified intersect relationship</summary>
         /// <param name="container"></param>
         /// <param name="entity">Current entity</param>
@@ -631,7 +629,7 @@
         {
             container.Log($"Setting state {state} {status} on {entity.LogicalName}");
 
-            var response = container.Service.Execute(new SetStateRequest()
+            var response = container.Execute(new SetStateRequest()
             {
                 EntityMoniker = entity.ToEntityReference(),
                 State = new OptionSetValue(state),
@@ -688,11 +686,13 @@
                         result.Add(0);
                         result.Add(3);
                         break;
+
                     case "quote":
                     case "salesorder":
                         result.Add(0);
                         result.Add(1);
                         break;
+
                     default:
                         // All other entities - active if state=0
                         result.Add(0);
@@ -701,6 +701,52 @@
             }
             return result;
         }
-        #endregion Public Methods
+        /// <summary>Gets the value of a property derived to its base type</summary>
+        /// <param name="container"></param>
+        /// <param name="entity"></param>
+        /// <param name="name"></param>
+        /// <param name="default"></param>
+        /// <param name="supresserrors"></param>
+        /// <returns>Base type of attribute</returns>
+        /// <remarks>Translates <c>AliasedValue, EntityReference, OptionSetValue and Money</c> to their underlying base types</remarks>
+        public static object AttributeAsBaseType(this IExecutionContainer container, Entity entity, string name, object @default, bool supresserrors)
+        {
+            if (!entity.Contains(name))
+            {
+                if (!supresserrors)
+                {
+                    
+                    throw new InvalidPluginExecutionException(string.Format("Attribute {0} not found in entity {1} {2}", name, entity.LogicalName, container.Entity(entity).ToString()));
+                }
+                else
+                {
+                    return @default;
+                }
+            }
+            return AttributeToBaseType(entity[name]);
+        }
+        private static object AttributeToBaseType(object attribute)
+        {
+            if (attribute is AliasedValue)
+            {
+                return AttributeToBaseType(((AliasedValue)attribute).Value);
+            }
+            else if (attribute is EntityReference)
+            {
+                return ((EntityReference)attribute).Id;
+            }
+            else if (attribute is OptionSetValue)
+            {
+                return ((OptionSetValue)attribute).Value;
+            }
+            else if (attribute is Money)
+            {
+                return ((Money)attribute).Value;
+            }
+            else
+            {
+                return attribute;
+            }
+        }
     }
 }
