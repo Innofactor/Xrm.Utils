@@ -649,7 +649,7 @@
         /// <param name="container"></param>
         /// <param name="strId"></param>
         /// <returns></returns>
-        public static Guid StringToGuidish(this IExecutionContainer container, string strId)
+        internal static Guid StringToGuidish(this IExecutionContainer container, string strId)
         {
             var id = Guid.Empty;
             if (!string.IsNullOrWhiteSpace(strId) &&
@@ -672,7 +672,35 @@
             }
             return id;
         }
-
+        /// <summary>Returns a list of states which indicate that a record of given entityname is active.</summary>
+        /// <param name="container"></param>
+        /// <param name="entityName">Name of the entity.</param>
+        /// <returns>List of active states</returns>
+        public static List<int> GetActiveStates(this IExecutionContainer container, string entityName)
+        {
+            var result = new List<int>();
+            if (!Constants.StatecodelessEntities.Contains(entityName))
+            {
+                switch (entityName)
+                {
+                    case "activitypointer":
+                    case "appointment":
+                        result.Add(0);
+                        result.Add(3);
+                        break;
+                    case "quote":
+                    case "salesorder":
+                        result.Add(0);
+                        result.Add(1);
+                        break;
+                    default:
+                        // All other entities - active if state=0
+                        result.Add(0);
+                        break;
+                }
+            }
+            return result;
+        }
         #endregion Public Methods
     }
 }
