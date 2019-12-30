@@ -1,8 +1,6 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Fluent.Attribute
 {
     using System;
-    using System.Collections.Generic;
-    using System.Globalization;
     using System.Text;
     using Innofactor.Xrm.Utils.Common.Extensions;
     using Innofactor.Xrm.Utils.Common.Interfaces;
@@ -13,16 +11,10 @@
 
     public class OperationsSet2 : Information
     {
-        #region Internal Constructors
-
         internal OperationsSet2(IExecutionContainer container, string name, Entity target)
             : base(container, name, target)
         {
         }
-
-        #endregion Internal Constructors
-
-        #region Public Methods
 
         /// <summary>
         /// Will add given <paramref name="columns" /> to the operation
@@ -99,10 +91,6 @@
                 container.EndSection();
             }
         }
-
-        #endregion Public Methods
-
-        #region Private Methods
 
         private string ToString(string attributeName, object attributeValue)
         {
@@ -226,7 +214,5 @@
                 return null;
             }
         }
-
-        #endregion Private Methods
     }
 }
