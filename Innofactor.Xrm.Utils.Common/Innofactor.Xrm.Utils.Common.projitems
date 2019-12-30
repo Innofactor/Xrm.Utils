@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Entity\OperationsSet5.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\InformationBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IExecutionContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Misc\Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\EntityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\FetchXML.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Misc\PPH.cs" />
