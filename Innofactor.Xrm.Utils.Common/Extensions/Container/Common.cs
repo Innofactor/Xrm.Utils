@@ -23,6 +23,8 @@
     /// </summary>
     public static partial class ContainerExtensions
     {
+        #region Public Methods
+
         /// <summary>Associates current record with relatedentity, using specified intersect relationship</summary>
         /// <param name="container"></param>
         /// <param name="entity">Current entity</param>
@@ -118,18 +120,6 @@
         }
 
         /// <summary>
-        /// Checks if a property exists in the encapsulated Entity
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="entity"></param>
-        /// <param name="attribute">Name of property to check</param>
-        /// <returns></returns>
-        public static Entity Ensure(this IExecutionContainer container, Entity entity, string attribute) =>
-            entity.Contains(attribute)
-            ? entity
-            : container.Reload(entity, attribute);
-
-        /// <summary>
         /// Converts QueryExpression to FetchXml
         /// </summary>
         /// <param name="container"></param>
@@ -163,6 +153,215 @@
             {
                 container.EndSection();
             }
+        }
+
+        /// <summary>Constructor for EntityCollection class, initializing collection with serialized entities</summary>
+        /// <param name="container"></param>
+        /// <param name="serializedEntities"></param>
+        public static EntityCollection CreateEntityCollection(this IExecutionContainer container, XmlDocument serializedEntities)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            try
+            {
+                if (serializedEntities != null && serializedEntities.ChildNodes.Count > 0)
+                {
+                    var entityCollection = new EntityCollection();
+                    if (serializedEntities.ChildNodes[0].Name == "Entities")
+                    {
+                        foreach (XmlNode xEntity in serializedEntities.ChildNodes[0].ChildNodes)
+                        {
+                            entityCollection.Add(container.Deserialize(xEntity));
+                        }
+                    }
+                    else
+                    {
+                        List<Entity> entities;
+                        var serializer = new DataContractSerializer(typeof(List<Entity>), null, int.MaxValue, false, false, null, new KnownTypesResolver());
+                        var sr = new StringReader(serializedEntities.OuterXml);
+                        using (var reader = new XmlTextReader(sr))
+                        {
+                            entities = (List<Entity>)serializer.ReadObject(reader);
+                        }
+                        sr.Close();
+                        foreach (var entity in entities)
+                        {
+                            entityCollection.Add(entity);
+                        }
+                    }
+                    return entityCollection;
+                }
+                else
+                {
+                    return new EntityCollection();
+                }
+            }
+            catch (Exception ex)
+            {
+                container.Log(ex);
+                throw;
+            }
+            finally
+            {
+                container.EndSection();
+            }
+        }
+
+        /// <summary>Constructor for EntityCollection class, initializing collection with text file entities</summary>
+        /// <param name="container"></param>
+        /// <param name="text"></param>
+        /// <param name="delimeter"></param>
+        public static EntityCollection CreateEntityCollection(this IExecutionContainer container, string text, char delimeter)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            try
+            {
+                container.Log($"Text {text.Length} characters, Delimeter: {delimeter}");
+                var entityCollection = new EntityCollection();
+                if (text.Length > 0)
+                {
+                    List<string> columns;
+                    List<string> types = null;
+                    var reader = new CsvReader(Encoding.UTF8, text) { Delimeter = delimeter, RemoveEmptyTrailingFields = true };
+                    if (!reader.ReadNextRecord())
+                    {
+                        throw new InvalidDataContractException("CSV file does not contain a column names header row.");
+                    }
+                    columns = reader.Fields;
+                    while (reader.ReadNextRecord())
+                    {
+                        var current = reader.Fields;
+                        if (current.Count >= 1)
+                        {   // Two columns must exist to have anything at all - Entity and Id (although Id can actually be empty)
+                            if (types == null)
+                            {   //
+                                if (current[0] == "String" && current[1] == "Guid")
+                                {   // Types not yet defined
+                                    container.Log("Assigning types from serialized text");
+                                    types = current;
+                                    continue;
+                                }
+                                else
+                                {
+                                    container.StartSection("Retrieving types from metadata");
+                                    var entity = current[0];
+                                    types = new List<string>(columns.Count);
+                                    // Idiotisk kod bara för att jag inte vet hur man hanterar listor vettigt, eller nåt //JR
+                                    for (var i = 0; i < columns.Count; i++) { types.Add(""); }
+
+                                    types[0] = "String";    // Entity name type
+                                    types[1] = "Guid";      // Record id type
+                                    container.Log($"Retrieving metadata for {entity}");
+
+                                    var metadata = (EntityMetadata)container.Execute(new RetrieveEntityRequest()
+                                    {
+                                        LogicalName = entity,
+                                        EntityFilters = EntityFilters.Attributes,
+                                        RetrieveAsIfPublished = true
+                                    });
+                                    foreach (var attrmeta in metadata.Attributes)
+                                    {
+                                        if (columns.Contains(attrmeta.LogicalName))
+                                        {
+                                            container.Log($"Column: {attrmeta.LogicalName} is {attrmeta.AttributeType}");
+                                            types[columns.IndexOf(attrmeta.LogicalName)] = attrmeta.AttributeType.ToString();
+                                        }
+                                    }
+                                    for (var i = 0; i < columns.Count; i++)
+                                    {
+                                        if (string.IsNullOrWhiteSpace(types[i]))
+                                        {
+                                            throw new ArgumentNullException("Type", "Cannot find type for column " + columns[i]);
+                                        }
+                                    }
+                                    container.EndSection();
+                                }
+                            }
+
+                            entityCollection.Add(container.InitFromTextLine(columns, types, current));
+                        }
+                    }
+                }
+                return entityCollection;
+            }
+            finally
+            {
+                container.EndSection();
+            }
+        }
+
+        /// <summary>Deserializes a file into a list of entities</summary>
+        /// <param name="container"></param>
+        /// <param name="filename">Source file</param>
+        /// <returns>List of entities</returns>
+        public static List<Entity> Deserialize(this IExecutionContainer container, string filename)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            List<Entity> oObject;
+
+            try
+            {
+                var serializer = new DataContractSerializer(typeof(List<Entity>), null, int.MaxValue, false, false, null, new KnownTypesResolver());
+                var reader = new XmlTextReader(filename);
+
+                oObject = (List<Entity>)serializer.ReadObject(reader);
+                return oObject;
+            }
+            catch (Exception ex)
+            {
+                container.Log(ex);
+                throw;
+            }
+            finally
+            {
+                container.EndSection();
+            }
+        }
+
+        /// <summary>Deserialize Entity from XML node</summary>
+        /// <param name="container"></param>
+        /// <param name="xEntity"></param>
+        /// <returns></returns>
+        public static Entity Deserialize(this IExecutionContainer container, XmlNode xEntity)
+        {
+            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
+            Entity result;
+            var name = xEntity.Name == "Entity" ? XML.GetAttribute(xEntity, "name") : xEntity.Name;
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new XmlException("Cannot deserialize entity, missing entity name");
+            }
+            var strId = XML.GetAttribute(xEntity, "id");
+            var id = StringToGuidish(container, strId);
+            if (!id.Equals(Guid.Empty))
+            {
+                result = new Entity(name, id);
+            }
+            else
+            {
+                result = new Entity(name);
+            }
+            foreach (XmlNode xAttribute in xEntity.ChildNodes)
+            {
+                if (xAttribute.NodeType == XmlNodeType.Element)
+                {
+                    var attribute = xAttribute.Name == "Attribute" ? XML.GetAttribute(xAttribute, "name") : xAttribute.Name;
+                    var type = XML.GetAttribute(xAttribute, "type");
+                    var value = xAttribute.ChildNodes.Count > 0 ? xAttribute.ChildNodes[0].InnerText : "";
+                    if (type == "EntityReference")
+                    {
+                        var entity = XML.GetAttribute(xAttribute, "entity");
+                        value = entity + ":" + value;
+                        var entrefname = XML.GetAttribute(xAttribute, "value");
+                        if (!string.IsNullOrEmpty(entrefname))
+                        {
+                            value += ":" + entrefname;
+                        }
+                    }
+                    result.Attributes.Add(attribute, value);
+                }
+            }
+            container.EndSection();
+            return result;
         }
 
         /// <summary>Disassociates current record from relatedentities, using specified intersect relationship</summary>
@@ -260,6 +459,28 @@
         }
 
         /// <summary>
+        /// Checks if a property exists in the encapsulated Entity
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="entity"></param>
+        /// <param name="attribute">Name of property to check</param>
+        /// <returns></returns>
+        public static Entity Ensure(this IExecutionContainer container, Entity entity, string attribute) =>
+            entity.Contains(attribute)
+            ? entity
+            : container.Reload(entity, attribute);
+
+        /// <summary>
+        /// Version of currently connected CRM environment
+        /// </summary>
+        public static Version GetCrmVersion(this IExecutionContainer container)
+        {
+            var resp = (RetrieveVersionResponse)container.Execute(new RetrieveVersionRequest());
+
+            return new Version(resp.Version);
+        }
+
+        /// <summary>
         /// </summary>
         /// <param name="container"></param>
         /// <param name="entity1"></param>
@@ -338,30 +559,6 @@
             return entity;
         }
 
-        /// <summary>Update state and status of current record</summary>
-        /// <remarks>
-        /// http://msdynamicscrmblog.wordpress.com/2013/10/26/status-and-status-reason-values-in-dynamics-crm-2013/comment-page-1/
-        /// ToStringWithEntityName() is replaced with entity.LogicalName
-        /// </remarks>
-        /// <param name="container"></param>
-        /// <param name="entity"></param>
-        /// <param name="state">Active=0 and Inactive=1</param>
-        /// <param name="status">Active=1 and Inactive=2</param>
-        public static SetStateResponse SetState(this IExecutionContainer container, Entity entity, int state, int status)
-        {
-            container.Log($"Setting state {state} {status} on {entity.LogicalName}");
-
-            var response = container.Service.Execute(new SetStateRequest()
-            {
-                EntityMoniker = entity.ToEntityReference(),
-                State = new OptionSetValue(state),
-                Status = new OptionSetValue(status)
-            }) as SetStateResponse;
-
-            container.Log("SetState completed");
-
-            return response;
-        }
         /// <summary>Serialize a list of entities to file</summary>
         /// <param name="container"></param>
         /// <param name="entity">Entity to serialize</param>
@@ -421,79 +618,31 @@
             }
         }
 
-        /// <summary>Deserializes a file into a list of entities</summary>
+        /// <summary>Update state and status of current record</summary>
+        /// <remarks>
+        /// http://msdynamicscrmblog.wordpress.com/2013/10/26/status-and-status-reason-values-in-dynamics-crm-2013/comment-page-1/
+        /// ToStringWithEntityName() is replaced with entity.LogicalName
+        /// </remarks>
         /// <param name="container"></param>
-        /// <param name="filename">Source file</param>
-        /// <returns>List of entities</returns>
-        public static List<Entity> Deserialize(this IExecutionContainer container, string filename)
+        /// <param name="entity"></param>
+        /// <param name="state">Active=0 and Inactive=1</param>
+        /// <param name="status">Active=1 and Inactive=2</param>
+        public static SetStateResponse SetState(this IExecutionContainer container, Entity entity, int state, int status)
         {
-            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
-            List<Entity> oObject;
+            container.Log($"Setting state {state} {status} on {entity.LogicalName}");
 
-            try
+            var response = container.Service.Execute(new SetStateRequest()
             {
-                var serializer = new DataContractSerializer(typeof(List<Entity>), null, int.MaxValue, false, false, null, new KnownTypesResolver());
-                var reader = new XmlTextReader(filename);
+                EntityMoniker = entity.ToEntityReference(),
+                State = new OptionSetValue(state),
+                Status = new OptionSetValue(status)
+            }) as SetStateResponse;
 
-                oObject = (List<Entity>)serializer.ReadObject(reader);
-                return oObject;
-            }
-            catch (Exception ex)
-            {
-                container.Log(ex);
-                throw;
-            }
-            finally
-            {
-                container.EndSection();
-            }
+            container.Log("SetState completed");
+
+            return response;
         }
-        /// <summary>Deserialize Entity from XML node</summary>
-        /// <param name="container"></param>
-        /// <param name="xEntity"></param>
-        /// <returns></returns>
-        public static Entity Deserialize(this IExecutionContainer container, XmlNode xEntity)
-        {
-            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
-            Entity result;
-            var name = xEntity.Name == "Entity" ? XML.GetAttribute(xEntity, "name") : xEntity.Name;
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new XmlException("Cannot deserialize entity, missing entity name");
-            }
-            var strId = XML.GetAttribute(xEntity, "id");
-            var id = StringToGuidish(container, strId);
-            if (!id.Equals(Guid.Empty))
-            {
-                result = new Entity(name, id);
-            }
-            else
-            {
-                result = new Entity(name);
-            }
-            foreach (XmlNode xAttribute in xEntity.ChildNodes)
-            {
-                if (xAttribute.NodeType == XmlNodeType.Element)
-                {
-                    var attribute = xAttribute.Name == "Attribute" ? XML.GetAttribute(xAttribute, "name") : xAttribute.Name;
-                    var type = XML.GetAttribute(xAttribute, "type");
-                    var value = xAttribute.ChildNodes.Count > 0 ? xAttribute.ChildNodes[0].InnerText : "";
-                    if (type == "EntityReference")
-                    {
-                        var entity = XML.GetAttribute(xAttribute, "entity");
-                        value = entity + ":" + value;
-                        var entrefname = XML.GetAttribute(xAttribute, "value");
-                        if (!string.IsNullOrEmpty(entrefname))
-                        {
-                            value += ":" + entrefname;
-                        }
-                    }
-                    result.Attributes.Add(attribute, value);
-                }
-            }
-            container.EndSection();
-            return result;
-        }
+
         /// <summary>
         ///
         /// </summary>
@@ -524,137 +673,6 @@
             return id;
         }
 
-        /// <summary>Constructor for EntityCollection class, initializing collection with serialized entities</summary>
-        /// <param name="container"></param>
-        /// <param name="serializedEntities"></param>
-        public static EntityCollection CreateEntityCollection(this IExecutionContainer container, XmlDocument serializedEntities)
-        {
-            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
-            try
-            {
-                if (serializedEntities != null && serializedEntities.ChildNodes.Count > 0)
-                {
-                    var entityCollection = new EntityCollection();
-                    if (serializedEntities.ChildNodes[0].Name == "Entities")
-                    {
-                        foreach (XmlNode xEntity in serializedEntities.ChildNodes[0].ChildNodes)
-                        {
-                            entityCollection.Add(container.Deserialize(xEntity));
-                        }
-                    }
-                    else
-                    {
-                        List<Entity> entities;
-                        var serializer = new DataContractSerializer(typeof(List<Entity>), null, int.MaxValue, false, false, null, new KnownTypesResolver());
-                        var sr = new StringReader(serializedEntities.OuterXml);
-                        using (var reader = new XmlTextReader(sr))
-                        {
-                            entities = (List<Entity>)serializer.ReadObject(reader);
-                        }
-                        sr.Close();
-                        foreach (var entity in entities)
-                        {
-                            entityCollection.Add(entity);
-                        }
-                    }
-                    return entityCollection;
-                }
-                else
-                {
-                    return new EntityCollection();
-                }
-            }
-            catch (Exception ex)
-            {
-                container.Log(ex);
-                throw;
-            }
-            finally
-            {
-                container.EndSection();
-            }
-        }
-        /// <summary>Constructor for EntityCollection class, initializing collection with text file entities</summary>
-        /// <param name="container"></param>
-        /// <param name="text"></param>
-        /// <param name="delimeter"></param>
-        public static EntityCollection CreateEntityCollection(this IExecutionContainer container, string text, char delimeter)
-        {
-            container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
-            try
-            {
-                container.Log($"Text {text.Length} characters, Delimeter: {delimeter}");
-                var entityCollection = new EntityCollection();
-                if (text.Length > 0)
-                {
-                    List<string> columns;
-                    List<string> types = null;
-                    var reader = new CsvReader(Encoding.UTF8, text) { Delimeter = delimeter, RemoveEmptyTrailingFields = true };
-                    if (!reader.ReadNextRecord())
-                    {
-                        throw new InvalidDataContractException("CSV file does not contain a column names header row.");
-                    }
-                    columns = reader.Fields;
-                    while (reader.ReadNextRecord())
-                    {
-                        var current = reader.Fields;
-                        if (current.Count >= 1)
-                        {   // Two columns must exist to have anything at all - Entity and Id (although Id can actually be empty)
-                            if (types == null)
-                            {   //
-                                if (current[0] == "String" && current[1] == "Guid")
-                                {   // Types not yet defined
-                                    container.Log("Assigning types from serialized text");
-                                    types = current;
-                                    continue;
-                                }
-                                else
-                                {   
-                                    container.StartSection("Retrieving types from metadata");
-                                    var entity = current[0];
-                                    types = new List<string>(columns.Count);
-                                    // Idiotisk kod bara för att jag inte vet hur man hanterar listor vettigt, eller nåt //JR
-                                    for (var i = 0; i < columns.Count; i++) { types.Add(""); }
-
-                                    types[0] = "String";    // Entity name type
-                                    types[1] = "Guid";      // Record id type
-                                    container.Log($"Retrieving metadata for {entity}");
-
-                                    var metadata = (EntityMetadata)container.Execute(new RetrieveEntityRequest()
-                                    {
-                                        LogicalName = entity,
-                                        EntityFilters = EntityFilters.Attributes,
-                                        RetrieveAsIfPublished = true
-                                    });
-                                    foreach (var attrmeta in metadata.Attributes)
-                                    {
-                                        if (columns.Contains(attrmeta.LogicalName))
-                                        {
-                                            container.Log($"Column: {attrmeta.LogicalName} is {attrmeta.AttributeType}");
-                                            types[columns.IndexOf(attrmeta.LogicalName)] = attrmeta.AttributeType.ToString();
-                                        }
-                                    }
-                                    for (var i = 0; i < columns.Count; i++)
-                                    {
-                                        if (string.IsNullOrWhiteSpace(types[i]))
-                                        {
-                                            throw new ArgumentNullException("Type", "Cannot find type for column " + columns[i]);
-                                        }
-                                    }
-                                    container.EndSection();
-                                }
-                            }
-
-                            entityCollection.Add(container.InitFromTextLine(columns, types, current));
-                        }
-                    }
-                }
-                return entityCollection;
-            }
-            finally
-            {
-                container.EndSection();
-            }
-        }
+        #endregion Public Methods
     }
 }

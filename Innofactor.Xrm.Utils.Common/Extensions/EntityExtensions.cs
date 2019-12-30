@@ -1,9 +1,11 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Microsoft.Xrm.Sdk;
 
@@ -12,6 +14,8 @@
     /// </summary>
     public static class EntityExtensions
     {
+        #region Public Methods
+
         /// <summary>
         /// Clones entity instance to a new C# instance
         /// </summary>
@@ -123,26 +127,11 @@
         }
 
         /// <summary>
-        /// Om entiteten innehåller attribut från länkade entiteter efter läsning så måste aliaset för den länkade entiteten anges.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="entity"></param>
-        /// <param name="linkedEntityAlias"></param>
-        /// <param name="name"></param>
-        /// <param name="default"></param>
-        /// <returns></returns>
-        public static T PropertyLinkedEntity<T>(this Entity entity, string linkedEntityAlias, string name, T @default)
-        {
-            var defaultValue = new AliasedValue(linkedEntityAlias, name, @default);
-            var value = (T)entity.GetAttribute(linkedEntityAlias + "." + name, defaultValue).Value;
-            return value;
-        }
-
-        /// <summary>
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="name"></param>
-        public static void RemoveProperty(this Entity entity, string name)
+        /// <remarks>Was RemoveProperty before</remarks>
+        public static void RemoveAttribute(this Entity entity, string name)
         {
             if (entity.Contains(name))
             {
@@ -169,68 +158,6 @@
             }
         }
 
-        /// <summary>
-        /// Sätter current user (from context) som owner på entity
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="user"></param>
-        public static void SetOwner(this Entity entity, Guid user) =>
-            entity.SetAttribute("ownerid", new EntityReference("systemuser", user));
-
-        /// <summary>Gets the value of a property derived to its base type</summary>
-        /// <param name="entity"></param>
-        /// <param name="name"></param>
-        /// <param name="default"></param>
-        /// <param name="supresserrors"></param>
-        /// <returns>Base type of attribute</returns>
-        /// <remarks>Translates <c>AliasedValue, EntityReference, OptionSetValue and Money</c> to their underlying base types</remarks>
-        public static object PropertyAsBaseType(this Entity entity, string name, object @default, bool supresserrors)
-        {
-            if (!entity.Contains(name))
-            {
-                if (!supresserrors)
-                {
-                    throw new InvalidPluginExecutionException($"Attribute {name} not found in entity {entity?.LogicalName} {entity?.Id}");
-                }
-                else
-                {
-                    return @default;
-                }
-            }
-            return AttributeToBaseType(entity[name]);
-        }
-
-        private static object Entity(object p)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>Gets base type of given attribute object</summary>
-        /// <param name="attribute">Attribute object containing the data</param>
-        /// <returns>Translates AliasedValue, EntityReference, OptionSetValue and Money to their underlying base types</returns>
-        private static object AttributeToBaseType(object attribute)
-        {
-            if (attribute is AliasedValue)
-            {
-                return AttributeToBaseType(((AliasedValue)attribute).Value);
-            }
-            else if (attribute is EntityReference)
-            {
-                return ((EntityReference)attribute).Id;
-            }
-            else if (attribute is OptionSetValue)
-            {
-                return ((OptionSetValue)attribute).Value;
-            }
-            else if (attribute is Money)
-            {
-                return ((Money)attribute).Value;
-            }
-            else
-            {
-                return attribute;
-            }
-        }
         /// <summary>
         ///
         /// </summary>
@@ -351,6 +278,36 @@
         }
 
         /// <summary>
+        /// Sätter current user (from context) som owner på entity
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="user"></param>
+        public static void SetOwner(this Entity entity, Guid user) =>
+            entity.SetAttribute("ownerid", new EntityReference("systemuser", user));
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private static object Entity(object p)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static List<string> extractPrefixes(string entityName)
+        {
+            var result = new List<string>();
+            var prefix = new StringBuilder();
+            while (entityName.Contains("_"))
+            {
+                prefix.Append(entityName.Split('_')[0] + "_");
+                entityName = entityName.Substring(entityName.IndexOf('_') + 1);
+                result.Add(prefix.ToString());
+            }
+            return result;
+        }
+
+        /// <summary>
         ///
         /// </summary>
         /// <param name="value"></param>
@@ -370,5 +327,7 @@
                 return bool.Parse(value);
             }
         }
+
+        #endregion Private Methods
     }
 }
