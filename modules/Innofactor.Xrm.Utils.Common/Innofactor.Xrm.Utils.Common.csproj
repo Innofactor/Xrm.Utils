@@ -141,14 +141,26 @@
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Interfaces\IExecutionContainer.cs">
       <Link>Interfaces\IExecutionContainer.cs</Link>
     </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\Constants.cs">
+      <Link>Misc\Constants.cs</Link>
+    </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\EntityComparer.cs">
       <Link>Misc\EntityComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\FetchXML.cs">
+      <Link>Misc\FetchXML.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\PPH.cs">
+      <Link>Misc\PPH.cs</Link>
     </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\Query.cs">
       <Link>Misc\Query.cs</Link>
     </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\SortAttribute.cs">
       <Link>Misc\SortAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\Utils.cs">
+      <Link>Misc\Utils.cs</Link>
     </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\XML.cs">
       <Link>Misc\XML.cs</Link>
