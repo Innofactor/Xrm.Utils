@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Reflection;
     using Innofactor.Xrm.Utils.Common.Interfaces;
-
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Query;
@@ -14,6 +13,8 @@
     /// </summary>
     public static partial class ContainerExtensions
     {
+        #region Public Methods
+
         /// <summary>
         /// </summary>
         /// <param name="container"></param>
@@ -26,6 +27,23 @@
 
             return entity;
         }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="entity"></param>
+        public static void Delete(this IExecutionContainer container, Entity entity)
+        {
+            if (entity.Id.Equals(Guid.Empty))
+            {
+                container.Log("Cannot delete - guid is empty");
+                return;
+            }
+
+            container.Service.Delete(entity.LogicalName, entity.Id);
+            container.Log($"Deleted {entity.LogicalName}:{entity.Id}");
+        }
+
         /// <summary>
         /// Used in Shuffle as InitFromTextLine
         /// </summary>
@@ -74,22 +92,6 @@
             }
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="entity"></param>
-        public static void Delete(this IExecutionContainer container, Entity entity)
-        {
-            if (entity.Id.Equals(Guid.Empty))
-            {
-                container.Log("Cannot delete - guid is empty");
-                return;
-            }
-
-            container.Service.Delete(entity.LogicalName, entity.Id);
-            container.Log($"Deleted {entity.LogicalName}:{entity.Id}");
-        }
-
         /// <summary>Encapsulated Retrieve method to be invoked on the service</summary>
         /// <param name="container"></param>
         /// <param name="reference"></param>
@@ -123,30 +125,6 @@
         /// <returns></returns>
         public static Entity Retrieve(this IExecutionContainer container, string entityName, Guid id, ColumnSet columnSet) =>
             container.Service.Retrieve(entityName, id, columnSet);
-
-        /// <summary>
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="query"></param>
-        /// <returns></returns>
-        public static EntityCollection RetrieveMultiple(this IExecutionContainer container, QueryBase query) =>
-            container.Service.RetrieveMultiple(query);
-
-        /// <summary>Retrieve objects matching given criteria</summary>
-        /// <param name="container"></param>
-        /// <param name="entity">Entity's logical name</param>
-        /// <param name="attribute"></param>
-        /// <param name="value"></param>
-        /// <param name="columns"></param>
-        /// <returns>EntityCollection that encapsulate the resulting Entity records</returns>
-        public static EntityCollection RetrieveMultiple(this IExecutionContainer container, string entity, string[] attribute, object[] value, ColumnSet columns)
-        {
-            var query = new QueryByAttribute(entity);
-            query.Attributes.AddRange(attribute);
-            query.Values.AddRange(value);
-            query.ColumnSet = columns;
-            return RetrieveMultiple(container, query);
-        }
 
         /// <summary>
         /// Retrieve All records using QueryExpression
@@ -189,18 +167,30 @@
             return results;
         }
 
-        private static ExecuteTransactionRequest GetRequest(QueryExpression query)
+        /// <summary>
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static EntityCollection RetrieveMultiple(this IExecutionContainer container, QueryBase query) =>
+            container.Service.RetrieveMultiple(query);
+
+        /// <summary>Retrieve objects matching given criteria</summary>
+        /// <param name="container"></param>
+        /// <param name="entity">Entity's logical name</param>
+        /// <param name="attribute"></param>
+        /// <param name="value"></param>
+        /// <param name="columns"></param>
+        /// <returns>EntityCollection that encapsulate the resulting Entity records</returns>
+        public static EntityCollection RetrieveMultiple(this IExecutionContainer container, string entity, string[] attribute, object[] value, ColumnSet columns)
         {
-            var request = new ExecuteTransactionRequest()
-            {
-                ReturnResponses = true,
-                Requests = new OrganizationRequestCollection()
-            };
-
-            request.Requests.Add(new RetrieveMultipleRequest { Query = query });
-
-            return request;
+            var query = new QueryByAttribute(entity);
+            query.Attributes.AddRange(attribute);
+            query.Values.AddRange(value);
+            query.ColumnSet = columns;
+            return RetrieveMultiple(container, query);
         }
+
         /// <summary>
         /// Save the entity record. If it has a valid Id it will be updated, otherwise new record created.
         /// </summary>
@@ -227,5 +217,24 @@
             container.Service.Update(entity);
             container.Log($"Updated {entity.LogicalName} {entity.Id} with {entity.Attributes.Count} attributes");
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
+
+        private static ExecuteTransactionRequest GetRequest(QueryExpression query)
+        {
+            var request = new ExecuteTransactionRequest()
+            {
+                ReturnResponses = true,
+                Requests = new OrganizationRequestCollection()
+            };
+
+            request.Requests.Add(new RetrieveMultipleRequest { Query = query });
+
+            return request;
+        }
+
+        #endregion Private Methods
     }
 }

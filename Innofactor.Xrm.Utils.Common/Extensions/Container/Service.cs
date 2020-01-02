@@ -3,14 +3,19 @@
     using System;
     using System.Runtime.Caching;
     using Innofactor.Xrm.Utils.Common.Interfaces;
-    using Microsoft.Crm.Sdk.Messages;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Metadata;
 
     public static partial class ContainerExtensions
     {
+        #region Private Fields
+
         private static readonly MemoryCache cache = new MemoryCache("metadata");
+
+        #endregion Private Fields
+
+        #region Public Methods
 
         /// <summary>
         /// Method to be used when retrieving metadata, to be able to benefit from metadata caching abilities
@@ -67,5 +72,7 @@
         /// <param name="request"></param>
         /// <returns></returns>
         public static OrganizationResponse Execute(this IExecutionContainer container, OrganizationRequest request) => container.Service.Execute(request);
+
+        #endregion Public Methods
     }
 }
