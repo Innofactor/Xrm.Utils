@@ -3,16 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
+    using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.Serialization;
     using System.Text;
+    using System.Xml;
     using Innofactor.Xrm.Utils.Common.Interfaces;
+    using Innofactor.Xrm.Utils.Common.Misc;
     using Microsoft.Xrm.Sdk;
 
     /// <summary>
     /// Light-weight features inspired by CintDynEntity
     /// </summary>
-    public static class EntityExtensions
+    public static partial class EntityExtensions
     {
         #region Public Methods
 

@@ -20,7 +20,7 @@
     /// </summary>
     public static class Serialization
     {
-        /// <summary>Constructor for CintDynEntityCollection class, initializing collection with text file entities</summary>
+        /// <summary>Serves as a constructor for EntityCollection class, initializing collection with text file entities</summary>
         /// <param name="text"></param>
         /// <param name="container"></param>
         /// <param name="delimeter"></param>
@@ -201,6 +201,7 @@
         /// First column is always entity name.
         /// Secon column is always record id.</summary>
         /// <param name="entities"></param>
+        /// <param name="container"></param>
         /// <param name="primarykeyattribute"></param>
         /// <param name="delimeter"></param>
         /// <returns></returns>
@@ -424,6 +425,27 @@
             foreach (var attribute in entity.Attributes)
             {
                 if (attribute.Key == primarykeyattribute)
+                {
+                    continue;
+                }
+                if (attribute.Key.EndsWith("_base") && entity.Contains(attribute.Key.Substring(0, attribute.Key.Length - 5)))
+                {
+                    continue;
+                }
+                entity.SerializeExplicitAttribute(container, result, xEntity, attribute.Key, attribute.Value);
+            }
+            parentNode.AppendChild(xEntity);
+        }
+        private static void SerializeExplicit(this Entity entity, IExecutionContainer container, XmlNode parentNode, XmlDocument result)
+        {
+            XmlNode xEntity = result.CreateElement(entity.LogicalName);
+            var xEntityId = result.CreateAttribute("id");
+            xEntityId.Value = entity.Id.ToString();
+            xEntity.Attributes.Append(xEntityId);
+            foreach (var attribute in entity.Attributes)
+            {
+                
+                if (attribute.Key == container.Entity(entity.LogicalName).PrimaryIdAttribute)
                 {
                     continue;
                 }

@@ -96,8 +96,14 @@
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\EntityCollectionExtensions.cs">
       <Link>Extensions\EntityCollectionExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\EntityCollectionExtensions.Shuffle.cs">
+      <Link>Extensions\EntityCollectionExtensions.Shuffle.cs</Link>
+    </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\EntityExtensions.cs">
       <Link>Extensions\EntityExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\EntityExtensions.Shuffle.cs">
+      <Link>Extensions\EntityExtensions.Shuffle.cs</Link>
     </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Extensions\ServiceProviderExtensions.cs">
       <Link>Extensions\ServiceProviderExtensions.cs</Link>

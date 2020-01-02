@@ -18,7 +18,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Service.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Container\Standard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityCollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityCollectionExtensions.Shuffle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityExtensions.Shuffle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ServiceProviderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Access\Information.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Access\OperationsSet1.cs" />

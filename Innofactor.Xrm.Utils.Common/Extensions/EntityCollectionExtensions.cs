@@ -2,14 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Xml;
     using Innofactor.Xrm.Utils.Common.Misc;
     using Microsoft.Xrm.Sdk;
 
     /// <summary>
     /// Extension methods for EntityCollection class
     /// </summary>
-    public static class EntityCollectionExtensions
+    public static partial class EntityCollectionExtensions
     {
         #region Public Methods
 
@@ -92,6 +95,7 @@
         public static EntityReferenceCollection ToEntityReferenceCollection(this EntityCollection collection) =>
             new EntityReferenceCollection(collection.Entities.Select(x => x.ToEntityReference()).ToList());
 
+       
         #endregion Public Methods
     }
 }
