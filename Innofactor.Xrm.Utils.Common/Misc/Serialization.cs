@@ -185,14 +185,21 @@
         /// <summary>
         ///
         /// </summary>
-        /// <param name="entities"></param>
+        /// <param name="entityCollection"></param>
         /// <param name="container"></param>
         /// <param name="delimeter"></param>
         /// <returns></returns>
-        public static string ToTextFile(this IEnumerable<Entity> entities, IExecutionContainer container, char delimeter)
+        public static string ToTextFile(this EntityCollection entityCollection, IExecutionContainer container, char delimeter)
         {
-            var pkattribute = entities.Select(e => container.Entity(e.LogicalName).PrimaryIdAttribute).FirstOrDefault();
-            return entities.ToTextFile(container, pkattribute, delimeter);
+            for(var i=0;i<= entityCollection.Count();i++)
+            {
+                var pkattribute = container.Entity(entityCollection[i].LogicalName).PrimaryIdAttribute;
+                if (!string.IsNullOrWhiteSpace(pkattribute))
+                {
+                    return entityCollection.ToTextFile(container, pkattribute, delimeter);
+                }
+            }
+            return null;
         }
 
         /// <summary>Returns the EntityCollection in a text file format with given separator.
@@ -200,12 +207,12 @@
         /// Second line defines column types.
         /// First column is always entity name.
         /// Secon column is always record id.</summary>
-        /// <param name="entities"></param>
+        /// <param name="entityCollection"></param>
         /// <param name="container"></param>
         /// <param name="primarykeyattribute"></param>
         /// <param name="delimeter"></param>
         /// <returns></returns>
-        public static string ToTextFile(this IEnumerable<Entity> entities, IExecutionContainer container, string primarykeyattribute, char delimeter)
+        public static string ToTextFile(this EntityCollection entityCollection, IExecutionContainer container, string primarykeyattribute, char delimeter)
         {
             var csv = new CsvFile();
             var columns = new CsvRecord();
@@ -216,7 +223,7 @@
             types.Fields.Add("Guid");
 
             var entityname = "";
-            foreach (var entity in entities)
+            foreach (var entity in entityCollection.Entities)
             {
                 if (string.IsNullOrWhiteSpace(entityname))
                 {
@@ -224,7 +231,7 @@
                 }
                 else if (entityname != entity.LogicalName)
                 {
-                    throw new InvalidPluginExecutionException("Cannot compose text file when collection contains entities of different types. " + entityname + " <> " + entity.LogicalName);
+                    throw new InvalidPluginExecutionException($"Cannot compose text file when collection contains entities of different types. { entityname } <> {entity.LogicalName}");
                 }
                 foreach (var attribute in entity.Attributes)
                 {
@@ -250,7 +257,7 @@
 
             csv.Records.Add(columns);
             csv.Records.Add(types);
-            foreach (var entity in entities)
+            foreach (var entity in entityCollection.Entities)
             {
                 var csventity = new CsvRecord();
                 csventity.Fields.AddRange(EntityToTextLine(container, entity, columns.Fields));
@@ -266,10 +273,10 @@
             container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
             try
             {
-                container.Log("Columns: {0} Types: {1} Fields: {2}", columns.Count, types.Count, values.Count);
+                container.Log($"Columns: {columns.Count} Types: {types.Count} Fields: {values.Count}");
                 var name = values[0];
                 var strId = values[1];
-                container.Log("Entity: {0} Id: {1}", name, strId);
+                container.Log($"Entity: {name} Id: {strId}");
                 var id = container.StringToGuidish(strId);
                 Entity entity;
                 if (!id.Equals(Guid.Empty))
