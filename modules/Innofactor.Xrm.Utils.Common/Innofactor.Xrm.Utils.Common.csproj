@@ -147,6 +147,12 @@
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Interfaces\IExecutionContainer.cs">
       <Link>Interfaces\IExecutionContainer.cs</Link>
     </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Interfaces\ILoggable.cs">
+      <Link>Interfaces\ILoggable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Loggers\CRMLogger.cs">
+      <Link>Loggers\CRMLogger.cs</Link>
+    </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\Constants.cs">
       <Link>Misc\Constants.cs</Link>
     </Compile>

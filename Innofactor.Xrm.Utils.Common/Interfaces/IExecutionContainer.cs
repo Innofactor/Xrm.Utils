@@ -15,10 +15,19 @@
             get;
         }
 
+        ///// <summary>
+        ///// Get instance of the <see cref="ITracingService" /> assosiated with current container
+        ///// </summary>
+        //ITracingService Logger
+        //{
+        //    get;
+        //}
+
+
         /// <summary>
-        /// Get instance of the <see cref="ITracingService" /> assosiated with current container
+        /// Get instance of the <see cref="ILoggable" /> assosiated with current container
         /// </summary>
-        ITracingService Logger
+        ILoggable Logger
         {
             get;
         }

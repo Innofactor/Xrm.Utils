@@ -4,6 +4,7 @@
     using System.Dynamic;
     using Innofactor.Xrm.Utils.Common.Extensions;
     using Innofactor.Xrm.Utils.Common.Interfaces;
+    using Innofactor.Xrm.Utils.Common.Loggers;
     using Innofactor.Xrm.Utils.Common.Misc;
     using Microsoft.Xrm.Sdk;
 
@@ -17,7 +18,7 @@
 
         private Lazy<EntitySet> entities;
 
-        private Lazy<ITracingService> logger;
+        private Lazy<ILoggable> logger;
 
         private Lazy<IOrganizationService> service;
 
@@ -37,8 +38,7 @@
             // this move will set fresh values for cached loggers and services
             Provider = provider;
             Context = Provider.Get<IPluginExecutionContext>();
-
-            logger = new Lazy<ITracingService>(() => Provider.Get<ITracingService>());
+            logger = new Lazy<ILoggable>(() => new CRMLogger(Provider.Get<ITracingService>()));
             service = new Lazy<IOrganizationService>(() => Provider.GetOrganizationService(Context.UserId));
 
             entities = new Lazy<EntitySet>(() => new EntitySet(Context));
@@ -65,7 +65,7 @@
         /// <summary>
         /// Get instance of the <see cref="ILoggable" /> assosiated with current container
         /// </summary>
-        public ITracingService Logger =>
+        public ILoggable Logger =>
             logger.Value;
 
         public IServiceProvider Provider
