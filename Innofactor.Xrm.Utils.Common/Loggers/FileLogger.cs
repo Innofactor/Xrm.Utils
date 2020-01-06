@@ -35,7 +35,7 @@
 
         /// <summary>Constructor for the Logging class</summary>
         /// <param name="name">Identifier for this instance of Logging, used in file name</param>
-        protected FileLogger(string name)
+        public FileLogger(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
