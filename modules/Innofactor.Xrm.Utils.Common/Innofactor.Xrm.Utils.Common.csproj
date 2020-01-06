@@ -153,6 +153,9 @@
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Loggers\CRMLogger.cs">
       <Link>Loggers\CRMLogger.cs</Link>
     </Compile>
+    <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Loggers\FileLogger.cs">
+      <Link>Loggers\FileLogger.cs</Link>
+    </Compile>
     <Compile Include="..\..\Innofactor.Xrm.Utils.Common\Misc\Constants.cs">
       <Link>Misc\Constants.cs</Link>
     </Compile>
