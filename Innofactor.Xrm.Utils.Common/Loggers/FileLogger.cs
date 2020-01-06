@@ -35,9 +35,12 @@
 
         /// <summary>Constructor for the Logging class</summary>
         /// <param name="name">Identifier for this instance of Logging, used in file name</param>
-        public FileLogger(string name)
+        /// <param name="path">Path for Log folder, defaults to C:\Temp\</param>
+        public FileLogger(string name, string path)
         {
-            if (string.IsNullOrEmpty(name))
+            LogPath = string.IsNullOrWhiteSpace(path) ? @"C:\Temp\" : path;
+            
+            if (string.IsNullOrWhiteSpace(name))
             {
                 name = Origin.ReflectedType.FullName;
             }
