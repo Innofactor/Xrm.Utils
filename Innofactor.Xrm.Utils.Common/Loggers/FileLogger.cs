@@ -42,7 +42,7 @@
             
             if (string.IsNullOrWhiteSpace(name))
             {
-                name = Origin.ReflectedType.FullName;
+                name = Assembly.GetExecutingAssembly().GetName().Name;
             }
 
             twLog = CreateFile(LogPath, name, "log", true);
