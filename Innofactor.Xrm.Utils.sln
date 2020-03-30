@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2046
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29924.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Innofactor.Xrm.Utils.Common", "Innofactor.Xrm.Utils.Common\Innofactor.Xrm.Utils.Common.shproj", "{6B4F59AE-7903-47B0-B888-B7B2EAD40B2C}"
 EndProject
