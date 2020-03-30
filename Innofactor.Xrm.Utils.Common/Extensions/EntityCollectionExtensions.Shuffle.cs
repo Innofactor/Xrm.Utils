@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Runtime.Serialization;
     using System.Xml;
     using Innofactor.Xrm.Utils.Common.Interfaces;
@@ -39,10 +40,7 @@
                 case SerializationStyle.SimpleNoId:
                 case SerializationStyle.Explicit:
                     var root = result.CreateNode(XmlNodeType.Element, "Entities", "");
-                    for (int i = 0; i <= collection.Count(); i++)
-                    {
-                        collection.Entities[i].Serialize(container, style, root);
-                    }
+                    collection.Entities.ToList<Entity>().ForEach(e => e.Serialize(container, style, root));
                     result.AppendChild(root);
                     break;
             }
