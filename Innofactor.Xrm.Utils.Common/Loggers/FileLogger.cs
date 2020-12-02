@@ -14,12 +14,18 @@
     {
         #region Public Fields
 
+        /// <summary>
+        /// Timestamp constant string
+        /// </summary>
         public const string TIMESTAMP = "[TIMESTAMP]";
 
         #endregion Public Fields
 
         #region Protected Fields
 
+        /// <summary>
+        ///
+        /// </summary>
         protected List<Tuple<string, DateTime>> stack = new List<Tuple<string, DateTime>>();
 
         #endregion Protected Fields
@@ -27,28 +33,25 @@
         #region Private Fields
 
         private DateTime lastLog = DateTime.MinValue;
-        private TextWriter twLog;
+        private TextWriter twLog = default;
 
         #endregion Private Fields
 
-        #region Protected Constructors
+        #region Public Constructors
 
         /// <summary>Constructor for the Logging class</summary>
-        /// <param name="name">Identifier for this instance of Logging, used in file name</param>
-        /// <param name="path">Path for Log folder, defaults to C:\Temp\</param>
-        public FileLogger(string name, string path)
+        /// <param name="fullName">Full file path (folder+filename), defaults to C:\Temp\"AssemblyName"</param>
+        public FileLogger(string fullName)
         {
-            LogPath = string.IsNullOrWhiteSpace(path) ? @"C:\Temp\" : path;
-            
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(fullName))
             {
-                name = Assembly.GetExecutingAssembly().GetName().Name;
+                fullName = $@"C:\Temp\{Assembly.GetExecutingAssembly().GetName().Name}";
             }
 
-            twLog = CreateFile(LogPath, name, "log", true);
+            twLog = CreateFile(fullName);
         }
 
-        #endregion Protected Constructors
+        #endregion Public Constructors
 
         #region Public Properties
 
@@ -250,34 +253,33 @@
 
         #region Private Methods
 
-        private TextWriter CreateFile(string path, string name, string suffix, bool prependdate)
+        private TextWriter CreateFile(string path)
         {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentNullException(path, "path must be a full file path including name");
+            }
             TextWriter tw = null;
-            string filename = "";
-            string file;
-            if (prependdate)
-            {
-                file = path + @"\" + DateTime.Now.ToString("yyyyMMdd", CultureInfo.InvariantCulture) + "_" + name;
-            }
-            else
-            {
-                file = path + @"\" + name;
-            }
+
+            string filename = Path.GetFileName(path);
+            string folderPath = Path.GetDirectoryName(path);
 
             try
             {   // First attempt
-                filename = file + "." + suffix;
-                tw = TextWriter.Synchronized(File.AppendText(filename));
+                tw = TextWriter.Synchronized(File.AppendText(path));
             }
             catch
             {
                 int i = 1;
                 bool ok = false;
+                string extension = Path.GetExtension(path);
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(path);
                 while (i < 10 && !ok)
                 {
                     try
                     {   // Second attempt, append i to file name
-                        filename = file + "_" + i.ToString() + "." + suffix;
+                        var newFileName = fileNameWithoutExtension + i + extension;
+                        filename = Path.Combine(folderPath, newFileName);
                         tw = TextWriter.Synchronized(File.AppendText(filename));
                         ok = true;
                     }
