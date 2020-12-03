@@ -61,7 +61,7 @@
                 var name = values[0];
                 var strId = values[1];
                 container.Log($"Entity: {name} Id: {strId}");
-                var id = StringToGuidish(container, strId);
+                var id = container.StringToGuidish(strId);
                 Entity entity;
                 if (!id.Equals(Guid.Empty))
                 {

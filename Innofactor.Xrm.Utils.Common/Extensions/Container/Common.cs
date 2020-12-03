@@ -355,7 +355,7 @@
                 throw new XmlException("Cannot deserialize entity, missing entity name");
             }
             var strId = XML.GetAttribute(xEntity, "id");
-            var id = StringToGuidish(container, strId);
+            var id = container.StringToGuidish(strId);
             if (!id.Equals(Guid.Empty))
             {
                 result = new Entity(name, id);
@@ -381,7 +381,7 @@
                             value += ":" + entrefname;
                         }
                     }
-                    result.Attributes.Add(attribute, value);
+                    result.SetAttribute(container, attribute, type, value);
                 }
             }
             container.EndSection();

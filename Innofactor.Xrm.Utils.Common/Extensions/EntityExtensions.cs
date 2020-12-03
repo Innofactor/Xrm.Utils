@@ -163,14 +163,14 @@
         }
 
         /// <summary>
-        ///
+        /// Attempts to set attribute on entity to the type mentioned. Removes the attribute in case of null
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="container"></param>
         /// <param name="attribute"></param>
         /// <param name="type"></param>
         /// <param name="value"></param>
-        /// <remarks>Previously called AddProperty </remarks>
+        /// <remarks>Previously called AddProperty/SetProperty. Used in Shuffle deserialization </remarks>
         public static void SetAttribute(this Entity entity, IExecutionContainer container, string attribute, string type, string value)
         {
             container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
