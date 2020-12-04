@@ -176,7 +176,7 @@
             container.StartSection($@"{MethodBase.GetCurrentMethod().DeclaringType.Name}\{MethodBase.GetCurrentMethod().Name}");
             try
             {
-                container.Log($@"{attribute} = ""{value}\"" ({type})");
+                container.Log($@"{attribute} = ""{value}"" ({type})");
                 switch (type)
                 {
                     case "String":
