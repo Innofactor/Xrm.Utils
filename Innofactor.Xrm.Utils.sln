@@ -9,13 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modules", "modules", "{A076
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Innofactor.Xrm.Utils.Workflow", "Innofactor.Xrm.Utils.Workflow\Innofactor.Xrm.Utils.Workflow.shproj", "{757D7E0D-BCBB-4773-A06C-DD27904B939B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innofactor.Xrm.Utils.Common", "shared\Innofactor.Xrm.Utils.Common\Innofactor.Xrm.Utils.Common.csproj", "{DD7194A9-1074-425B-BE3F-86999DBE6336}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innofactor.Xrm.Utils.Common", "modules\Innofactor.Xrm.Utils.Common\Innofactor.Xrm.Utils.Common.csproj", "{DD7194A9-1074-425B-BE3F-86999DBE6336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innofactor.Xrm.Utils.Workflow", "shared\Innofactor.Xrm.Utils.Workflow\Innofactor.Xrm.Utils.Workflow.csproj", "{7D2358E1-ED0E-4FE9-99FF-8554F2D02DF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innofactor.Xrm.Utils.Workflow", "modules\Innofactor.Xrm.Utils.Workflow\Innofactor.Xrm.Utils.Workflow.csproj", "{7D2358E1-ED0E-4FE9-99FF-8554F2D02DF0}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Innofactor.Xrm.Utils.Plugin", "Innofactor.Xrm.Utils.Plugin\Innofactor.Xrm.Utils.Plugin.shproj", "{5878BE73-CF3F-4946-AB03-C3B1039E3A62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innofactor.Xrm.Utils.Plugin", "shared\Innofactor.Xrm.Utils.Plugin\Innofactor.Xrm.Utils.Plugin.csproj", "{A0F415DD-2EEB-405E-BA1E-6EFFBA8A1401}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Innofactor.Xrm.Utils.Plugin", "modules\Innofactor.Xrm.Utils.Plugin\Innofactor.Xrm.Utils.Plugin.csproj", "{A0F415DD-2EEB-405E-BA1E-6EFFBA8A1401}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
