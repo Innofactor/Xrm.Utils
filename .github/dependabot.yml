@@ -1,0 +1,17 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: Microsoft.CrmSdk.Deployment
+    versions:
+    - 9.0.2.32
+  - dependency-name: Microsoft.CrmSdk.Workflow
+    versions:
+    - 9.0.2.32
+  - dependency-name: Microsoft.CrmSdk.CoreAssemblies
+    versions:
+    - 9.0.2.32
