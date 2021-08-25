@@ -1,24 +1,26 @@
 ﻿namespace Innofactor.Xrm.Utils.Common.Extensions
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.Globalization;
-    using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Runtime.Serialization;
+    using System.ServiceModel;
     using System.Text;
-    using System.Xml;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Innofactor.Xrm.Utils.Common.Misc;
     using Microsoft.Xrm.Sdk;
+    using Microsoft.Xrm.Sdk.Messages;
+    using Microsoft.Xrm.Sdk.Metadata;
+    using Microsoft.Xrm.Sdk.Query;
 
     /// <summary>
     /// Light-weight features inspired by CintDynEntity
     /// </summary>
     public static partial class EntityExtensions
     {
-        #region Public Methods
+        private static readonly ConcurrentDictionary<string, string> PrimaryIdAttributes = new ConcurrentDictionary<string, string>();
+        private static readonly ConcurrentDictionary<string, string> PrimaryNameAttributes = new ConcurrentDictionary<string, string>();
 
         /// <summary>
         /// Clones entity instance to a new C# instance
@@ -282,32 +284,360 @@
         }
 
         /// <summary>
-        /// Sätter current user (from context) som owner på entity
+        /// Sets current user (from context) som owner på entity
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="user"></param>
         public static void SetOwner(this Entity entity, Guid user) =>
             entity.SetAttribute("ownerid", new EntityReference("systemuser", user));
 
-        #endregion Public Methods
+        /// <summary>Retrieves the entity instance from given relation attribute</summary>
+        /// <param name="entity"></param>
+        /// <param name="container"></param>
+        /// <param name="related"></param>
+        /// <param name="columns"></param>
+        /// <returns></returns>
+        public static Entity GetRelated(this Entity entity, IExecutionContainer container, string related, params string[] columns) =>
+            entity.GetRelated(container, related, new ColumnSet(columns));
 
-        #region Private Methods
-
-        private static object Entity(object p)
+        /// <summary>
+        /// Will add given <paramref name="columns" /> to the operation
+        /// </summary>
+        /// <param name="columns"></param>
+        /// <returns></returns>
+        public static Entity GetRelated(this Entity entity, IExecutionContainer container, string related, ColumnSet columns)
         {
-            throw new NotImplementedException();
+            container.StartSection($"GetRelated {related} from {entity.ToStringExt()}");
+
+            var result = default(Entity);
+
+            if (entity.Attributes.Contains(related))
+            {
+                if (entity.Attributes[related] is EntityReference)
+                {
+                    result = container.Retrieve((EntityReference)entity.Attributes[related], columns);
+                }
+            }
+            else
+            {
+                container.Log($"Record does not contain attribute {related}");
+            }
+
+            if (result == null)
+            {
+                container.Log("Could not load related record");
+            }
+            else
+            {
+                container.Log($"Loaded related {result.LogicalName} {result.ToStringExt()}");
+            }
+
+            container.EndSection();
+            return result;
+        }
+        public static string ToStringExt(this Entity target)
+        {
+            if (target == null)
+            {
+                return string.Empty;
+            }
+
+            var result = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(target.LogicalName))
+            {
+                // Adding entity logical name
+                result.Append(target.LogicalName);
+            }
+
+            if (!target.Id.Equals(Guid.Empty))
+            {
+                if (result.Length > 0)
+                {
+                    result.Append(":");
+                }
+
+                result.Append(target.Id.ToString());
+            }
+
+            foreach (var key in "name;fullname;title;subject".Split(';'))
+            {
+                if (target.Contains(key))
+                {
+                    if (result.Length > 0)
+                    {
+                        result.Append(" ");
+                    }
+
+                    result.Append("(");
+                    result.Append(target.Attributes[key] as string);
+                    result.Append(")");
+
+                    break;
+                }
+            }
+
+            return result.ToString();
         }
 
-        private static List<string> extractPrefixes(string entityName)
+        /// <summary>Retrieves records (children) relating to current record (parent)</summary>
+        /// <param name="entity"></param>
+        /// <param name="container"></param>
+        /// <param name="childEntityName">Name of child entity</param>
+        /// <param name="referencingattribute">Name of attribute on child entity that relates to current entity</param>
+        /// <param name="onlyactive">True to include statecode=0 for children</param>
+        /// <param name="columns">Columns to return for retrieved children</param>
+        /// <returns>Collection of children to parent</returns>
+        public static EntityCollection GetRelating(this Entity entity, IExecutionContainer container, string childEntityName, string referencingattribute, bool onlyactive, params string[] columns) =>
+            entity.GetRelating(container, childEntityName, referencingattribute, onlyactive, new ColumnSet(columns));
+
+        /// <summary>Retrieves records (children) relating to current record (parent)</summary>
+        /// <param name="entity"></param>
+        /// <param name="container"></param>
+        /// <param name="childEntityName">Name of child entity</param>
+        /// <param name="referencingattribute">Name of attribute on child entity that relates to current entity</param>
+        /// <param name="onlyactive">True to include statecode=0 for children</param>
+        /// <param name="columns">Columns to return for retrieved children</param>
+        /// <returns>Collection of children to parent</returns>
+        public static EntityCollection GetRelating(this Entity entity, IExecutionContainer container, string childEntityName, string referencingattribute, bool onlyactive, ColumnSet columns) =>
+            entity.GetRelating(container, childEntityName, referencingattribute, onlyactive, null, null, columns, false);
+
+        /// <summary>Retrieves records (children) relating to current record (parent)</summary>
+        /// <param name="container"></param>
+        /// <param name="childEntityName"></param>
+        /// <param name="entity">Name of child entity</param>
+        /// <param name="referencingattribute">Name of attribute on child entity that relates to current entity</param>
+        /// <param name="onlyactive">True to include statecode=0 for children</param>
+        /// <param name="columns">Columns to return for retrieved children</param>
+        /// <param name="nolock"></param>
+        /// <returns>Collection of children to parent</returns>
+        public static EntityCollection GetRelating(this Entity entity, IExecutionContainer container, string childEntityName, string referencingattribute, bool onlyactive, ColumnSet columns, bool nolock) =>
+            entity.GetRelating(container, childEntityName, referencingattribute, onlyactive, null, null, columns, nolock);
+
+        /// <summary>Retrieves records (children) relating to current record (parent)</summary>
+        /// <param name="entity"></param>
+        /// <param name="container"></param>
+        /// <param name="childEntityName">Name of child entity</param>
+        /// <param name="referencingattribute">Name of attribute on child entity that relates to current entity</param>
+        /// <param name="onlyactive">True to include statecode=0 for children</param>
+        /// <param name="extrafilter">Extra filters to use when retrieving children</param>
+        /// <param name="orders">Order by definition</param>
+        /// <param name="columns">Columns to return for retrieved children</param>
+        /// <returns>Collection of children to parent</returns>
+        public static EntityCollection GetRelating(this Entity entity, IExecutionContainer container, string childEntityName, string referencingattribute, bool onlyactive, FilterExpression extrafilter, OrderExpression[] orders, ColumnSet columns) =>
+            entity.GetRelating(container, childEntityName, referencingattribute, onlyactive, extrafilter, orders, columns, false);
+
+        /// <summary>Retrieves records (children) relating to current record (parent)</summary>
+        /// <param name="entity"></param>
+        /// <param name="container"></param>
+        /// <param name="childEntityName">Name of child entity</param>
+        /// <param name="referencingattribute">Name of attribute on child entity that relates to current entity</param>
+        /// <param name="onlyactive">True to include statecode=0 for children</param>
+        /// <param name="extrafilter">Extra filters to use when retrieving children</param>
+        /// <param name="orders">Order by definition</param>
+        /// <param name="columns">Columns to return for retrieved children</param>
+        /// <param name="nolock">If 'true' query is executed with NoLock attribute = true, otherwise NoLock is "false" (by default)</param>
+        /// <returns>Collection of children to parent</returns>
+        public static EntityCollection GetRelating(this Entity entity, IExecutionContainer container, string childEntityName, string referencingattribute, bool onlyactive, FilterExpression extrafilter, OrderExpression[] orders, ColumnSet columns, bool nolock = false)
         {
-            var result = new List<string>();
-            var prefix = new StringBuilder();
-            while (entityName.Contains("_"))
+            container.StartSection($"GetRelating {childEntityName} where {referencingattribute}={entity.Id} and active={onlyactive}");
+            var qry = new QueryExpression(childEntityName);
+            Query.AppendCondition(qry.Criteria, LogicalOperator.And, referencingattribute, ConditionOperator.Equal, entity.Id);
+            if (onlyactive)
             {
-                prefix.Append(entityName.Split('_')[0] + "_");
-                entityName = entityName.Substring(entityName.IndexOf('_') + 1);
-                result.Add(prefix.ToString());
+                Query.AppendConditionActive(qry.Criteria);
             }
+
+            qry.ColumnSet = columns;
+            if (extrafilter != null)
+            {
+                container.Logger.Log($"Adding filter with {extrafilter.Conditions.Count} conditions");
+                qry.Criteria.AddFilter(extrafilter);
+            }
+
+            if (orders != null && orders.Length > 0)
+            {
+                container.Logger.Log($"Adding orders ({orders.Length})");
+                qry.Orders.AddRange(orders);
+            }
+
+            qry.NoLock = nolock;
+            var result = container.RetrieveMultiple(qry);
+            container.Logger.Log($"Got {result.Count()} records");
+            container.EndSection();
+            return result;
+        }
+
+        /// <summary>Get associated records from a N:N-relationship</summary>
+        /// <param name="entity1"></param>
+        /// <param name="container"></param>
+        /// <param name="entity">Other entity to retrieve</param>
+        /// <param name="intersect">Name of the relationship / intersect table</param>
+        /// <param name="onlyactive">Specifies if only active records of other entity shall be returned</param>
+        /// <param name="columns">ColumnSet of the other entity to retrieve</param>
+        /// <returns>Associated other entity records</returns>
+        public static EntityCollection GetAssociated(this Entity entity1, IExecutionContainer container, string entity, string intersect, bool onlyactive, ColumnSet columns) =>
+            entity1.GetAssociated(container, entity, intersect, onlyactive, false, columns);
+
+        /// <summary>Get associated records from a N:N-relationship</summary>
+        /// <param name="entity1"></param>
+        /// <param name="container"></param>
+        /// <param name="entity">Other entity to retrieve (logicalName)</param>
+        /// <param name="intersect">Name of the relationship / intersect table</param>
+        /// <param name="onlyactive">Specifies if only active records of other entity shall be returned</param>
+        /// <param name="nolock">If 'true' query is executed with NoLock attribute</param>
+        /// <param name="columns">ColumnSet of the other entity to retrieve</param>
+        /// <returns>Associated other entity records</returns>
+        public static EntityCollection GetAssociated(this Entity entity1, IExecutionContainer container, string entity, string intersect, bool onlyactive, bool nolock, ColumnSet columns)
+        {
+            container.StartSection($"Slim: GetAssociated({entity}, {intersect}, {onlyactive})");
+            var thisIdAttribute = entity1.GetPrimaryIdAttribute(container); //container.Service.IdAttribute(entity1.LogicalName, container.Logger);
+            var otherIdAttribute = new Entity(entity).GetPrimaryIdAttribute(container); //container.Service.IdAttribute(entity, container.Logger);
+            var qry = new QueryExpression(entity);
+            if (entity != entity1.LogicalName)
+            {   // N:N mellan olika entiteter
+                var leSource = Query.AppendLinkMM(qry.LinkEntities, intersect, entity, otherIdAttribute, entity1.LogicalName, thisIdAttribute);
+                Query.AppendCondition(leSource.LinkCriteria, LogicalOperator.And, thisIdAttribute, ConditionOperator.Equal, entity1.Id);
+            }
+            else
+            {   // N:N till samma enititet
+                var leSource = Query.AppendLink(qry.LinkEntities, entity, intersect, otherIdAttribute, thisIdAttribute + "two");
+                Query.AppendCondition(leSource.LinkCriteria, LogicalOperator.And, thisIdAttribute + "one", ConditionOperator.Equal, entity1.Id);
+            }
+            if (onlyactive)
+            {
+                Query.AppendConditionActive(qry.Criteria);
+            }
+
+            qry.ColumnSet = columns;
+            qry.NoLock = nolock;
+            var fetchXml = container.ConvertToFetchXml(qry);
+            container.Logger.Log(fetchXml);
+            var result = container.RetrieveMultiple(qry);
+            container.EndSection();
+            return result;
+        }
+
+        /// <summary>
+        /// Get the primary id attribute of the target entity
+        /// </summary>
+        /// <remarks>Metadata request that is time consuming, but results are cached.</remarks>
+        /// <returns></returns>
+        public static string GetPrimaryIdAttribute(this Entity entity, IExecutionContainer container)
+        {
+            var result = string.Empty;
+
+            if (PrimaryIdAttributes.ContainsKey(entity.LogicalName))
+            {
+                result = PrimaryIdAttributes[entity.LogicalName];
+            }
+            else
+            {
+                try
+                {
+                    var request = new RetrieveEntityRequest()
+                    {
+                        LogicalName = entity.LogicalName,
+                        EntityFilters = EntityFilters.Entity,
+                        RetrieveAsIfPublished = true
+                    };
+
+                    var response = (RetrieveEntityResponse)container.Service.Execute(request);
+
+                    var metabase = response.EntityMetadata;
+
+                    container.Logger.Log("Metadata retrieved");
+                    if (metabase is EntityMetadata meta)
+                    {
+                        result = meta.PrimaryIdAttribute;
+                        PrimaryIdAttributes.TryAdd(entity.LogicalName, result);
+                    }
+                    else
+                    {
+                        throw new InvalidPluginExecutionException(
+                            $"Unable to retrieve metadata/primaryattribute for entity: {entity.LogicalName}. Metadata is: {metabase}");
+                    }
+                    container.Logger.Log($"Returning {result}");
+                }
+                catch (FaultException<OrganizationServiceFault> ex)
+                {
+                    if (ex.Message.Contains("Could not find an entity with specified entity name"))
+                    {
+                        container.Logger.Log("Slim: GetPrimaryIdAttribute: Entity not found");
+                        PrimaryNameAttributes.TryRemove(entity.LogicalName, out result);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                finally
+                {
+                    container.Logger.EndSection();
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets primary name attribute of the entity
+        /// </summary>
+        /// <returns></returns>
+        public static string GetPrimaryNameAttribute(this Entity entity, IExecutionContainer container)
+        {
+            var result = string.Empty;
+
+            if (PrimaryNameAttributes.ContainsKey(entity.LogicalName))
+            {
+                result = PrimaryNameAttributes[entity.LogicalName];
+            }
+            else
+            {
+                container.Logger.StartSection($"Getting name of primary attribute on '{entity.LogicalName}'");
+                try
+                {
+                    var request = new RetrieveEntityRequest()
+                    {
+                        LogicalName = entity.LogicalName,
+                        EntityFilters = EntityFilters.Entity,
+                        RetrieveAsIfPublished = true
+                    };
+
+                    var response = (RetrieveEntityResponse)container.Service.Execute(request);
+
+                    var metabase = response.EntityMetadata;
+
+                    container.Logger.Log("Metadata retrieved");
+                    if (metabase is EntityMetadata meta)
+                    {
+                        result = meta.PrimaryNameAttribute;
+                        PrimaryNameAttributes.TryAdd(entity.LogicalName, result);
+                    }
+                    else
+                    {
+                        throw new InvalidPluginExecutionException(
+                            $"Unable to retrieve metadata/primaryattribute for entity: {entity.LogicalName}. Metadata is: {metabase.ToString()}");
+                    }
+                    container.Logger.Log($"Returning {result}");
+                }
+                catch (FaultException<OrganizationServiceFault> ex)
+                {
+                    if (ex.Message.Contains("Could not find an entity with specified entity name"))
+                    {
+                        container.Logger.Log("Slim: GetPrimaryNameAttribute: Entity not found");
+                        PrimaryNameAttributes.TryRemove(entity.LogicalName, out result);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                finally
+                {
+                    container.Logger.EndSection();
+                }
+            }
+
             return result;
         }
 
@@ -331,7 +661,5 @@
                 return bool.Parse(value);
             }
         }
-        
-        #endregion Private Methods
     }
 }
