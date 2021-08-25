@@ -565,6 +565,7 @@
                     {
                         container.Logger.Log("Slim: GetPrimaryIdAttribute: Entity not found");
                         PrimaryNameAttributes.TryRemove(entity.LogicalName, out result);
+                        throw;
                     }
                     else
                     {
@@ -626,6 +627,7 @@
                     {
                         container.Logger.Log("Slim: GetPrimaryNameAttribute: Entity not found");
                         PrimaryNameAttributes.TryRemove(entity.LogicalName, out result);
+                        throw;
                     }
                     else
                     {
