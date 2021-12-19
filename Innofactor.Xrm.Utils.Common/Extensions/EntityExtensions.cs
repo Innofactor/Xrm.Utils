@@ -9,6 +9,7 @@
     using System.Text;
     using Innofactor.Xrm.Utils.Common.Interfaces;
     using Innofactor.Xrm.Utils.Common.Misc;
+    using Microsoft.Crm.Sdk.Messages;
     using Microsoft.Xrm.Sdk;
     using Microsoft.Xrm.Sdk.Messages;
     using Microsoft.Xrm.Sdk.Metadata;
@@ -21,6 +22,20 @@
     {
         private static readonly ConcurrentDictionary<string, string> PrimaryIdAttributes = new ConcurrentDictionary<string, string>();
         private static readonly ConcurrentDictionary<string, string> PrimaryNameAttributes = new ConcurrentDictionary<string, string>();
+
+        /// <summary>Assigns current record to given assignee</summary>
+        /// <param name="entity">The entity you'd like to assign to the given user/team in the parameter</param>
+        /// <param name="container">container object</param>
+        /// <param name="assignee">User/Team to assigne the record to</param>
+        public static void Assign(this Entity entity, IExecutionContainer container, EntityReference assignee)
+        {
+            container.Service.Execute(new AssignRequest()
+            {
+                Assignee = assignee,
+                Target = entity.ToEntityReference()
+            });
+            container.Logger.Log($"Assigned {entity.ToStringExt()} to {assignee.LogicalName} {assignee.Id}");
+        }
 
         /// <summary>
         /// Clones entity instance to a new C# instance
