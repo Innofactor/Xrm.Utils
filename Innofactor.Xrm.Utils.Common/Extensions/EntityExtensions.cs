@@ -678,5 +678,58 @@
                 return bool.Parse(value);
             }
         }
+
+        /// <summary>Gives "rights" to "principal" for current record
+        /// Details: https://docs.microsoft.com/en-us/dotnet/api/microsoft.crm.sdk.messages.grantaccessrequest
+        /// </summary>
+        /// <param name="entity">The entity on which the access needs to be granted</param>
+        /// <param name="container"></param>
+        /// <param name="principal">User or Team to grant access to</param>
+        /// <param name="rights">Rights to grant to user/team</param>
+        public static void GrantAccessTo(this Entity entity, IExecutionContainer container, EntityReference principal, AccessRights rights)
+        {
+            container.Service.Execute(new GrantAccessRequest()
+            {
+                PrincipalAccess = new PrincipalAccess()
+                {
+                    Principal = principal,
+                    AccessMask = rights
+                },
+                Target = entity.ToEntityReference()
+            });
+            container.Logger.Log($"Granted {rights} on {entity.ToStringExt()} to {principal.LogicalName} {principal.Id}");
+        }
+        /// <summary>Retrieves current AccessRights for given principal on current record</summary>
+        /// <param name="entity"></param>
+        /// <param name="container"></param>
+        /// <param name="principal">User or Team to read access for</param>
+        /// <returns>Current access</returns>
+        public static AccessRights GetAccessFor(this Entity entity, IExecutionContainer container, EntityReference principal)
+        {
+            var accessResponse = (RetrievePrincipalAccessResponse)container.Service.Execute(new RetrievePrincipalAccessRequest()
+            {
+                Principal = principal,
+                Target = entity.ToEntityReference()
+            });
+            var result = accessResponse.AccessRights;
+            container.Logger.Log($"Read access {result} on {entity.ToStringExt()} for {principal.LogicalName} {principal.Id}");
+            return result;
+        }
+        /// <summary>Removes access from revokee on current record
+        /// Details: https://docs.microsoft.com/en-us/dotnet/api/microsoft.crm.sdk.messages.revokeaccessrequest
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="container"></param>
+        /// <param name="principal">User or Team to revoke access from</param>
+        public static void RevokeAccessFrom(this Entity entity, IExecutionContainer container, EntityReference principal)
+        {
+            container.Service.Execute(new RevokeAccessRequest()
+            {
+                // Note: "user" är inte "systemuser" - jag förstår idag 2012-04-16 inte varför denna kodrad finns. Incheckad 2011-02-14.
+                Revokee = principal,
+                Target = entity.ToEntityReference()
+            });
+            container.Logger.Log($"Revoked {principal.LogicalName} {principal.Id} from {entity.ToStringExt()}");
+        }
     }
 }
