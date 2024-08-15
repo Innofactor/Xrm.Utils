@@ -1,3 +1,5 @@
+## This project is now archived and further development will be done at https://github.com/rappen/Xrm.Utils.Core 
+
 # Xrm.Utils
 
 Project contains various useful extensions that will help develop CRM-reladed code faster.
